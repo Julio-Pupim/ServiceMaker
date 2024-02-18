@@ -33,10 +33,16 @@ A estrutura analítica do projeto é composta por diversas fases, cada uma com s
 4.2. Integração do backend com o banco de dados PostgreSQL <br>
 4.3. Desenvolvimento do frontend com Vue.js, Vuetify e Axios <br>
 4.4. Desenvolvimento e testes das funcionalidades <br>
+5W2H
+Gráfico de Gantt
 ## Principais requisitos das principais entregas/produtos
+Business Model Canvas
+Product Backlog Building
 ## Marcos
 ## Partes interessadas do projeto
 ## Restrições
 ## Premissas
+Trello
 ## Riscos
 ## Orçamento do projeto
+Modelo de Orçamento de Projeto
