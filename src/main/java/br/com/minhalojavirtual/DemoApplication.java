@@ -1,4 +1,4 @@
-package com.domcorretora.demo;
+package br.com.minhalojavirtual;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.domcorretora.demo;
+package br.com.minhalojavirtual;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
