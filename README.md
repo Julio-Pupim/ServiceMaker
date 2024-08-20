@@ -1,48 +1,32 @@
-# Projeto Escola de T.I.
-## Objetivos deste documento
-Este documento visa autorizar o início do projeto, cujo os responáveis são Júlio Pupim, Romullo Augusto, Alexandre Gonçalves Bernardi, Antônio de Oliveira 
-Agnolin, Emanuel Fernandes Diniz e Gabriel Koichi Koyama. As principais entregas ficam por conta dos objetivos gerais e específicos, os requisitos funcionais 
-e não funcionais, diagramas de caso de uso e entidade relacionamento, Business Model Canvas e o Product Backlog Building. Na parte de Back End vamos utilizar a linguagem Java, com o framework Spring Boot e conexão com o banco de dados PostgreSQL. Na parte de Front End utilizaremos Vue.js, Vuetify e Axios.
-## Situação atual e justificativa do projeto
-O projeto se encontra atualmente em desenvolvimento.
-## Objetivos SMART e critérios de sucesso do projeto
-1-Específico: <br>
-2-Indicador e meta: <br>
-3-Quem: <br>
-4-Realístico: <br>
-5-Quando: <br>
-## Estrutura Analítica do Projeto - Fases principais e entregas
-A estrutura analítica do projeto é composta por diversas fases, cada uma com suas entregas específicas. As principais fases e entregas do projeto são as seguintes:
-1. Planejamento Inicial <br>
-1.1. Documento de Abertura do Projeto <br>
-1.2. Definição da equipe do projeto <br>
-1.3. Definição do objetivo do projeto <br>
-1.4. Definição das metas SMART <br>
-2. Análise de Requisitos <br>
-2.1. Levantamento de requisitos funcionais e não funcionais <br>
-2.2. Estudo de mercado <br>
-2.3. Identificação das funcionalidades do sistema <br>
-2.4. Elaboração do Business Model Canvas <br>
-3. Design <br>
-3.1. Elaboração do design do sistema <br>
-3.2. Desenvolvimento de diagramas de caso de uso <br>
-3.3. Criação do diagrama de entidade relacionamento <br>
-3.4. Definição da infraestrutura tecnológica necessária <br>
-4. Desenvolvimento do Sistema <br>
-4.1. Programação do backend em linguagem Java com Spring Boot <br>
-4.2. Integração do backend com o banco de dados PostgreSQL <br>
-4.3. Desenvolvimento do frontend com Vue.js, Vuetify e Axios <br>
-4.4. Desenvolvimento e testes das funcionalidades <br>
-5W2H
-Gráfico de Gantt
-## Principais requisitos das principais entregas/produtos
-Business Model Canvas
-Product Backlog Building
-## Marcos
-## Partes interessadas do projeto
-## Restrições
+# Service Maker
+
+## Situação Atual
+
+Atualmente, as pessoas enfrentam dificuldades para encontrar serviços de qualidade pela internet, dificultando que provedores de serviços e clientes encontrem o que estão procurando. Para resolver esse problema, o projeto Service Maker visa facilitar a conexão entre prestadores de serviços e clientes.
+
+## Principais Entregas/Produtos
+
+Após feita a análise por parte dos membros do grupo, definimos o que seria necessário fazer.
+Para a construção do aplicativo Service Maker, alguns requisitos-chave devem ser atendidos para garantir a funcionalidade esperada:
+
+* Cadastro de Usuários: Permitir que prestadores de serviços e clientes se cadastrem na plataforma. Autenticação por meio de email e senha. Recuperação de senha via email.
+
+* Funções para Prestadores de Serviços: Permitir cadastro e edição de serviços, incluindo informações como preço, descrição e promoções. Possibilidade de agendar horários disponíveis para atendimento. Anunciar seu serviço, receber feedback e avaliações dos clientes.
+
+* Infraestrutura de Aplicativo: Disponibilidade do aplicativo para dispositivos móveis (Android/IOS), banco de dados robusto para armazenar informações dos
+serviços e dos usuários e desenvolver o sistema de maneira a garantir escalabilidade para um grande número de usuários no futuro.
+
+* Outras Funcionalidades: Notificações para lembrar os clientes sobre agendamentos, sistema de segurança e privacidade para proteger dados pessoais dos usuários, e módulo para relatórios e métricas para os prestadores de serviços.
+
 ## Premissas
-Trello
-## Riscos
-## Orçamento do projeto
-Modelo de Orçamento de Projeto
+
+As principais premissas do projeto são de que os usuários e prestadores de serviços tenham acesso ao aplicativo por meio de dispositivos móveis, que a plataforma do aplicativo tenha uma infraestrutura suficiente para lidar com todos os processos e a escalabilidade que o projeto poderá ter e que a equipe de desenvolvimento do sistema permanecerá comprometida durante todo o projeto.
+
+* Aplicativo capaz de solicitar serviços;
+* Cliente pode realizar agendamento;
+* Prestador pode cadastrar serviço;
+* Cadastro de conta;
+* Cliente pode favoritar um serviço;
+* Cliente pode avaliar os serviços;
+* Prestador pode anunciar serviço;
+* O prestador pode assinar o premium.
