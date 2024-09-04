@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.domain.Specification;
 
 public abstract class AbstractService <Entity extends AbstractEntity, Repository extends AbstractRepository<Entity>>{
 
@@ -33,6 +34,10 @@ public abstract class AbstractService <Entity extends AbstractEntity, Repository
     public List<Entity> getAll(){
         return repository.findAll();
     }
+
+    public List<Entity> getAll(Specification<Entity> specification){
+        return repository.findAll(specification);
+    } //TODO: criar specificationBuilder e criar endpoint passando a entidade;
 
     public Entity update(Long id, Entity entity){
         Optional<Entity> entityOptional = repository.findById(id);

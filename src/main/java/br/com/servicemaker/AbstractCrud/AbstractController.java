@@ -10,7 +10,7 @@ import java.util.Objects;
 public class AbstractController<Entity extends AbstractEntity,Repository extends AbstractRepository<Entity>,
         Service extends AbstractService<Entity,Repository>> {
 
-    private final  Service service;
+    private final Service service;
 
     @Autowired
     public AbstractController(Service service){
@@ -36,7 +36,7 @@ public class AbstractController<Entity extends AbstractEntity,Repository extends
     }
 
     @GetMapping
-    public ResponseEntity<List<Entity>> findAll(){
+    public ResponseEntity<List<Entity>> getAll(){
         return ResponseEntity.ok(service.getAll());
     }
 
