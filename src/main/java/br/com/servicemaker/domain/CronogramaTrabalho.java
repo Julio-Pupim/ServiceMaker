@@ -1,11 +1,17 @@
-package br.com.servicemaker;
+package br.com.servicemaker.domain;
 
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "CRONOGRAMA_TRABALHO")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CronogramaTrabalho {
 
     @Id

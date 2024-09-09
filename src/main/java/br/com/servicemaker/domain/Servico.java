@@ -1,12 +1,18 @@
-package br.com.servicemaker;
+package br.com.servicemaker.domain;
 
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "SERVICO")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Servico {
 
     @Id
