@@ -1,5 +1,9 @@
 package br.com.servicemaker.repository;
 
-public interface CronogramaTrabalho {
+import br.com.servicemaker.AbstractCrud.AbstractRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CronogramaTrabalho extends AbstractRepository {
 
 }

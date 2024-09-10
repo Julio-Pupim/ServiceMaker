@@ -1,5 +1,9 @@
 package br.com.servicemaker.repository;
 
-public interface EnderecoRepository {
+import br.com.servicemaker.AbstractCrud.AbstractRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface EnderecoRepository extends AbstractRepository {
 
 }
