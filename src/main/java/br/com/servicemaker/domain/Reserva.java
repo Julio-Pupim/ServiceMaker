@@ -24,10 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Reserva extends AbstractEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
-
   @ManyToOne
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
   private Usuario cliente;
