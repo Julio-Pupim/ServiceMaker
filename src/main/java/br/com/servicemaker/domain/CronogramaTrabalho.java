@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.AbstractCrud.AbstractEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
@@ -12,11 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CronogramaTrabalho {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CronogramaTrabalho extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "ID_AGENDA", nullable = false)

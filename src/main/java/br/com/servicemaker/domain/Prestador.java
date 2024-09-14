@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.AbstractCrud.AbstractEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -12,11 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Prestador {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Prestador extends AbstractEntity {
 
     @OneToMany(mappedBy = "prestador")
     private List<Agenda> agendas;

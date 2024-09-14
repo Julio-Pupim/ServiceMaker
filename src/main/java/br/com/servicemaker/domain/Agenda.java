@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.AbstractCrud.AbstractEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -13,11 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Agenda {
+public class Agenda extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     private LocalDateTime dataInicio;
 

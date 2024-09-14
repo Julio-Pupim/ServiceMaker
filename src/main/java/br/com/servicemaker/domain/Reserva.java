@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.AbstractCrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reserva {
+public class Reserva extends AbstractEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
