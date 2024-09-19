@@ -1,6 +1,8 @@
 package br.com.servicemaker.domain;
 
-import jakarta.persistence.*;
+import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Setor {
+public class Setor extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    private String descricao;
-
+  private String descricao;
 
 }

@@ -1,12 +1,10 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,11 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Reserva {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+public class Reserva extends AbstractEntity {
 
   @ManyToOne
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
