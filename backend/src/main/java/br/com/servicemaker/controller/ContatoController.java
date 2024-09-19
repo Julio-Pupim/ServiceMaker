@@ -1,6 +1,6 @@
 package br.com.servicemaker.controller;
 
-import br.com.servicemaker.AbstractCrud.AbstractController;
+import br.com.servicemaker.abstractcrud.AbstractController;
 import br.com.servicemaker.domain.Contato;
 import br.com.servicemaker.repository.ContatoRepository;
 import br.com.servicemaker.service.ContatoService;

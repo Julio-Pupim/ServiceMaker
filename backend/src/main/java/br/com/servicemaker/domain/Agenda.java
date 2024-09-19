@@ -19,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Agenda extends AbstractEntity {
 
+
   private LocalDateTime dataInicio;
 
   private LocalDateTime dataFim;

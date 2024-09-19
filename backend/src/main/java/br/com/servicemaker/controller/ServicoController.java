@@ -1,7 +1,7 @@
 package br.com.servicemaker.controller;
 
 
-import br.com.servicemaker.AbstractCrud.AbstractController;
+import br.com.servicemaker.abstractcrud.AbstractController;
 import br.com.servicemaker.domain.Servico;
 import br.com.servicemaker.repository.ServicoRepository;
 import br.com.servicemaker.service.ServicoService;

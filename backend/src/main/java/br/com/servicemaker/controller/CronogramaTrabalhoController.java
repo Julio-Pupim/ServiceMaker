@@ -1,6 +1,6 @@
 package br.com.servicemaker.controller;
 
-import br.com.servicemaker.AbstractCrud.AbstractController;
+import br.com.servicemaker.abstractcrud.AbstractController;
 import br.com.servicemaker.domain.CronogramaTrabalho;
 import br.com.servicemaker.repository.CronogramaTrabalhoRepository;
 import br.com.servicemaker.service.CronogramaTrabalhoService;
