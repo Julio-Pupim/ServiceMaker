@@ -1,7 +1,10 @@
 package br.com.servicemaker.domain;
 
-import br.com.servicemaker.AbstractCrud.AbstractEntity;
-import jakarta.persistence.*;
+import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Contato extends AbstractEntity {
 
-    private String telefone;
+  private String telefone;
 
-    private String celular;
+  private String celular;
 
-    private String email;
+  private String email;
 
-    @OneToOne
-    @JoinColumn(name = "ID_USUARIO", nullable = false)
-    private Usuario usuario;
+  @OneToOne
+  @JoinColumn(name = "ID_USUARIO", nullable = false)
+  private Usuario usuario;
 
 }

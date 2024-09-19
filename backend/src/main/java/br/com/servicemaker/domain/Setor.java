@@ -1,7 +1,8 @@
 package br.com.servicemaker.domain;
 
-import br.com.servicemaker.AbstractCrud.AbstractEntity;
-import jakarta.persistence.*;
+import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Setor extends AbstractEntity {
 
-    private String descricao;
+  private String descricao;
 
 }

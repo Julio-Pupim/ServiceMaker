@@ -1,6 +1,6 @@
 package br.com.servicemaker.service;
 
-import br.com.servicemaker.AbstractCrud.AbstractService;
+import br.com.servicemaker.abstractcrud.AbstractService;
 import br.com.servicemaker.domain.Avaliacao;
 import br.com.servicemaker.repository.AvaliacaoRepository;
 import jakarta.persistence.EntityManager;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AvaliacaoService extends AbstractService<Avaliacao, AvaliacaoRepository> {
 
   @Autowired
-  public AvaliacaoService(AvaliacaoRepository repository, EntityManager em){
+  public AvaliacaoService(AvaliacaoRepository repository, EntityManager em) {
     super(repository, em);
   }
 

@@ -1,8 +1,10 @@
 package br.com.servicemaker.domain;
 
-import br.com.servicemaker.AbstractCrud.AbstractEntity;
-import jakarta.persistence.*;
-
+import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,25 +17,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Usuario extends AbstractEntity {
 
-    private String nome;
+  private String nome;
 
-    private String cpf;
+  private String cpf;
 
-    private String senha;
+  private String senha;
 
-    private Boolean prestador;
+  private Boolean prestador;
 
-    @OneToOne(mappedBy = "usuario")
-    private Endereco endereco;
+  @OneToOne(mappedBy = "usuario")
+  private Endereco endereco;
 
-    @OneToOne(mappedBy = "usuario")
-    private Contato contato;
+  @OneToOne(mappedBy = "usuario")
+  private Contato contato;
 
-    @OneToMany(mappedBy = "cliente")
-    private List<Reserva> reservas;
+  @OneToMany(mappedBy = "cliente")
+  private List<Reserva> reservas;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Avaliacao> avaliacoes;
+  @OneToMany(mappedBy = "usuario")
+  private List<Avaliacao> avaliacoes;
 
 
 }
