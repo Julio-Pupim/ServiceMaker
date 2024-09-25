@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Prestador extends AbstractEntity {
+public class Prestador extends Usuario {
 
   @OneToMany(mappedBy = "prestador")
   private List<Agenda> agendas;
