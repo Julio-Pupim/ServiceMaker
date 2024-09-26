@@ -7,6 +7,7 @@ import br.com.servicemaker.domain.Usuario;
 import br.com.servicemaker.infra.seguranca.TokenService;
 import br.com.servicemaker.repository.UsuarioRepository;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,17 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/usuario")
 public class AutenticacaoController {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
     private UsuarioRepository repository;
-
-    @Autowired
     private TokenService tokenService;
 
     @PostMapping("/login")
