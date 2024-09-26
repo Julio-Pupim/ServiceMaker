@@ -38,6 +38,12 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @Enumerated
   private Roles role;
 
+  public Usuario(String email, String password, Roles role){
+    this.email = email;
+    this.senha = senha;
+    this.role = role;
+  }
+
   @OneToOne(mappedBy = "usuario")
   private Endereco endereco;
 
