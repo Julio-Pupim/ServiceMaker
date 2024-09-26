@@ -1,12 +1,12 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import { Link } from 'expo-router';
 
 const App = () => {
   return (
     <View>
-      <Text>App</Text>
-      <Link href="./(auth)/cadastro" style={{ color: 'blue' }}>Go to Home</Link>
+      <Link href="./(auth)/login" style={{ color: 'blue' }}>Auth</Link>
+      <Link href="./(tabs)/inicio" style={{ color: 'blue' }}>App</Link>
     </View>
   );
 };
