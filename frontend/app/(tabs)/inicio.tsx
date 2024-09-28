@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 
@@ -16,6 +16,10 @@ const Inicio = () => {
     { id: '4', descricao: 'Carpinteiro', icon: 'hammer-outline' },
     { id: '5', descricao: 'Mecânico', icon: 'car-outline' },
     { id: '6', descricao: 'Jardineiro', icon: 'leaf-outline' },
+    { id: '7', descricao: 'Pintor', icon: 'color-palette-outline' },
+    { id: '8', descricao: 'Designer de interiores', icon: 'home-outline' },
+    { id: '9', descricao: 'Nutricionista', icon: 'restaurant-outline' },
+    { id: '10', descricao: 'Personal Trainer', icon: 'fitness-outline' },
   ];
 
   const profissionais = [
@@ -25,6 +29,12 @@ const Inicio = () => {
     { id: '4', nome: 'Manuel' },
     { id: '5', nome: 'Emanuelle' },
     { id: '6', nome: 'Fernanda' },
+    { id: '7', nome: 'Carlos' },
+    { id: '8', nome: 'Ana' },
+    { id: '9', nome: 'Juliano' },
+    { id: '10', nome: 'Patrícia' },
+    { id: '11', nome: 'Cláudio' },
+    { id: '12', nome: 'Sofia' },
   ];
 
   return (
@@ -32,7 +42,7 @@ const Inicio = () => {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
-          <Ionicons name="person-circle-outline" size={30} color="white" />
+          <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
@@ -53,16 +63,17 @@ const Inicio = () => {
 
       <Text style={styles.sectionTitle}>Serviços frequentes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
-        {servicosFrequentes.map((servico) => (
+        {servicosFrequentes.map(servico => (
           <View key={servico.id} style={styles.servicoItem}>
+            <Ionicons name={servico.icon} size={35} color="black" />
             <Text style={styles.servicoText}>{servico.descricao}</Text>
           </View>
         ))}
       </ScrollView>
 
-          <Text style={styles.sectionTitle}>Encontre profissionais</Text>
+      <Text style={styles.sectionTitle}>Encontre profissionais</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.profissionaisScroll}>
-        {profissionais.map((profissional) => (
+        {profissionais.map(profissional => (
           <View key={profissional.id} style={styles.profissionalItem}>
             <Text style={styles.profissionalNome}>{profissional.nome}</Text>
           </View>
@@ -70,7 +81,7 @@ const Inicio = () => {
       </ScrollView>
     </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -81,7 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD700',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    padding: 20,
+    padding: 25,
     marginBottom: 20,
   },
   userText: {
@@ -90,21 +101,21 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginLeft: 10,
+    marginLeft: 15,
   },
   greetings: {
     color: 'black',
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginLeft: 20,
   },
   subText: {
     color: 'gray',
-    fontSize: 14,
+    fontSize: 16,
     marginLeft: 20,
-    marginBottom: 20,
+    marginBottom: 25,
   },
   promocoesContainer: {
     flexDirection: 'row',
@@ -113,23 +124,23 @@ const styles = StyleSheet.create({
   },
   promoCard: {
     backgroundColor: '#E0F7FA',
-    padding: 15,
+    padding: 20,
     borderRadius: 10,
     width: '45%',
   },
   promoTitle: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 5,
   },
   promoDesc: {
     color: '#00ACC1',
-    fontSize: 14,
+    fontSize: 15,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 20,
+    marginVertical: 25,
     marginLeft: 20,
   },
   servicosScroll: {
@@ -137,11 +148,11 @@ const styles = StyleSheet.create({
   },
   servicoItem: {
     alignItems: 'center',
-    marginRight: 30,
+    marginRight: 35,
   },
   servicoText: {
-    marginTop: 10,
-    fontSize: 14,
+    marginTop: 12,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   profissionaisScroll: {
@@ -149,18 +160,12 @@ const styles = StyleSheet.create({
   },
   profissionalItem: {
     alignItems: 'center',
-    marginRight: 30,
-  },
-  profissionalImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginBottom: 10,
+    marginRight: 35,
   },
   profissionalNome: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
 
-export default Inicio
+export default Inicio;

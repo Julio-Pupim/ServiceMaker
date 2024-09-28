@@ -15,7 +15,7 @@ export default function TabLayout() {
         headerShown: false,
       }}>
       <Tabs.Screen
-        name="index"
+        name="inicio"
         options={{
           title: 'Início',
           tabBarIcon: ({ color, focused }) => (
@@ -24,11 +24,29 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="pesquisa"
         options={{
-          title: 'Explore',
+          title: 'Pesquisa',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="agenda"
+        options={{
+          title: 'Agenda',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),
         }}
       />
