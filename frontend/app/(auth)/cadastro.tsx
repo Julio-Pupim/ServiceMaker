@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Cadastro = () => {
-  const [email, setEmail] = useState('');
+    const navigation = useNavigation();
+
+    const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
     const login = () => {
         alert(`E-mail: ${email}`);
         alert(`Senha: ${senha}`);
+    };
+
+    const loginClick = () => {
+      navigation.navigate('login');
+    };
+
+    const senhaClick = () => {
+      navigation.navigate('recuperarsenha');
     };
 
     return (
@@ -33,11 +44,11 @@ const Cadastro = () => {
             <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={senhaClick}>
             <Text>Esqueceu sua senha?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={loginClick}>
             <Text>Já possui uma conta? Realizar Login</Text>
         </TouchableOpacity>
       </View>
