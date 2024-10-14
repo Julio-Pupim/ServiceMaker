@@ -1,6 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -24,7 +25,7 @@ public class Agenda extends AbstractEntity {
   @OneToOne(mappedBy = "agenda")
   private Prestador prestador;
 
-  @OneToMany(mappedBy = "agenda")
+  @OneToMany(mappedBy = "agenda", cascade = CascadeType.REMOVE)
   private List<CronogramaTrabalho> cronogramas;
 
   @OneToMany(mappedBy = "agenda")

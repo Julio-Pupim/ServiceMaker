@@ -39,7 +39,7 @@ public class Usuario extends AbstractEntity {
   @OneToMany(mappedBy = "cliente", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
   private List<Reserva> reservas;
 
-  @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
   private List<Avaliacao> avaliacoes;
 
 
