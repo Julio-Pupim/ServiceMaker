@@ -40,14 +40,12 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @Enumerated
   private Roles role;
 
-  public Usuario(String email, String password, Roles role){
-    this.email = email;
+  public Usuario(Contato contato, String nome, String senha, Roles role){
+    this.contato = contato;
+    this.nome = nome;
     this.senha = senha;
     this.role = role;
   }
-
-  @OneToOne(mappedBy = "usuario")
-  private Endereco endereco;
 
   @OneToOne(orphanRemoval = true)
   @JoinColumn(name = "id_contato")
@@ -62,18 +60,18 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if(Roles.Prestador.equals(this.role)) return List.of(new SimpleGrantedAuthority("Prestador"), new SimpleGrantedAuthority("Cliente"));
-    else return List.of(new SimpleGrantedAuthority("Cliente"));
+    if(Roles.Prestador.equals(this.role)) return List.of(new SimpleGrantedAuthority("ROLE_PRESTADOR"), new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    else return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
   }
 
   @Override
   public String getPassword() {
-    return "";
+    return this.getSenha();
   }
 
   @Override
   public String getUsername() {
-    return "";
+    return this.getContato().getEmail();
   }
 
   @Override
