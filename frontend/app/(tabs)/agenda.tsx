@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, CalendarProps } from 'react-native-calendars';
+import { router } from 'expo-router';
 
 const Agenda = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [task, setTask] = useState('');
   const [tasks, setTasks] = useState([]);
 
-  const handleDayPress = (day) => {
+  const handleDayPress = (day: CalendarProps) => {
     setSelectedDate(day.dateString);
   };
 
@@ -42,13 +43,25 @@ const Agenda = () => {
       <Calendar
         style={styles.calendar}
         onDayPress={handleDayPress}
-        current={'2024-08-22'}
+        current={'2024-10-22'}
         markedDates={{
-          '2024-08-22': {
+          '2024-10-22': {
             dots: [
               { key: '1', color: 'red', selectedDotColor: 'red' },
+            ],
+            selected: true,
+            selectedColor: '#00ADF5',
+          },
+          '2024-10-26': {
+            dots: [
               { key: '2', color: 'green', selectedDotColor: 'green' },
-              { key: '3', color: 'purple', selectedDotColor: 'purple' },
+            ],
+            selected: true,
+            selectedColor: '#00ADF5',
+          },
+          '2024-10-29': {
+            dots: [
+              { key: '2', color: 'green', selectedDotColor: 'green' },
             ],
             selected: true,
             selectedColor: '#00ADF5',
@@ -72,8 +85,8 @@ const Agenda = () => {
         <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
         <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
       </View>
-
-      <TouchableOpacity style={styles.addButton} onPress={addTask}>
+      
+      <TouchableOpacity style={styles.addButton} onPress={() => router.navigate('/(extra)/agendamento')}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -83,10 +96,10 @@ const Agenda = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#FBCB1C',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 25,
