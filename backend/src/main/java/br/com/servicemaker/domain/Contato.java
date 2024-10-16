@@ -2,9 +2,11 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +22,12 @@ public class Contato extends AbstractEntity {
 
   private String celular;
 
+  @Email
+  @NotBlank
+  @NotNull
   private String email;
 
-  @OneToOne
-  @JoinColumn(name = "ID_USUARIO", nullable = false)
+  @OneToOne(mappedBy = "contato")
   private Usuario usuario;
 
 }

@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+    const navigation = useNavigation();
+
+    const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
 
     const login = () => {
         alert(`E-mail: ${email}`);
         alert(`Senha: ${senha}`);
+    };
+
+    const cadastroClick = () => {
+      navigation.navigate('cadastro');
+    };
+
+    const senhaClick = () => {
+      navigation.navigate('recuperarsenha');
     };
 
     return (
@@ -34,12 +45,12 @@ const Login = () => {
             <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={senhaClick}>
             <Text>Esqueceu sua senha?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity>
-            <Text>Não possui uma conta? Realizar Cadastro</Text>
+        <TouchableOpacity onPress={cadastroClick}>
+          <Text>Não possui uma conta? Realizar Cadastro</Text>
         </TouchableOpacity>
       </View>
     );
