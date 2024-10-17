@@ -1,75 +1,248 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';  
-import Icon from 'react-native-vector-icons/Ionicons';
+import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'; // Importação correta
+import { Controller, useForm } from 'react-hook-form';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
-const Agendamento = () => {
-  const navigation = useNavigation();  
+type AgendamentoForm = {
+  servico: string;
+  prestador: string;
+  localizacao: string;
+  anotacao: string;
+  data: string;
+  horaInicio: string;
+  horaFim: string;
+};
 
-  const [servico, setServico] = useState('');
-  const [prestador, setPrestador] = useState('');
-  const [data, setData] = useState(new Date());
-  const [horaInicio, setHoraInicio] = useState(new Date());
-  const [horaFim, setHoraFim] = useState(new Date());
+const AgendamentoScreen: React.FC = () => {
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
+    defaultValues: {
+      servico: '',
+      prestador: '',
+      localizacao: '',
+      anotacao: '',
+      data: '',
+      horaInicio: '',
+      horaFim: '',
+    },
+    mode: 'onChange',
+  });
+
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [mode, setMode] = useState<'date' | 'time'>('date');
+
+  const onChange = (event: DateTimePickerEvent, selectedValue?: Date) => {
+    const currentDate = selectedValue || selectedDate;
+    setShowDatePicker(false);
+    setShowTimePicker(false);
+    setSelectedDate(currentDate);
+  };
+
+  const showMode = (currentMode: 'date' | 'time') => {
+    if (currentMode === 'date') {
+      setShowDatePicker(true);
+    } else {
+      setShowTimePicker(true);
+    }
+  };
+
+  const addTask = async (data: AgendamentoForm) => {
+    if (!selectedDate || !data.servico || !data.prestador || !data.localizacao || !data.anotacao) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos e selecione uma data.');
+      return;
+    }
+    console.log('Agendamento adicionado:', { ...data, date: selectedDate });
+    Alert.alert('Agendamento adicionado com sucesso!');
+    router.push('/(tabs)/inicio');
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <TouchableOpacity style={styles.returnButton} onPress={() => navigation.goBack()}>
-        <Icon name="arrow-back" size={24} color="white" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar hidden />
+      <View style={styles.header}>
+        <View style={styles.userText}>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>Usuário</Text>
+        </View>
+      </View>
+
+      <Text style={styles.title}>Realizar um Agendamento</Text>
+
+      <Controller
+        control={control}
+        name="servico"
+        rules={{ required: 'Serviço é um campo obrigatório' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Serviço"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+      {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
+
+      <Controller
+        control={control}
+        name="prestador"
+        rules={{ required: 'Prestador é um campo obrigatório' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Prestador"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
+
+      <View>
+        <Button title="Selecionar Data" onPress={() => showMode('date')} />
+        {showDatePicker && (
+          <DateTimePicker
+            value={selectedDate || new Date()}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+      </View>
+
+      <View>
+        <Button title="Selecionar Hora de Início" onPress={() => showMode('time')} />
+        {showTimePicker && (
+          <DateTimePicker
+            value={selectedDate || new Date()}
+            mode="time"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+      </View>
+
+      <View>
+        <Button title="Selecionar Hora Final" onPress={() => showMode('time')} />
+        {showTimePicker && (
+          <DateTimePicker
+            value={selectedDate || new Date()}
+            mode="time"
+            is24Hour={true}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+      </View>
+
+      <Controller
+        control={control}
+        name="localizacao"
+        rules={{ required: 'Localização é um campo obrigatório' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Localização"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+      {errors.localizacao && <Text style={styles.errorText}>{errors.localizacao.message}</Text>}
+
+      <Controller
+        control={control}
+        name="anotacao"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Anotação"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+
+      <TouchableOpacity
+        style={[styles.button]}
+        onPress={handleSubmit(addTask)}
+        disabled={!isValid || !selectedDate}
+      >
+        <Text style={styles.buttonText}>Adicionar Agendamento</Text>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Serviço</Text>
-      <TextInput style={styles.input} value={servico} onChangeText={setServico} placeholder="Tipo de Serviço" />
-
-      <Text style={styles.label}>Prestador</Text>
-      <TextInput style={styles.input} value={prestador} onChangeText={setPrestador} placeholder="Nome do Prestador" />
-
-      <Text style={styles.label}>Data</Text>
-      <Text style={styles.input}>{data.toDateString()}</Text>
-
-      <Text style={styles.label}>Hora de Início</Text>
-      <Text style={styles.input}>{horaInicio.toLocaleTimeString()}</Text>
-
-      <Text style={styles.label}>Hora Final</Text>
-      <Text style={styles.input}>{horaFim.toLocaleTimeString()}</Text>
-
-      <Text style={styles.label}>Localização</Text>
-      <TextInput style={styles.input} placeholder="Endereço" />
-
-      <Text style={styles.label}>Anotação</Text>
-      <TextInput style={styles.input} placeholder="Anotação..." multiline={true} numberOfLines={3} />
-
-      <Button title="Agendar" onPress={() => {}} />
-    </ScrollView>
+      <TouchableOpacity style={styles.cancelButton} onPress={() => router.push('/(tabs)/agenda')}>
+        <Text style={styles.cancelText}>Cancelar</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#FFFFFF',
   },
-  returnButton: {
-    width: 50,
-    height: 50,
+  header: {
     backgroundColor: '#FBCB1C',
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 25,
     marginBottom: 20,
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
+  userText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userName: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
+    paddingLeft: 10,
+    marginVertical: 10,
     borderWidth: 1,
-    marginBottom: 20,
-    padding: 10,
-    borderRadius: 5,
+    borderColor: '#ccc',
+  },
+  button: {
+    height: 50,
+    backgroundColor: '#FBCB1C',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  cancelButton: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  cancelText: {
+    color: '#007BFF',
+  },
+  errorText: {
+    color: '#FF375B',
+    marginLeft: 10,
   },
 });
 
-export default Agendamento;
+export default AgendamentoScreen;

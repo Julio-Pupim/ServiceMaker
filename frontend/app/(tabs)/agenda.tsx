@@ -1,35 +1,47 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Calendar, CalendarProps } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
+import { Controller, useForm } from 'react-hook-form';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
-const Agenda = () => {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [task, setTask] = useState('');
-  const [tasks, setTasks] = useState([]);
+type AgendamentoForm = {
+  servico: string;
+  prestador: string;
+  localizacao: string;
+  anotacao: string;
+};
 
-  const handleDayPress = (day: CalendarProps) => {
+const AgendaScreen = () => {
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
+    defaultValues: {
+      servico: '',
+      prestador: '',
+      localizacao: '',
+      anotacao: '',
+    },
+    mode: 'onChange',
+  });
+
+  const [selectedDate, setSelectedDate] = useState<string>('');
+
+  const handleDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
   };
 
-  const addTask = () => {
-    if (!task || !selectedDate) {
-      Alert.alert('Erro', 'Por favor, insira uma tarefa e selecione uma data.');
+  const addTask = async (data: AgendamentoForm) => {
+    if (!selectedDate || !data.servico || !data.prestador || !data.localizacao || !data.anotacao) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos e selecione uma data.');
       return;
     }
-
-    const newTask = {
-      date: selectedDate,
-      description: task,
-    };
-
-    setTasks([...tasks, newTask]);
-    setTask('');
-    setSelectedDate('');
+    console.log('Agendamento adicionado:', { ...data, date: selectedDate });
+    Alert.alert('Agendamento adicionado com sucesso!');
+    router.push('/(tabs)/inicio');
   };
+
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
@@ -38,34 +50,14 @@ const Agenda = () => {
         </View>
       </View>
 
-      <Text style={styles.title}>Agendamento</Text>
-
+      <ScrollView>
+      <Text style={styles.title}>Agenda</Text>
       <Calendar
         style={styles.calendar}
         onDayPress={handleDayPress}
         current={'2024-10-22'}
         markedDates={{
-          '2024-10-22': {
-            dots: [
-              { key: '1', color: 'red', selectedDotColor: 'red' },
-            ],
-            selected: true,
-            selectedColor: '#00ADF5',
-          },
-          '2024-10-26': {
-            dots: [
-              { key: '2', color: 'green', selectedDotColor: 'green' },
-            ],
-            selected: true,
-            selectedColor: '#00ADF5',
-          },
-          '2024-10-29': {
-            dots: [
-              { key: '2', color: 'green', selectedDotColor: 'green' },
-            ],
-            selected: true,
-            selectedColor: '#00ADF5',
-          },
+          [selectedDate]: { selected: true, selectedColor: '#00ADF5' },
         }}
         markingType={'multi-dot'}
         theme={{
@@ -89,7 +81,8 @@ const Agenda = () => {
       <TouchableOpacity style={styles.addButton} onPress={() => router.navigate('/(extra)/agendamento')}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -149,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Agenda;
+export default AgendaScreen;
