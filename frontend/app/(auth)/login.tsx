@@ -1,59 +1,112 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
-const Login = () => {
-    const navigation = useNavigation();
+type LoginForm = {
+  email: string;
+  senha: string;
+}
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+const login = async (data: LoginForm) => {
+  try {
 
-    const login = () => {
-        alert(`E-mail: ${email}`);
-        alert(`Senha: ${senha}`);
-    };
+    const response = await axios.post('http://localhost:8080/api/login', data);
+    return response.data.token;
 
-    const cadastroClick = () => {
-      navigation.navigate('cadastro');
-    };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Erro na requisição HTTP:', error.message);
+    } else {
+      console.error("Erro na requisição de login: ", error);
+    }
+  }
+}
+const storeToken = async (token: string) => {
+  try {
+    await AsyncStorage.setItem('jwt_token', token);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Erro ao salvar token no AsyncStorage:', error);
+    }
+    throw error;
+  }
+};
 
-    const senhaClick = () => {
-      navigation.navigate('recuperarsenha');
-    };
+async function handleLogin(data: LoginForm) {
+  try {
+    const token = await login(data);
 
-    return (
-      <View style={styles.container}>
-        <StatusBar hidden />
-        <Image
-          style={{ width: 200, height: 40 }}
-          source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
-        />
-        <Text>Login</Text>
-        <TextInput 
-          placeholder='E-mail' 
-          style={styles.textInput} 
-          onChangeText={text => setEmail(text)} 
-        />    
-        <TextInput 
-          placeholder='Senha' 
-          style={styles.textInput} 
-          secureTextEntry
-          onChangeText={text => setSenha(text)} 
-        />
-        <TouchableOpacity style={styles.button} onPress={login}>
-            <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
-        </TouchableOpacity>
+    await storeToken(token);
 
-        <TouchableOpacity onPress={senhaClick}>
-            <Text>Esqueceu sua senha?</Text>
-        </TouchableOpacity>
+    router.push("/(tabs)/inicio");
 
-        <TouchableOpacity onPress={cadastroClick}>
-          <Text>Não possui uma conta? Realizar Cadastro</Text>
-        </TouchableOpacity>
-      </View>
-    );
+  } catch (error) {
+    console.error('Falha no processo de login:', error);
+  }
+}
+
+const LoginScreen = () => {
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm<LoginForm>({
+    defaultValues: {
+      email: '',
+      senha: ''
+    },
+    mode: "onChange"
+  });
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image style={styles.logo}
+        source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
+      />
+      <Controller
+        control={control}
+        name='email'
+        rules={{ required: 'email obrigatório', pattern: { value: /^\S+@\S+$/i, message: "email inválido" } }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            placeholder='digite seu email'
+            style={styles.textInput}
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+      {<Text style={styles.labelError}>{errors?.email?.message}</Text>}
+
+      <Controller
+        control={control}
+        name='senha'
+        rules={{ required: 'Senha obrigatória' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            placeholder='Senha'
+            style={styles.textInput}
+            secureTextEntry={true}
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
+      {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
+
+      <TouchableOpacity style={[styles.button, { opacity: isValid ? 1 : 0.5 }]} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
+        <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => { router.navigate('/recuperarsenha') }}>
+        <Text>Esqueceu sua senha?</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => { router.navigate('/cadastro') }}>
+        <Text>Não possui uma conta? Realizar Cadastro</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -81,6 +134,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
   },
+  labelError: {
+    alignSelf: 'flex-start',
+    color: '#ff375b',
+    marginStart: 8,
+  },
+  logo: {
+    width: 200,
+    height: 40,
+  },
+
 });
 
-export default Login
+export default LoginScreen
