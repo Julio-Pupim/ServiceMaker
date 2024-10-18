@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
