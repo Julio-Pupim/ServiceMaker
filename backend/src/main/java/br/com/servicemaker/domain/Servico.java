@@ -1,6 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -27,6 +28,7 @@ public class Servico extends AbstractEntity {
 
   private String descricao;
 
+  @Column(name = "tempo_servico")
   private LocalTime tempoServico;
 
   private Double preco;
