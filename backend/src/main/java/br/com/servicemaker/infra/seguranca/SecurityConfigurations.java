@@ -30,6 +30,8 @@ public class SecurityConfigurations {
     return httpSecurity
         .cors(request -> {
           CorsConfiguration configuration = new CorsConfiguration();
+          configuration.setAllowedOrigins(List.of("http://localhost:8081"));
+          configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
           configuration.setAllowedOrigins(List.of("*"));
           configuration.setAllowedMethods(List.of("*"));
           configuration.setAllowedHeaders(List.of("*"));

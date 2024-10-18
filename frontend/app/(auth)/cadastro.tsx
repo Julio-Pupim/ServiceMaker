@@ -2,8 +2,8 @@ import axios from 'axios';
 import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
 import React from 'react';
-import { Controller, get, useForm } from 'react-hook-form';
-import { View, Text, TextInput, Image, StyleSheet, TouchableOpacity, Pressable, ScrollView } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 
 type CadastroForm = {
@@ -28,8 +28,9 @@ type CadastroForm = {
 async function handleCadastro(data: CadastroForm) {
   console.log("TO AQUI ", data);
   try {
-    await axios.post("https://localhost:8080/api/auth/cadastro", data);
-
+    await axios.post("http://localhost:8080/api/auth/registro", data);
+    router.navigate("/(auth)/login");
+    
   } catch (error) {
     if (axios.isAxiosError(error) && error.status == 500) {
       console.error('Erro interno do sistema:', error.message);
@@ -39,7 +40,6 @@ async function handleCadastro(data: CadastroForm) {
       console.error(error);
     }
   }
-  router.navigate("/(auth)/login");
 }
 
 const Cadastro = () => {
