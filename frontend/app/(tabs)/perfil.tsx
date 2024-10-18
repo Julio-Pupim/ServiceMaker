@@ -1,135 +1,117 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, View, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, View, TextInput, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function TelaEditarPerfil() {
+export default function Perfil() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
 
   return (
-    <SafeAreaView style={estilos.container}>
-      {/* Cabeçalho */}
-      <View style={estilos.header}>
-        <TouchableOpacity style={estilos.btnVoltar}>
-          <Icon name="arrow-back" size={28} color="white" />
-        </TouchableOpacity>
-        <Text style={estilos.headerTexto}>Editar Perfil</Text>
+    <SafeAreaView style={styles.container}>
+      <StatusBar hidden />
+      <View style={styles.header}>
+        <View style={styles.userText}>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>Usuário</Text>
+        </View>
       </View>
 
-      <ScrollView contentContainerStyle={estilos.scrollViewContainer}>
-        {/* Foto de Perfil */}
-        <View style={estilos.containerPerfil}>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.containerPerfil}>
           <Image
             source={{ uri: 'https://via.placeholder.com/100' }} 
-            style={estilos.imagemPerfil}
+            style={styles.imagemPerfil}
           />
         </View>
 
-        {/* Ícone de Editar Foto */}
-        <TouchableOpacity style={estilos.iconEditarPerfil}>
+        <TouchableOpacity style={styles.iconEditarPerfil}>
           <Icon name="edit" size={24} color="white" />
         </TouchableOpacity>
 
-        {/* Formulário de Edição */}
-        <View style={estilos.formulario}>
-          <View style={estilos.containerInput}>
-            <Text style={estilos.label}>Nome Completo</Text>
-            <View style={estilos.wrapperInput}>
+        <View style={styles.formulario}>
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>Nome Completo</Text>
+            <View style={styles.wrapperInput}>
               <TextInput
                 value={nome}
                 onChangeText={setNome}
-                style={estilos.input}
+                style={styles.input}
               />
-              <Icon name="edit" size={20} color="gray" style={estilos.iconEditar} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View style={estilos.containerInput}>
-            <Text style={estilos.label}>E-mail</Text>
-            <View style={estilos.wrapperInput}>
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>E-mail</Text>
+            <View style={styles.wrapperInput}>
               <TextInput
                 value={email}
                 onChangeText={setEmail}
-                style={estilos.input}
+                style={styles.input}
                 keyboardType="email-address"
               />
-              <Icon name="edit" size={20} color="gray" style={estilos.iconEditar} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View style={estilos.containerInput}>
-            <Text style={estilos.label}>Número de Celular</Text>
-            <View style={estilos.wrapperInput}>
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>Número de Celular</Text>
+            <View style={styles.wrapperInput}>
               <TextInput
                 value={telefone}
                 onChangeText={setTelefone}
-                style={estilos.input}
+                style={styles.input}
                 keyboardType="phone-pad"
               />
-              <Icon name="edit" size={20} color="gray" style={estilos.iconEditar} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View style={estilos.containerInput}>
-            <Text style={estilos.label}>Endereço</Text>
-            <View style={estilos.wrapperInput}>
+          <View style={styles.containerInput}>
+            <Text style={styles.label}>Endereço</Text>
+            <View style={styles.wrapperInput}>
               <TextInput
                 value={endereco}
                 onChangeText={setEndereco}
-                style={estilos.input}
+                style={styles.input}
               />
-              <Icon name="edit" size={20} color="gray" style={estilos.iconEditar} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          {/* Botão de Salvar */}
-          <TouchableOpacity style={estilos.botaoSalvar}>
-            <Text style={estilos.textoBotaoSalvar}>Salvar</Text>
+          <TouchableOpacity style={styles.botaoSalvar}>
+            <Text style={styles.textoBotaoSalvar}>Salvar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-
-      {/* Rodapé */}
-      <View style={estilos.rodape}>
-        <TouchableOpacity style={estilos.iconRodape}>
-          <Icon name="home" size={28} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.iconRodape}>
-          <Icon name="shopping-cart" size={28} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity style={estilos.iconRodape}>
-          <Icon name="person" size={28} color="white" />
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 }
 
-const estilos = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   header: {
-    backgroundColor: '#fbcb1c',
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#FBCB1C',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 25,
+    marginBottom: 20,
+  },
+  userText: {
     flexDirection: 'row',
-    width: '100%',
-    position: 'relative',
+    alignItems: 'center',
   },
-  headerTexto: {
-    fontSize: 20,
+  userName: {
     color: 'white',
+    fontSize: 20,
     fontWeight: 'bold',
-  },
-  btnVoltar: {
-    position: 'absolute',
-    left: 15,
-    top: 15,
+    marginLeft: 15,
   },
   scrollViewContainer: {
     paddingBottom: 100, 
@@ -207,3 +189,5 @@ const estilos = StyleSheet.create({
     paddingHorizontal: 20,
   },
 });
+
+export default Perfil;
