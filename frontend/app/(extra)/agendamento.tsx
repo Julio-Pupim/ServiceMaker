@@ -34,6 +34,7 @@ const AgendamentoScreen: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [mode, setMode] = useState<'date' | 'time'>('date');
+  const [show, setShow] = useState(false);
 
   const onChange = (event: DateTimePickerEvent, selectedValue?: Date) => {
     const currentDate = selectedValue || selectedDate;
@@ -43,11 +44,8 @@ const AgendamentoScreen: React.FC = () => {
   };
 
   const showMode = (currentMode: 'date' | 'time') => {
-    if (currentMode === 'date') {
-      setShowDatePicker(true);
-    } else {
-      setShowTimePicker(true);
-    }
+    setMode(currentMode);
+    setShow(true);
   };
 
   const addTask = async (data: AgendamentoForm) => {
@@ -104,10 +102,11 @@ const AgendamentoScreen: React.FC = () => {
 
       <View>
         <Button title="Selecionar Data" onPress={() => showMode('date')} />
-        {showDatePicker && (
+        {show && (
           <DateTimePicker
+            testID='DateTimePicker'
             value={selectedDate || new Date()}
-            mode="date"
+            mode={mode}
             is24Hour={true}
             display="default"
             onChange={onChange}
@@ -116,24 +115,12 @@ const AgendamentoScreen: React.FC = () => {
       </View>
 
       <View>
-        <Button title="Selecionar Hora de Início" onPress={() => showMode('time')} />
-        {showTimePicker && (
+        <Button title="Selecionar Hora" onPress={() => showMode('time')} />
+        {show && (
           <DateTimePicker
+            testID='DateTimePicker'
             value={selectedDate || new Date()}
-            mode="time"
-            is24Hour={true}
-            display="default"
-            onChange={onChange}
-          />
-        )}
-      </View>
-
-      <View>
-        <Button title="Selecionar Hora Final" onPress={() => showMode('time')} />
-        {showTimePicker && (
-          <DateTimePicker
-            value={selectedDate || new Date()}
-            mode="time"
+            mode={mode}
             is24Hour={true}
             display="default"
             onChange={onChange}
@@ -174,7 +161,7 @@ const AgendamentoScreen: React.FC = () => {
         onPress={handleSubmit(addTask)}
         disabled={!isValid || !selectedDate}
       >
-        <Text style={styles.buttonText}>Adicionar Agendamento</Text>
+        <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/inicio')}>Adicionar Agendamento</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.cancelButton} onPress={() => router.push('/(tabs)/agenda')}>
