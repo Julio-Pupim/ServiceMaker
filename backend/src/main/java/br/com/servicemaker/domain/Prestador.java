@@ -1,6 +1,8 @@
 package br.com.servicemaker.domain;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -16,7 +18,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@DiscriminatorValue("prestador")
 public class Prestador extends Usuario {
+
+  @Column(name = "tipo_usuario", insertable = false, updatable = false)
+  private String tipoUsuario;
 
   @OneToOne(cascade = {CascadeType.REMOVE,
       CascadeType.MERGE}, optional = false, orphanRemoval = true)

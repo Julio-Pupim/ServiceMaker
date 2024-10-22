@@ -3,6 +3,9 @@ package br.com.servicemaker.domain;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Roles;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
@@ -29,6 +32,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
 public class Usuario extends AbstractEntity implements UserDetails {
 
 
@@ -43,7 +47,9 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @NotBlank
   private String senha;
 
-  private Boolean prestador;
+  @NotNull
+  @Column(name = "tipo_usuario", nullable = false)
+  private String tipoUsuario;
 
   @OneToMany(mappedBy = "usuario")
   private List<Endereco> endereco;
@@ -62,13 +68,13 @@ public class Usuario extends AbstractEntity implements UserDetails {
   private List<Avaliacao> avaliacoes;
 
   public Usuario(String nome, String cpf, String senha, Contato contato, Endereco endereco,
-      Boolean prestador, Roles role) {
+      String prestador, Roles role) {
     this.contato = contato;
     this.nome = nome;
     this.senha = senha;
     this.role = role;
     this.cpf = cpf;
-    this.prestador = prestador;
+    this.tipoUsuario = prestador;
     this.endereco = Collections.singletonList(endereco);
   }
 

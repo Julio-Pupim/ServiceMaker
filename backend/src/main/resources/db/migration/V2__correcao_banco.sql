@@ -2,14 +2,58 @@ alter table if exists usuario
     add column if not exists id_contato bigint,
     add column if not exists id_agenda  bigint;
 
-ALTER TABLE if exists usuario
-    ADD CONSTRAINT uc_usuario_id_agenda UNIQUE (id_agenda);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_type = 'FOREIGN KEY'
+        AND table_name = 'usuario'
+        AND constraint_name = 'fk_usuario_on_id_agenda'
+    ) THEN
+        ALTER TABLE usuario
+        ADD CONSTRAINT fk_usuario_on_id_agenda FOREIGN KEY (id_agenda) REFERENCES agenda (id);
+    END IF;
+END $$;
 
-ALTER TABLE if exists usuario
-    ADD CONSTRAINT uc_usuario_id_contato UNIQUE (id_contato);
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_type = 'FOREIGN KEY'
+        AND table_name = 'usuario'
+        AND constraint_name = 'fk_usuario_on_id_contato'
+    ) THEN
+        ALTER TABLE usuario
+        ADD CONSTRAINT fk_usuario_on_id_contato FOREIGN KEY (id_contato) REFERENCES contato (id);
+    END IF;
 
-ALTER TABLE if exists usuario
-    ADD CONSTRAINT FK_USUARIO_ON_ID_AGENDA FOREIGN KEY (id_agenda) REFERENCES agenda (id);
+END $$;
 
-ALTER TABLE if exists usuario
-    ADD CONSTRAINT FK_USUARIO_ON_ID_CONTATO FOREIGN KEY (id_contato) REFERENCES contato (id);
+ALTER TABLE IF EXISTS USUARIO
+    ALTER COLUMN cpf DROP NOT NULL,
+    ALTER COLUMN prestador TYPE varchar(10),
+    ALTER COLUMN prestador SET NOT NULL;
+
+
+ALTER TABLE IF EXISTS USUARIO
+  RENAME COLUMN prestador to tipo_usuario;
+
+
+ALTER TABLE IF EXISTS agenda
+    DROP CONSTRAINT IF EXISTS agenda_id_prestador_fkey,
+    ADD CONSTRAINT agenda_id_prestador_fkey FOREIGN KEY (id_prestador) REFERENCES usuario(id);
+
+ALTER TABLE avaliacao
+    DROP CONSTRAINT IF EXISTS avaliacao_id_prestador_fkey,
+    ADD CONSTRAINT avaliacao_id_prestador_fkey FOREIGN KEY (id_prestador) REFERENCES usuario(id);
+
+ALTER TABLE certificado
+    DROP CONSTRAINT IF EXISTS certificado_id_prestador_fkey,
+    ADD CONSTRAINT certificado_id_prestador_fkey FOREIGN KEY (id_prestador) REFERENCES usuario(id);
+
+ALTER TABLE servico
+    DROP CONSTRAINT IF EXISTS servico_id_prestador_fkey,
+    ADD CONSTRAINT servico_id_prestador_fkey FOREIGN KEY (id_prestador) REFERENCES usuario(id);
+
+DROP TABLE IF EXISTS prestador;
+

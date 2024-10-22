@@ -53,13 +53,12 @@ public class AutenticacaoController {
     Endereco endereco = new Endereco(data.enderecoDTO());
     if (data.prestador()) {
       Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
-          endereco, true, Roles.Prestador);
+          endereco, "prestador", Roles.Prestador);
       Usuario saved = this.repository.save(novoUsuario);
-
       return ResponseEntity.ok(saved);
     }
     Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
-        endereco, false, Roles.Cliente);
+        endereco, "cliente", Roles.Cliente);
 
     Usuario saved = this.repository.save(novoUsuario);
 
