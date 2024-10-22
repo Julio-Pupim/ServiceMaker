@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 const Cadastro = () => {
     const navigation = useNavigation();
@@ -14,11 +15,11 @@ const Cadastro = () => {
     };
 
     const loginClick = () => {
-      navigation.navigate('login');
+      router.navigate('/(auth)/login');
     };
 
     const senhaClick = () => {
-      navigation.navigate('recuperarsenha');
+      router.navigate('/(auth)/recuperarsenha');
     };
 
     return (

@@ -3,11 +3,11 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-
+import { router } from 'expo-router';
 
 const Inicio = () => {
 
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   const promocoes = [
     { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
@@ -43,15 +43,15 @@ const Inicio = () => {
   ];
 
   const agendaClick = () => {
-    navigation.navigate('agenda');
+    router.navigate('/(tabs)/agenda');
   };
 
   const profissionalClick = () => {
-    navigation.navigate('perfil');
+    router.navigate('/(tabs)/perfil');
   };
   
   const pesquisaClick = () => {
-    navigation.navigate('perfil');
+    router.navigate('/(tabs)/perfil');
   };
   
 
