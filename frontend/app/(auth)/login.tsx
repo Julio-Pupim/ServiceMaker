@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 const Login = () => {
     const navigation = useNavigation();
@@ -15,11 +16,11 @@ const Login = () => {
     };
 
     const cadastroClick = () => {
-      navigation.navigate('cadastro');
+      router.navigate('/(auth)/cadastro');
     };
 
     const senhaClick = () => {
-      navigation.navigate('recuperarsenha');
+      router.navigate('/(auth)/recuperarsenha');
     };
 
     return (
