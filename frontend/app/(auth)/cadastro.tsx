@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Controller, get, useForm, useWatch } from 'react-hook-form';
 import { View, Text, TextInput, Button, Image, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 type CadastroForm = {
   nome: string,
