@@ -2,16 +2,20 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
+import br.com.servicemaker.domain.enums.Roles;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -19,10 +23,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario extends AbstractEntity {
+public class Usuario extends AbstractEntity implements UserDetails {
 
   private String nome;
 
+  @CPF
   private String cpf;
 
   private String senha;
@@ -31,6 +36,16 @@ public class Usuario extends AbstractEntity {
 
   @OneToMany(mappedBy = "usuario")
   private List<Endereco> endereco;
+
+  @Enumerated
+  private Roles role;
+
+  public Usuario(Contato contato, String nome, String senha, Roles role){
+    this.contato = contato;
+    this.nome = nome;
+    this.senha = senha;
+    this.role = role;
+  }
 
   @OneToOne(orphanRemoval = true)
   @JoinColumn(name = "id_contato")
@@ -43,4 +58,24 @@ public class Usuario extends AbstractEntity {
   private List<Avaliacao> avaliacoes;
 
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if(Roles.Prestador.equals(this.role)) return List.of(new SimpleGrantedAuthority("ROLE_PRESTADOR"), new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    else return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+  }
+
+  @Override
+  public String getPassword() {
+    return this.getSenha();
+  }
+
+  @Override
+  public String getUsername() {
+    return this.getContato().getEmail();
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return UserDetails.super.isEnabled();
+  }
 }
