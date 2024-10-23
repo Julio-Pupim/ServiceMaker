@@ -85,8 +85,8 @@ const RecuperarSenha = () => {
               style={styles.textInput}
               onChangeText={text => setConfirmarSenha(text)}
             />
-            <TouchableOpacity style={styles.button} onPress={setNovaSenha}>
-              <Text style={styles.button}>Continuar</Text>
+            <TouchableOpacity style={styles.button} onPress={verificarEmail}>
+              <Text style={styles.buttonText}>Continuar</Text>
             </TouchableOpacity>
           </View>
         );
@@ -122,6 +122,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBCB1C',
     borderRadius: 10,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#000',
   },
 });
 
