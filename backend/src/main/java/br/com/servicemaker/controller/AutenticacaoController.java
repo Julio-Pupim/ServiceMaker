@@ -3,8 +3,10 @@ package br.com.servicemaker.controller;
 import br.com.servicemaker.DTO.AuthenticationDTO;
 import br.com.servicemaker.DTO.LoginResponseDTO;
 import br.com.servicemaker.DTO.RegistroDTO;
+import br.com.servicemaker.domain.Agenda;
 import br.com.servicemaker.domain.Contato;
 import br.com.servicemaker.domain.Endereco;
+import br.com.servicemaker.domain.Prestador;
 import br.com.servicemaker.domain.Usuario;
 import br.com.servicemaker.domain.enums.Roles;
 import br.com.servicemaker.infra.seguranca.TokenService;
@@ -50,15 +52,15 @@ public class AutenticacaoController {
     }
     String encryptedPassword = passwordEncoder.encode(data.senha());
     Contato contato = new Contato(data.contato());
-    Endereco endereco = new Endereco(data.enderecoDTO());
+    Endereco endereco = new Endereco(data.endereco());
     if (data.prestador()) {
-      Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
-          endereco, "prestador", Roles.Prestador);
-      Usuario saved = this.repository.save(novoUsuario);
+      Prestador novoPrestador = new Prestador(data.nome(), data.cpf(), encryptedPassword, contato,
+          endereco, Roles.PRESTADOR, new Agenda());
+      Prestador saved = this.repository.save(novoPrestador);
       return ResponseEntity.ok(saved);
     }
     Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
-        endereco, "cliente", Roles.Cliente);
+        endereco, Roles.CLIENTE);
 
     Usuario saved = this.repository.save(novoUsuario);
 

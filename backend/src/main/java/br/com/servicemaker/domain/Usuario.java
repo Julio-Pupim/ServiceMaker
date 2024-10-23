@@ -3,10 +3,11 @@ package br.com.servicemaker.domain;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Roles;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -33,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @NoArgsConstructor
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("CLIENTE")
 public class Usuario extends AbstractEntity implements UserDetails {
 
 
@@ -47,44 +49,39 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @NotBlank
   private String senha;
 
-  @NotNull
-  @Column(name = "tipo_usuario", nullable = false)
-  private String tipoUsuario;
-
   @OneToMany(mappedBy = "usuario")
   private List<Endereco> endereco;
 
-  @Enumerated
+  @Enumerated(EnumType.STRING)
   private Roles role;
 
-  @OneToOne(optional = false, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "id_contato")
   private Contato contato;
 
-  @OneToMany(mappedBy = "cliente", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
   private List<Reserva> reservas;
 
   @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
   private List<Avaliacao> avaliacoes;
 
   public Usuario(String nome, String cpf, String senha, Contato contato, Endereco endereco,
-      String prestador, Roles role) {
+      Roles role) {
     this.contato = contato;
     this.nome = nome;
     this.senha = senha;
     this.role = role;
     this.cpf = cpf;
-    this.tipoUsuario = prestador;
     this.endereco = Collections.singletonList(endereco);
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if (Roles.Prestador.equals(this.role)) {
-      return List.of(new SimpleGrantedAuthority("ROLE_PRESTADOR"),
-          new SimpleGrantedAuthority("ROLE_CLIENTE"));
+    if (Roles.PRESTADOR.equals(this.role)) {
+      return List.of(new SimpleGrantedAuthority(Roles.PRESTADOR.getRole()),
+          new SimpleGrantedAuthority(Roles.CLIENTE.getRole()));
     } else {
-      return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+      return List.of(new SimpleGrantedAuthority(Roles.CLIENTE.getRole()));
     }
   }
 

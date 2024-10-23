@@ -9,17 +9,17 @@ import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 type CadastroForm = {
   nome: string,
   contato: {
-    telefone?: string,
+    telefone: string,
     email: string,
   }
   senha: string,
   confirmaSenha: string,
   endereco?: {
-    rua: string,
-    numero: string,
-    cep: string,
-    complemento: string,
-    tipo: string
+    rua?: string,
+    numero?: string,
+    cep?: string,
+    complemento?: string,
+    tipo?: string
   }
   cpf?: string
   prestador: boolean
@@ -30,7 +30,7 @@ async function handleCadastro(data: CadastroForm) {
   try {
     await axios.post("http://localhost:8080/api/auth/registro", data);
     router.navigate("/(auth)/login");
-    
+
   } catch (error) {
     if (axios.isAxiosError(error) && error.status == 500) {
       console.error('Erro interno do sistema:', error.message);
@@ -51,13 +51,13 @@ const Cadastro = () => {
       },
       senha: '',
       confirmaSenha: '',
-      cpf: '',
+      cpf: undefined,
       endereco: {
-        cep: '',
-        rua: '',
-        complemento: '',
-        numero: '',
-        tipo: '',
+        cep: undefined,
+        rua: undefined,
+        complemento: undefined,
+        numero: undefined,
+        tipo: undefined,
       },
       prestador: false,
       nome: ''
@@ -90,6 +90,7 @@ const Cadastro = () => {
           control={control}
           name='contato.telefone'
           rules={{
+            required: 'Telefone é obrigatório',
             maxLength: {
               value: 11,
               message: 'O telefone deve ter no máximo 11 dígitos (DDD + número)',

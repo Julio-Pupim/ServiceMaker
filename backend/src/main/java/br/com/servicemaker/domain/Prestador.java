@@ -1,7 +1,7 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.domain.enums.Roles;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("prestador")
 public class Prestador extends Usuario {
 
-  @Column(name = "tipo_usuario", insertable = false, updatable = false)
-  private String tipoUsuario;
 
   @OneToOne(cascade = {CascadeType.REMOVE,
       CascadeType.MERGE}, optional = false, orphanRemoval = true)
@@ -36,5 +34,10 @@ public class Prestador extends Usuario {
       CascadeType.MERGE}, orphanRemoval = true)
   private List<Certificado> certificados;
 
-
+  public Prestador(String nome, String cpf, String senha, Contato contato, Endereco endereco,
+      Roles role,
+      Agenda agenda) {
+    super(nome, cpf, senha, contato, endereco, role);
+    this.agenda = agenda;
+  }
 }

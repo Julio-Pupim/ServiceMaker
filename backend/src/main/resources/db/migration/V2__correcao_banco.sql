@@ -1,7 +1,7 @@
 alter table if exists usuario
     add column if not exists id_contato bigint,
-    add column if not exists id_agenda  bigint;
-
+    add column if not exists id_agenda  bigint,
+    ADD COLUMN role varchar(20) NOT NULL;
 DO $$
 BEGIN
     IF NOT EXISTS (
@@ -57,3 +57,15 @@ ALTER TABLE servico
 
 DROP TABLE IF EXISTS prestador;
 
+ALTER TABLE IF EXISTS contato
+DROP COLUMN id_usuario;
+
+ALTER TABLE IF EXISTS CONTATO
+DROP COLUMN celular,
+ALTER COLUMN telefone SET NOT NULL;
+
+ALTER TABLE usuario
+ALTER COLUMN senha TYPE TEXT;
+
+ALTER TABLE ENDERECO
+ALTER COLUMN tipo TYPE TEXT
