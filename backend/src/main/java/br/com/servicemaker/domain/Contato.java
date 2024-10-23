@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.DTO.ContatoDTO;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -30,4 +31,10 @@ public class Contato extends AbstractEntity {
   @OneToOne(mappedBy = "contato")
   private Usuario usuario;
 
+  public Contato(ContatoDTO contato) {
+    super();
+    this.telefone = contato.telefone();
+    this.celular = contato.celular();
+    this.email = contato.email();
+  }
 }
