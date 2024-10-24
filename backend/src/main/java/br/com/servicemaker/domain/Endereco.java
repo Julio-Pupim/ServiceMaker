@@ -1,5 +1,6 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.DTO.EnderecoDTO;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -32,4 +33,12 @@ public class Endereco extends AbstractEntity {
   @JoinColumn(name = "ID_USUARIO", nullable = false)
   private Usuario usuario;
 
+  public Endereco(EnderecoDTO enderecoDTO) {
+    super();
+    this.cep = enderecoDTO.cep();
+    this.rua = enderecoDTO.rua();
+    this.numero = enderecoDTO.numero();
+    this.complemento = enderecoDTO.complemento();
+    this.tipo = enderecoDTO.tipo();
+  }
 }

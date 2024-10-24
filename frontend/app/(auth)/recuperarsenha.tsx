@@ -1,5 +1,7 @@
-import { View, Text, StatusBar, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, StatusBar, Image, TextInput, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 
 const RecuperarSenha = () => {
   const [email, setEmail] = useState('');
@@ -32,21 +34,29 @@ const RecuperarSenha = () => {
     switch (step) {
       case 1:
         return (
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
             <StatusBar hidden />
             <Image
               style={{ width: 200, height: 40 }}
-              src='../../assets/images/ServiceMakerWhiteLogo.png'
+              source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
             />
             <TextInput
               placeholder='Email'
               style={styles.textInput}
               onChangeText={text => setEmail(text)}
             />
-            <TouchableOpacity style={styles.button} onPress={verificarEmail}>
-              <Text style={styles.button}>Continuar</Text>
+            <Pressable style={styles.button} onPress={verificarEmail}>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
+            </Pressable>
+
+            <TouchableOpacity style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
+              <Text style={styles.redirectText}>Já possui uma conta? Realizar Login</Text>
             </TouchableOpacity>
-          </View>
+
+            <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
+              <Text style={styles.redirectText}>Não possui uma conta? Realizar Cadastro</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
         );
       case 2:
         return (
@@ -54,16 +64,16 @@ const RecuperarSenha = () => {
             <StatusBar hidden />
             <Image
               style={{ width: 200, height: 40 }}
-              src='../../assets/images/ServiceMakerLogoWhiteLogo.png'
+              source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
             />
             <TextInput
               placeholder='Código de verificação'
               style={styles.textInput}
               onChangeText={text => setCodigoVerificacao(text)}
             />
-            <TouchableOpacity style={styles.button} onPress={verificarCodigo}>
-              <Text style={styles.button}>Continuar</Text>
-            </TouchableOpacity>
+            <Pressable style={styles.button} onPress={verificarCodigo}>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
+            </Pressable>
           </View>
         );
       case 3:
@@ -72,7 +82,7 @@ const RecuperarSenha = () => {
             <StatusBar hidden />
             <Image
               style={{ width: 200, height: 40 }}
-              src='../../assets/images/ServiceMakerWhiteLogo.png'
+              source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
             />
             <TextInput
               placeholder='Senha'
@@ -85,7 +95,7 @@ const RecuperarSenha = () => {
               onChangeText={text => setConfirmarSenha(text)}
             />
             <TouchableOpacity style={styles.button} onPress={verificarEmail}>
-              <Text style={styles.buttonText}>Continuar</Text>
+              <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
             </TouchableOpacity>
           </View>
         );
@@ -121,11 +131,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FBCB1C',
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center',
   },
-  buttonText: {
-    textAlign: 'center',
+  redirect: {
+    marginTop: 20,
+  },
+  redirectText: {
     color: '#000',
+    textAlign: 'center',
   },
 });
 

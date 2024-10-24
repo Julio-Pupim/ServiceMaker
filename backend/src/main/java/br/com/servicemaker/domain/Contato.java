@@ -1,6 +1,8 @@
 package br.com.servicemaker.domain;
 
+import br.com.servicemaker.DTO.ContatoDTO;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -18,9 +20,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Contato extends AbstractEntity {
 
+  @NotNull
+  @NotBlank
+  @Column(nullable = false)
   private String telefone;
-
-  private String celular;
 
   @Email
   @NotBlank
@@ -30,4 +33,9 @@ public class Contato extends AbstractEntity {
   @OneToOne(mappedBy = "contato")
   private Usuario usuario;
 
+  public Contato(ContatoDTO contato) {
+    super();
+    this.telefone = contato.telefone();
+    this.email = contato.email();
+  }
 }
