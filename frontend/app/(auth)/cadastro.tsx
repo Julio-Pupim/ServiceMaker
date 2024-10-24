@@ -3,7 +3,7 @@ import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 
 type CadastroForm = {
@@ -268,9 +268,13 @@ const Cadastro = () => {
           <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
         </Pressable>
 
-        <Pressable onPress={() => router.navigate("/(auth)/login")}>
-          <Text>Já possui uma conta? Realizar Login</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
+          <Text style={styles.redirectText}>Já possui uma conta? Realizar Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+          <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -335,6 +339,13 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     marginLeft: 10,         // Espaçamento entre o checkbox e o texto
+  },
+  redirect: {
+    marginTop: 20,
+  },
+  redirectText: {
+    color: '#000',
+    textAlign: 'center',
   },
 })
 

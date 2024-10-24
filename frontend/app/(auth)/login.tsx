@@ -94,16 +94,16 @@ const LoginScreen = () => {
       />
       {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
 
-      <TouchableOpacity style={[styles.button, { opacity: isValid ? 1 : 0.5 }]} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
+      <TouchableOpacity style={styles.button} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => { router.navigate('/recuperarsenha') }}>
-        <Text>Esqueceu sua senha?</Text>
+      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
+        <Text style={styles.redirectText}>Não possui uma conta? Realizar Cadastro</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => { router.navigate('/cadastro') }}>
-        <Text>Não possui uma conta? Realizar Cadastro</Text>
+      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+        <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -143,7 +143,13 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
   },
-
+  redirect: {
+    marginTop: 20,
+  },
+  redirectText: {
+    color: '#000',
+    textAlign: 'center',
+  },
 });
 
 export default LoginScreen
