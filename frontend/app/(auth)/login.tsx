@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -15,7 +14,7 @@ type LoginForm = {
 const login = async (data: LoginForm) => {
   try {
 
-    const response = await axios.post('https://localhost:8080/api/login', data);
+    const response = await axios.post('http://localhost:8080/api/login', data);
     return response.data.token;
 
   } catch (error) {

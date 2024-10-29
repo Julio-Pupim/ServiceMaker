@@ -1,5 +1,6 @@
 import { View, Text, StatusBar, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RecuperarSenha = () => {
   const [email, setEmail] = useState('');
@@ -32,7 +33,7 @@ const RecuperarSenha = () => {
     switch (step) {
       case 1:
         return (
-          <View style={styles.container}>
+          <SafeAreaView style={styles.container}>
             <StatusBar hidden />
             <Image
               style={{ width: 200, height: 40 }}
@@ -46,7 +47,7 @@ const RecuperarSenha = () => {
             <TouchableOpacity style={styles.button} onPress={verificarEmail}>
               <Text style={styles.button}>Continuar</Text>
             </TouchableOpacity>
-          </View>
+          </SafeAreaView>
         );
       case 2:
         return (

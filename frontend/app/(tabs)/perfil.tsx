@@ -32,7 +32,7 @@ export default function Perfil() {
         </TouchableOpacity>
 
         <View style={styles.formulario}>
-          <View style={styles.containerInput}>
+          <View >
             <Text style={styles.label}>Nome Completo</Text>
             <View style={styles.wrapperInput}>
               <TextInput
@@ -44,7 +44,7 @@ export default function Perfil() {
             </View>
           </View>
 
-          <View style={styles.containerInput}>
+          <View >
             <Text style={styles.label}>E-mail</Text>
             <View style={styles.wrapperInput}>
               <TextInput
@@ -57,7 +57,7 @@ export default function Perfil() {
             </View>
           </View>
 
-          <View style={styles.containerInput}>
+          <View >
             <Text style={styles.label}>Número de Celular</Text>
             <View style={styles.wrapperInput}>
               <TextInput
@@ -70,7 +70,7 @@ export default function Perfil() {
             </View>
           </View>
 
-          <View style={styles.containerInput}>
+          <View >
             <Text style={styles.label}>Endereço</Text>
             <View style={styles.wrapperInput}>
               <TextInput
@@ -138,9 +138,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginTop: 30,
   },
-  containerInput: {
-    marginBottom: 20,
-  },
   label: {
     fontSize: 14,
     color: 'gray',
@@ -149,20 +146,23 @@ const styles = StyleSheet.create({
   wrapperInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-    borderRadius: 8,
-    padding: 8,
+    padding: 0,
     backgroundColor: '#fff',
-    elevation: 1,
   },
   input: {
-    flex: 1,
-    fontSize: 16,
-    color: 'black',
+    flex: 1, 
+    height: 40,
+    paddingLeft: 10,
+    marginVertical: 10,
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 10,
   },
   iconEditar: {
     marginLeft: 10,
+    position: 'absolute',
+    right: 10, 
   },
   botaoSalvar: {
     backgroundColor: '#007BFF',

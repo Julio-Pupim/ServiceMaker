@@ -1,15 +1,62 @@
-import { View } from 'react-native';
+import { router } from 'expo-router';
 import React from 'react';
-import { Link } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, Button, StyleSheet, Image, Pressable } from 'react-native';
 
-const App = () => {
+export default function InicioLogin() {
   return (
-    <SafeAreaView>
-      <Link href="./(auth)/login" style={{ color: 'blue' }}>Auth</Link>
-      <Link href="./(tabs)/inicio" style={{ color: 'blue' }}>App</Link>
-    </SafeAreaView>
-  );
-};
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={require('../assets/images/ServiceMakerVectorLogo.png')} style={styles.logo} />
+        <Text style={styles.title}>Service Maker</Text> 
+        <Text style={styles.subtitle}>Conectando cliente ao prestador</Text>
+      </View>
 
-export default App;
+      <Pressable style={styles.button} onPress={() => {router.navigate("/(auth)/login") }}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
+
+      <Pressable style={styles.button} onPress={() => { router.navigate("/(auth)/cadastro")}}>
+        <Text style={styles.buttonText}>Cadastrar</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 40, 
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#000',
+    marginBottom: 40,
+  },
+  button: {
+    backgroundColor: '#FFC107',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+});
