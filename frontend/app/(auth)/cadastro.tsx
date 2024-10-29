@@ -45,7 +45,7 @@ const Cadastro = () => {
         render={({ field: { onChange, value } }) => (
           <TextInput
             placeholder='digite seu nome'
-            style={styles.textInput}
+            style={[styles.textInput, { marginTop: 80}]}
             value={value}
             onChangeText={onChange}
           />
@@ -58,7 +58,7 @@ const Cadastro = () => {
         render={({ field: { onChange, value } }) => (
           <TextInput
             placeholder='Digite sua senha'
-            style={styles.textInput}
+            style={[styles.textInput, { marginTop: -3}]}
             secureTextEntry={true}
             value={value}
             onChangeText={onChange}
@@ -77,22 +77,18 @@ const Cadastro = () => {
         render={({ field: { onChange, value } }) => (
           <TextInput
             placeholder='Senha'
-            style={styles.textInput}
+            style={[styles.textInput, { marginTop: -3}]}
             secureTextEntry={true}
             value={value}
             onChangeText={onChange}
           />
         )}
       />
-      <TouchableOpacity style={styles.button} onPress={(data) => console.log(data)}>
+      <TouchableOpacity style={[styles.button, { marginBottom: 10, marginTop: 20}]} onPress={(data) => console.log(data)}>
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity>
-        <Text>Esqueceu sua senha?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => { router.navigate('/login') }}>
         <Text>Já possui uma conta? Realizar Login</Text>
       </TouchableOpacity>
     </View>

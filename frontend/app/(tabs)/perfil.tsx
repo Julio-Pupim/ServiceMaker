@@ -2,6 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { router } from 'expo-router';
+
+const inicio = () => {
+  router.navigate('/inicio');
+};
 
 export default function Perfil() {
   const [nome, setNome] = useState('');
@@ -82,7 +87,7 @@ export default function Perfil() {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.botaoSalvar}>
+          <TouchableOpacity style={styles.botaoSalvar} onPress={inicio}>
             <Text style={styles.textoBotaoSalvar}>Salvar</Text>
           </TouchableOpacity>
         </View>

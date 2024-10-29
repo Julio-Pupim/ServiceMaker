@@ -64,6 +64,7 @@ const LoginScreen = () => {
       <Image style={styles.logo}
         source={require('../../assets/images/ServiceMakerWhiteLogo.png')}
       />
+      
       <Controller
         control={control}
         name='email'
@@ -71,7 +72,7 @@ const LoginScreen = () => {
         render={({ field: { onChange, value } }) => (
           <TextInput
             placeholder='digite seu email'
-            style={styles.textInput}
+            style={[styles.textInput, { marginTop: 80, marginBottom: -3}]}
             value={value}
             onChangeText={onChange}
           />
@@ -86,7 +87,7 @@ const LoginScreen = () => {
         render={({ field: { onChange, value } }) => (
           <TextInput
             placeholder='Senha'
-            style={styles.textInput}
+            style={[styles.textInput, { marginBottom: 2}]}
             secureTextEntry={true}
             value={value}
             onChangeText={onChange}
@@ -95,16 +96,16 @@ const LoginScreen = () => {
       />
       {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
 
-      <TouchableOpacity style={[styles.button, { opacity: isValid ? 1 : 0.5 }]} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
+      <TouchableOpacity style={[styles.button, { opacity: isValid ? 1 : 0.5 }, {marginTop: 25}]} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => { router.navigate('/recuperarsenha') }}>
-        <Text>Esqueceu sua senha?</Text>
+      <TouchableOpacity style={{ marginTop: 20 }} onPress={() => { router.navigate('/recuperarsenha') }}>
+        <Text>Esqueceu sua senha ?</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => { router.navigate('/cadastro') }}>
-        <Text>Não possui uma conta? Realizar Cadastro</Text>
+        <Text>Não possui uma conta ? Realizar Cadastro</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
