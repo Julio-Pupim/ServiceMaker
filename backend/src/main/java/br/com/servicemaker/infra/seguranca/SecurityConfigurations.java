@@ -28,19 +28,21 @@ public class SecurityConfigurations {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
     return httpSecurity
-        .cors(request -> {
-          CorsConfiguration configuration = new CorsConfiguration();
-          configuration.setAllowedOrigins(List.of("http://localhost:8081"));
-          configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-          configuration.setAllowedOrigins(List.of("*"));
-          configuration.setAllowedMethods(List.of("*"));
-          configuration.setAllowedHeaders(List.of("*"));
+        .cors(cors -> {
+          cors.configurationSource(request -> {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(List.of("http://localhost:8081"));
+            configuration.setAllowedMethods(List.of("*"));
+            configuration.setAllowedHeaders(List.of("*"));
+            return configuration;
+          });
         })
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/auth/registro").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
             .requestMatchers("/api/servicos").hasRole("PRESTADOR")
             .anyRequest().authenticated()
         )

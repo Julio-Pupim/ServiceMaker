@@ -3,23 +3,23 @@ import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity } from 'react-native';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 
 type CadastroForm = {
   nome: string,
   contato: {
-    telefone?: string,
+    telefone: string,
     email: string,
   }
   senha: string,
   confirmaSenha: string,
   endereco?: {
-    rua: string,
-    numero: string,
-    cep: string,
-    complemento: string,
-    tipo: string
+    rua?: string,
+    numero?: string,
+    cep?: string,
+    complemento?: string,
+    tipo?: string
   }
   cpf?: string
   prestador: boolean
@@ -30,7 +30,7 @@ async function handleCadastro(data: CadastroForm) {
   try {
     await axios.post("http://localhost:8080/api/auth/registro", data);
     router.navigate("/(auth)/login");
-    
+
   } catch (error) {
     if (axios.isAxiosError(error) && error.status == 500) {
       console.error('Erro interno do sistema:', error.message);
@@ -51,13 +51,13 @@ const Cadastro = () => {
       },
       senha: '',
       confirmaSenha: '',
-      cpf: '',
+      cpf: undefined,
       endereco: {
-        cep: '',
-        rua: '',
-        complemento: '',
-        numero: '',
-        tipo: '',
+        cep: undefined,
+        rua: undefined,
+        complemento: undefined,
+        numero: undefined,
+        tipo: undefined,
       },
       prestador: false,
       nome: ''
@@ -90,6 +90,7 @@ const Cadastro = () => {
           control={control}
           name='contato.telefone'
           rules={{
+            required: 'Telefone é obrigatório',
             maxLength: {
               value: 11,
               message: 'O telefone deve ter no máximo 11 dígitos (DDD + número)',
@@ -267,9 +268,13 @@ const Cadastro = () => {
           <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
         </Pressable>
 
-        <Pressable onPress={() => router.navigate("/(auth)/login")}>
-          <Text>Já possui uma conta? Realizar Login</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
+          <Text style={styles.redirectText}>Já possui uma conta? Realizar Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+          <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -334,6 +339,13 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     marginLeft: 10,         // Espaçamento entre o checkbox e o texto
+  },
+  redirect: {
+    marginTop: 20,
+  },
+  redirectText: {
+    color: '#000',
+    textAlign: 'center',
   },
 })
 
