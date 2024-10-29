@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record ContatoDTO(String telefone, String celular, @Email @NotBlank @NotNull String email) {
+public record ContatoDTO(@NotBlank @NotNull String telefone,
+                         @Email @NotBlank @NotNull String email) {
 
 }

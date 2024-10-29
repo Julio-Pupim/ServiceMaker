@@ -1,7 +1,6 @@
 package br.com.servicemaker.DTO;
 
-public record AuthenticationDTO (String email, String password){
-
+public record AuthenticationDTO(String email, String senha) {
 
 
 }

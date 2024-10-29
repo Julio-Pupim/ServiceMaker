@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 export default function AuthLayout() {
   return (
     <>
-      <Stack>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="cadastro"
           options={{ headerShown: false }}
