@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("*")
 public class AutenticacaoController {
 
   private final AuthenticationManager authenticationManager;
@@ -36,7 +34,7 @@ public class AutenticacaoController {
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
-    var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+    var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
     var servMaker = this.authenticationManager.authenticate(usernamePassword);
 
     var token = tokenService.gerarToken((Usuario) servMaker.getPrincipal());
