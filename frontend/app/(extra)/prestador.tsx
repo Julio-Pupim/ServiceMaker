@@ -28,8 +28,9 @@ const Prestadores = () => {
     <View style = {styles.container}>
       <StatusBar hidden/>
       <View style = {styles.topoTela}>
+        <Ionicons name="arrow-back-outline" size={30} color="white"/>
         <View style={styles.userText}>
-          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Ionicons name="bag-handle-outline" size={35} color="white" />
           <Text style={styles.userName}>Prestadores</Text>
         </View>
       </View>
@@ -57,11 +58,13 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         padding: 16,
-        backgroundColor:'white',
+        backgroundColor:'#ECF0F1',
         
    
     },
     topoTela:{
+      flexDirection: 'row',
+      justifyContent: 'space-around',
       backgroundColor: '#FFD700',
       borderBottomLeftRadius: 20,
       borderBottomRightRadius: 20,
@@ -70,7 +73,11 @@ const styles = StyleSheet.create({
     },
     userText: {
       flexDirection: 'row',
+      marginHorizontal: 20,
       alignItems: 'center',
+      marginRight:300,
+  
+      
     },
     userName: {
       color: 'white',

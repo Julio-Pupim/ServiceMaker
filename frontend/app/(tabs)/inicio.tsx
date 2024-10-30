@@ -4,8 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { Icon } from 'lucide-react-native';
+import { TextInput } from 'react-native-gesture-handler';
+import Pesquisa from '../search/[query]';
 
 const Inicio = () => {
+  const [searchText, setSearchText] = useState('');
 
   //const navigation = useNavigation();
 
@@ -53,6 +57,10 @@ const Inicio = () => {
   const pesquisaClick = () => {
     router.navigate('/(tabs)/perfil');
   };
+
+  const prestadorClick = () => {
+    router.navigate('/(extra)/prestador')
+  }
   
 
   return (
@@ -67,7 +75,17 @@ const Inicio = () => {
 
       <View>
         <Text style={styles.greetings}>Olá, usuário!</Text>
-        <Text style={styles.subText}>O que você procura hoje?</Text>
+      </View>
+
+      <View style={styles.pesquisa}>
+        <Ionicons name = "search" size = {20} color = "black" style={styles.iconPesquisa} />
+        <TextInput
+          style={styles.textoPesquisa}  
+          placeholder="O que você procura hoje?" 
+          value={searchText}
+          onChangeText={setSearchText}  
+        />
+
       </View>
 
       <View style={styles.promocoesContainer}>
@@ -82,7 +100,7 @@ const Inicio = () => {
       <Text style={styles.sectionTitle}>Serviços frequentes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {servicosFrequentes.map(servico => (
-          <TouchableOpacity key={servico.id} style={styles.servicoItem} onPress={agendaClick}>
+          <TouchableOpacity key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>
             <Ionicons name={servico.icon} size={35} color="black"/>
             <Text style={styles.servicoText}>{servico.descricao}</Text>
           </TouchableOpacity>
@@ -186,6 +204,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  pesquisa:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    height: 40,
+  },
+  iconPesquisa: {
+    marginRight: 10
+  },
+  textoPesquisa:{
+    flex: 1,
+    fontSize: 16,
+  },
+
 });
 
 export default Inicio;
