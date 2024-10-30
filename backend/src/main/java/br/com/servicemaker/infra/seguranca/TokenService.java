@@ -8,7 +8,9 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,11 +20,17 @@ public class TokenService {
   private String secret;
 
   public String gerarToken(Usuario usuario) {
+
+    List<String> roles = usuario.getAuthorities().stream()
+        .map(GrantedAuthority::getAuthority)
+        .toList();
+    
     try {
       Algorithm algorithm = Algorithm.HMAC256(secret);
       return JWT.create()
           .withIssuer("serviceMaker-api")
           .withSubject(usuario.getContato().getEmail())
+          .withClaim("roles", roles)
           .withExpiresAt(genDataVencimento())
           .sign(algorithm);
     } catch (JWTCreationException e) {

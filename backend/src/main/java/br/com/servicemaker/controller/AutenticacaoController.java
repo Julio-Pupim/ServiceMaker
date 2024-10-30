@@ -11,6 +11,7 @@ import br.com.servicemaker.domain.Usuario;
 import br.com.servicemaker.domain.enums.Roles;
 import br.com.servicemaker.infra.seguranca.TokenService;
 import br.com.servicemaker.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,7 @@ public class AutenticacaoController {
   }
 
   @PostMapping("/registro")
+  @Transactional
   public ResponseEntity<Usuario> registro(@RequestBody @Valid RegistroDTO data) {
 
     if (this.repository.findByContatoEmail(data.contato().email()) != null) {

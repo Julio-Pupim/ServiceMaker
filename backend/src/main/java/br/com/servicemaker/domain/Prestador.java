@@ -22,8 +22,7 @@ import lombok.NoArgsConstructor;
 public class Prestador extends Usuario {
 
 
-  @OneToOne(cascade = {CascadeType.REMOVE,
-      CascadeType.MERGE}, optional = false, orphanRemoval = true)
+  @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @JoinColumn(name = "id_agenda", nullable = false, referencedColumnName = "id")
   private Agenda agenda;
 
