@@ -3,6 +3,8 @@ import { SafeAreaView, Text, View, TextInput, TouchableOpacity, StyleSheet, Scro
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import  ServicoService from '../../service/ServicoService'
+import { router } from 'expo-router';
 
 
 type criarServicoForm = {
@@ -26,7 +28,20 @@ export default function criaServico() {
     },
     mode: "onChange"
   });
-  const onSubmit = (data: criarServicoForm) => console.log(data);
+
+  
+
+  const onSubmit = async (data: criarServicoForm) => {
+
+    ServicoService: ServicoService;
+
+    try {
+      await ServicoService.createServico(data);
+      router.navigate('ListaServico');
+    } catch (error) {
+      console.error('Erro ao cadastrar serviço:', error);
+    }
+  };
 
   const onlyText = (text: string) => text.replace(/[^a-zA-Z\s]/g, '');
 
