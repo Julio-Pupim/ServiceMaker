@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Text, TextInput, Image, StyleSheet, Pressable } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -94,17 +94,17 @@ const LoginScreen = () => {
       />
       {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
+      <Pressable style={styles.button} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
-      </TouchableOpacity>
+      </Pressable>
 
-      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
+      <Pressable style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
         <Text style={styles.redirectText}>Não possui uma conta? Realizar Cadastro</Text>
-      </TouchableOpacity>
+      </Pressable>
 
-      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+      <Pressable style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
         <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ECF0F1',
+    backgroundColor: '#FFFFFF',
     padding: 20,
   },
   textInput: {

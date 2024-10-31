@@ -1,14 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, View, TextInput, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-export default function Perfil() {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [endereco, setEndereco] = useState('');
-
+const Perfil = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -18,74 +14,50 @@ export default function Perfil() {
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
-
-      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-        <View style={styles.containerPerfil}>
-          <Image
+      <ScrollView contentContainerStyle={styles.content}>
+        <View style={styles.profileContainer}>
+          <Image 
             source={{ uri: 'https://via.placeholder.com/100' }} 
-            style={styles.imagemPerfil}
+            style={styles.profileImage} 
           />
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>Usuário</Text>
+            <Text style={styles.profilePhone}>55 44 1234-5678</Text>
+          </View>
+          <Pressable style={styles.editButton} onPress={() => { router.navigate('/(perfil)/edicaoperfil') }}>
+            <Icon name="edit" size={24} color="white" />
+          </Pressable>
         </View>
 
-        <TouchableOpacity style={styles.iconEditarPerfil}>
-          <Icon name="edit" size={24} color="white" />
-        </TouchableOpacity>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/endereco') }}>
+          <Icon name="location-on" size={24} color="black" />
+          <Text style={styles.menuText}>Gerenciar endereço</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
 
-        <View style={styles.formulario}>
-          <View >
-            <Text style={styles.label}>Nome Completo</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={nome}
-                onChangeText={setNome}
-                style={styles.input}
-              />
-              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
-            </View>
-          </View>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/compartilhe') }}>
+          <Icon name="share" size={24} color="black" />
+          <Text style={styles.menuText}>Compartilhe</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
 
-          <View >
-            <Text style={styles.label}>E-mail</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                keyboardType="email-address"
-              />
-              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
-            </View>
-          </View>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/avaliacao') }}>
+          <Icon name="star-rate" size={24} color="black" />
+          <Text style={styles.menuText}>Nos avalie</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
 
-          <View >
-            <Text style={styles.label}>Número de Celular</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={telefone}
-                onChangeText={setTelefone}
-                style={styles.input}
-                keyboardType="phone-pad"
-              />
-              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
-            </View>
-          </View>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/sobre') }}>
+          <Icon name="info" size={24} color="black" />
+          <Text style={styles.menuText}>Sobre o Service Maker</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
 
-          <View >
-            <Text style={styles.label}>Endereço</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={endereco}
-                onChangeText={setEndereco}
-                style={styles.input}
-              />
-              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
-            </View>
-          </View>
-
-          <TouchableOpacity style={styles.botaoSalvar}>
-            <Text style={styles.textoBotaoSalvar}>Salvar</Text>
-          </TouchableOpacity>
-        </View>
+        <Pressable style={styles.menuItem}>
+          <Icon name="logout" size={24} color="black" />
+          <Text style={styles.menuText}>Sair</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -113,80 +85,56 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 15,
   },
-  scrollViewContainer: {
-    paddingBottom: 100, 
+  content: {
+    padding: 20,
   },
-  containerPerfil: {
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  imagemPerfil: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderColor: '#fbcb1c',
-    borderWidth: 2,
-  },
-  iconEditarPerfil: {
-    backgroundColor: '#007BFF',
-    borderRadius: 15,
-    padding: 5,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  formulario: {
-    paddingHorizontal: 20,
-    marginTop: 30,
-  },
-  label: {
-    fontSize: 14,
-    color: 'gray',
-    marginBottom: 5,
-  },
-  wrapperInput: {
+  profileContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomColor: '#ddd',
-    padding: 0,
-    backgroundColor: '#fff',
+    marginBottom: 30,
   },
-  input: {
-    flex: 1, 
-    height: 40,
-    paddingLeft: 10,
-    marginVertical: 10,
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 10,
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginRight: 15,
   },
-  iconEditar: {
-    marginLeft: 10,
-    position: 'absolute',
-    right: 10, 
+  profileInfo: {
+    flex: 1,
   },
-  botaoSalvar: {
-    backgroundColor: '#007BFF',
-    borderRadius: 8,
-    padding: 15,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  textoBotaoSalvar: {
-    color: 'white',
-    fontSize: 16,
+  profileName: {
+    fontSize: 20,
     fontWeight: 'bold',
   },
-  rodape: {
+  profilePhone: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  editButton: {
+    backgroundColor: '#FBCB1C',
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  menuText: {
+    flex: 1,
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  footer: {
+    backgroundColor: '#FFD700',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#fbcb1c',
     paddingVertical: 10,
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-  },
-  iconRodape: {
-    paddingHorizontal: 20,
   },
 });
 

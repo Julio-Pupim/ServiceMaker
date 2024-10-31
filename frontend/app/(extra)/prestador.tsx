@@ -1,8 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { AlignCenter, Navigation } from 'lucide-react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 
 
