@@ -100,7 +100,7 @@ const Inicio = () => {
       <Text style={styles.sectionTitle}>Serviços frequentes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {servicosFrequentes.map(servico => (
-          <TouchableOpacity key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>
+          <TouchableOpacity key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>   
             <Ionicons name={servico.icon} size={35} color="black"/>
             <Text style={styles.servicoText}>{servico.descricao}</Text>
           </TouchableOpacity>
@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
   pesquisa:{
     flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: 10, 
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     paddingHorizontal: 10,
