@@ -1,13 +1,21 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://localhost:8080/api/servico';
+const API_URL = 'http://localhost:8080/api/servicos';
+
 
 // Função para recuperar o token do AsyncStorage
 const getAuthToken = async () => {
   try {
-    const token = await AsyncStorage.getItem('authToken');
-    return token;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Ambiente navegador
+      console.log('pegou token')
+      return window.localStorage.getItem('jwt_token');
+      
+    } else {
+      // Ambiente móvel
+      return await AsyncStorage.getItem('jwt_token');
+    }
   } catch (error) {
     console.error('Erro ao recuperar token:', error);
     return null;
@@ -25,6 +33,7 @@ axiosInstance.interceptors.request.use(
     const token = await getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('interceptor')
     }
     return config;
   },
@@ -32,6 +41,18 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+const createServico = async (servicos) => {
+  try {
+    const response = await axiosInstance.post('/', servicos);
+    console.log('criou serviço')
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar serviço:', error);
+    throw error;
+  }
+};
+
 
 // Funções CRUD utilizando axiosInstance com o token já configurado
 const getAllServicos = async () => {
@@ -54,15 +75,6 @@ const getServicoById = async (id) => {
   }
 };
 
-const createServico = async (servico) => {
-  try {
-    const response = await axiosInstance.post('/', servico);
-    return response.data;
-  } catch (error) {
-    console.error('Erro ao criar serviço:', error);
-    throw error;
-  }
-};
 
 const updateServico = async (id, servico) => {
   try {
