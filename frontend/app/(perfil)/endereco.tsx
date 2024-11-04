@@ -30,10 +30,6 @@ export default function GerenciarEndereco() {
         </View>
       </View>
       
-      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-        <Text style={styles.returnText}>Voltar</Text>
-      </Pressable>
-      
       <View style={styles.inputContainer}>
         <Controller
           control={control}
@@ -66,6 +62,10 @@ export default function GerenciarEndereco() {
           </View>
         )}
       />
+ 
+      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
+        <Text style={styles.returnText}>Voltar</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };

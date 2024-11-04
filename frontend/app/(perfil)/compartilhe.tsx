@@ -23,7 +23,10 @@ export default function Compartilhar() {
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
-        <Text style={styles.headerText}>Compartilhe</Text>
+        <View style={styles.userText}>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>Usuário</Text>
+        </View>
       </View>
       <View style={styles.content}>
         <Text style={styles.description}>
@@ -46,17 +49,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems: 'center',
   },
   header: {
     backgroundColor: '#FBCB1C',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
     padding: 25,
-    alignItems: 'center',
     marginBottom: 20,
+    width: '100%',
   },
-  headerText: {
+  userText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userName: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginLeft: 15,
   },
   content: {
     padding: 20,

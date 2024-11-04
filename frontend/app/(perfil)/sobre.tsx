@@ -1,10 +1,18 @@
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
 
 export default function SobreNos() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
+      <View style={styles.header}>
+        <View style={styles.userText}>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>Usuário</Text>
+        </View>
+      </View>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Sobre o Service Maker</Text>
 
@@ -49,6 +57,10 @@ export default function SobreNos() {
           Venha fazer parte da nossa comunidade! Experimente o Service Maker e descubra como podemos facilitar o seu dia a dia.
         </Text>
       </ScrollView>
+
+      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
+        <Text style={styles.returnText}>Voltar</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
@@ -57,6 +69,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  header: {
+    backgroundColor: '#FBCB1C',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 25,
+    marginBottom: 20,
+    width: '100%',
+  },
+  userText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userName: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginLeft: 15,
   },
   content: {
     padding: 20,
@@ -90,5 +121,12 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#333',
     marginBottom: 5,
+  },
+  returnButton: {
+    marginTop: 15,
+    alignItems: 'center',
+  },
+  returnText: {
+    color: '#007BFF',
   },
 });
