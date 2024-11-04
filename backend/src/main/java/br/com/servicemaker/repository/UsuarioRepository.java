@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioRepository extends AbstractRepository<Usuario> {
 
-    UserDetails findByContatoEmail(String email);
+  UserDetails findByContatoEmail(String email);
 
 }

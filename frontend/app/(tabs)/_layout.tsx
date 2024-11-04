@@ -19,6 +19,7 @@ export default function TabLayout() {
         name="inicio"
         options={{
           title: 'Início',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
@@ -28,6 +29,7 @@ export default function TabLayout() {
         name="pesquisa"
         options={{
           title: 'Pesquisa',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'search' : 'search-outline'} color={color} />
           ),
@@ -37,6 +39,7 @@ export default function TabLayout() {
         name="agenda"
         options={{
           title: 'Agenda',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'calendar' : 'calendar-outline'} color={color} />
           ),
@@ -46,6 +49,7 @@ export default function TabLayout() {
         name="perfil"
         options={{
           title: 'Perfil',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
           ),

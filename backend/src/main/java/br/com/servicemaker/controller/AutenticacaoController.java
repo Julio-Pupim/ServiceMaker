@@ -3,9 +3,15 @@ package br.com.servicemaker.controller;
 import br.com.servicemaker.DTO.AuthenticationDTO;
 import br.com.servicemaker.DTO.LoginResponseDTO;
 import br.com.servicemaker.DTO.RegistroDTO;
+import br.com.servicemaker.domain.Agenda;
+import br.com.servicemaker.domain.Contato;
+import br.com.servicemaker.domain.Endereco;
+import br.com.servicemaker.domain.Prestador;
 import br.com.servicemaker.domain.Usuario;
+import br.com.servicemaker.domain.enums.Roles;
 import br.com.servicemaker.infra.seguranca.TokenService;
 import br.com.servicemaker.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +35,7 @@ public class AutenticacaoController {
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
-    var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+    var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
     var servMaker = this.authenticationManager.authenticate(usernamePassword);
 
     var token = tokenService.gerarToken((Usuario) servMaker.getPrincipal());
@@ -38,17 +44,28 @@ public class AutenticacaoController {
   }
 
   @PostMapping("/registro")
+  @Transactional
   public ResponseEntity<Usuario> registro(@RequestBody @Valid RegistroDTO data) {
 
-    if (this.repository.findByContatoEmail(data.contato().getEmail()) != null) {
+    if (this.repository.findByContatoEmail(data.contato().email()) != null) {
       return ResponseEntity.badRequest().build();
     }
-    String encryptedPassword = passwordEncoder.encode(data.password());
-    Usuario novoUsuario = new Usuario(data.contato(), data.nome(), encryptedPassword, data.role());
+    String encryptedPassword = passwordEncoder.encode(data.senha());
+    Contato contato = new Contato(data.contato());
+    Endereco endereco = new Endereco(data.endereco());
+    if (data.prestador()) {
+      Prestador novoPrestador = new Prestador(data.nome(), data.cpf(), encryptedPassword, contato,
+          endereco, Roles.PRESTADOR, new Agenda());
+      Prestador saved = this.repository.save(novoPrestador);
+      return ResponseEntity.ok(saved);
+    }
+    Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
+        endereco, Roles.CLIENTE);
 
     Usuario saved = this.repository.save(novoUsuario);
 
     return ResponseEntity.ok(saved);
+
   }
 
 }

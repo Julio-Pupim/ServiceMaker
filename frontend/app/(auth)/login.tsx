@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
@@ -15,7 +14,7 @@ type LoginForm = {
 const login = async (data: LoginForm) => {
   try {
 
-    const response = await axios.post('https://localhost:8080/api/login', data);
+    const response = await axios.post('http://localhost:8080/api/auth/login', data);
     return response.data.token;
 
   } catch (error) {
@@ -96,6 +95,7 @@ const LoginScreen = () => {
       />
       {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
 
+<<<<<<< HEAD
       <TouchableOpacity style={[styles.button, { opacity: isValid ? 1 : 0.5 }, {marginTop: 25}]} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
       </TouchableOpacity>
@@ -106,6 +106,18 @@ const LoginScreen = () => {
 
       <TouchableOpacity onPress={() => { router.navigate('/cadastro') }}>
         <Text>Não possui uma conta ? Realizar Cadastro</Text>
+=======
+      <TouchableOpacity style={styles.button} onPress={handleSubmit(handleLogin)} disabled={!isValid}  >
+        <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
+        <Text style={styles.redirectText}>Não possui uma conta? Realizar Cadastro</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+        <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
+>>>>>>> d8fc74eac11e956a501f441213d393dd802be651
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -145,7 +157,13 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
   },
-
+  redirect: {
+    marginTop: 20,
+  },
+  redirectText: {
+    color: '#000',
+    textAlign: 'center',
+  },
 });
 
 export default LoginScreen
