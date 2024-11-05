@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'; // Importação correta
 import { Controller, useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ type AgendamentoForm = {
   horaFim: string;
 };
 
-const AgendamentoScreen: React.FC = () => {
+export default function Agendamento() {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
       servico: '',
@@ -156,17 +156,17 @@ const AgendamentoScreen: React.FC = () => {
         )}
       />
 
-      <TouchableOpacity
+      <Pressable
         style={[styles.button]}
         onPress={handleSubmit(addTask)}
         disabled={!isValid || !selectedDate}
       >
-        <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/inicio')}>Adicionar Agendamento</Text>
-      </TouchableOpacity>
+        <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
+      </Pressable>
 
-      <TouchableOpacity style={styles.cancelButton} onPress={() => router.push('/(tabs)/agenda')}>
+      <Pressable style={styles.cancelButton} onPress={() => router.push('/(tabs)/agenda')}>
         <Text style={styles.cancelText}>Cancelar</Text>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -231,5 +231,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
-export default AgendamentoScreen;

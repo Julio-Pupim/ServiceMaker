@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, TouchableOpacity, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
@@ -78,9 +78,9 @@ const AgendaScreen = () => {
         <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
       </View>
       
-      <TouchableOpacity style={styles.addButton} onPress={() => router.navigate('/(extra)/agendamento')}>
+      <Pressable style={styles.addButton} onPress={() => router.navigate('/(agenda)/agendamento')}>
         <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
+      </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

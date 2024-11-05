@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 
 const Inicio = () => {
-
-  //const navigation = useNavigation();
-
   const promocoes = [
     { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
     { id: '2', titulo: 'Reparo de celulares', desconto: '15% de desconto' },
@@ -72,31 +68,31 @@ const Inicio = () => {
 
       <View style={styles.promocoesContainer}>
         {promocoes.map(promo => (
-          <TouchableOpacity key={promo.id} style={styles.promoCard} onPress={pesquisaClick}>
+          <Pressable key={promo.id} style={styles.promoCard} onPress={pesquisaClick}>
             <Text style={styles.promoTitle}>{promo.titulo}</Text>
             <Text style={styles.promoDesc}>{promo.desconto}</Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
 
       <Text style={styles.sectionTitle}>Serviços frequentes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {servicosFrequentes.map(servico => (
-          <TouchableOpacity key={servico.id} style={styles.servicoItem} onPress={agendaClick}>
+          <Pressable key={servico.id} style={styles.servicoItem} onPress={agendaClick}>
             <Ionicons name={servico.icon} size={35} color="black"/>
             <Text style={styles.servicoText}>{servico.descricao}</Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </ScrollView>
 
       <Text style={styles.sectionTitle}>Encontre profissionais</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.profissionaisScroll}>
         {profissionais.map(profissional => (
-          <TouchableOpacity key={profissional.id} style={styles.servicoItem} onPress={profissionalClick}>
+          <Pressable key={profissional.id} style={styles.servicoItem} onPress={profissionalClick}>
             <View key={profissional.id} style={styles.profissionalItem}>
               <Text style={styles.profissionalNome}>{profissional.nome}</Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </ScrollView>
     </ScrollView>
