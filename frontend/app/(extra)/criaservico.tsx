@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, Text, View, TextInput, TouchableOpacity, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';

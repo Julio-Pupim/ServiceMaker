@@ -1,4 +1,4 @@
-import { View, Text, StatusBar, Image, TextInput, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StatusBar, Image, TextInput, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -49,13 +49,13 @@ const RecuperarSenha = () => {
               <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
             </Pressable>
 
-            <TouchableOpacity style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
+            <Pressable style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
               <Text style={styles.redirectText}>Já possui uma conta? Realizar Login</Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
+            <Pressable style={styles.redirect} onPress={() => { router.navigate('/cadastro') }}>
               <Text style={styles.redirectText}>Não possui uma conta? Realizar Cadastro</Text>
-            </TouchableOpacity>
+            </Pressable>
           </SafeAreaView>
         );
       case 2:
@@ -94,9 +94,9 @@ const RecuperarSenha = () => {
               style={styles.textInput}
               onChangeText={text => setConfirmarSenha(text)}
             />
-            <TouchableOpacity style={styles.button} onPress={verificarEmail}>
+            <Pressable style={styles.button} onPress={verificarEmail}>
               <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         );
       default:
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ECF0F1',
+    backgroundColor: '#FFFFFF',
     padding: 20,
   },
   textInput: {

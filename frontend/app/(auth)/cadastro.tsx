@@ -3,7 +3,7 @@ import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 
 type CadastroForm = {
@@ -268,13 +268,13 @@ const Cadastro = () => {
           <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
         </Pressable>
 
-        <TouchableOpacity style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
+        <Pressable style={styles.redirect} onPress={() => router.navigate("/(auth)/login")}>
           <Text style={styles.redirectText}>Já possui uma conta? Realizar Login</Text>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
+        <Pressable style={styles.redirect} onPress={() => { router.navigate('/recuperarsenha') }}>
           <Text style={styles.redirectText}>Esqueceu sua senha?</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ScrollView>
   );
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ECF0F1',
+    backgroundColor: '#FFFFFF',
     padding: 20,
   },
   logo: {
@@ -332,13 +332,13 @@ const styles = StyleSheet.create({
     marginStart: 8,
   },
   checkboxContainer: {
-    flexDirection: 'row',  // Alinha o checkbox e o texto horizontalmente
-    alignItems: 'center',  // Centraliza verticalmente
-    marginVertical: 10,    // Espaço entre os componentes
-    alignSelf: 'flex-start', // Alinha o grupo à esquerda
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+    alignSelf: 'flex-start',
   },
   checkboxLabel: {
-    marginLeft: 10,         // Espaçamento entre o checkbox e o texto
+    marginLeft: 10,
   },
   redirect: {
     marginTop: 20,
