@@ -25,14 +25,20 @@ const login = async (data: LoginForm) => {
     }
   }
 }
-const storeToken = async (token: string) => {
+
+const storeToken = async (token) => {
   try {
-    await AsyncStorage.setItem('jwt_token', token);
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error('Erro ao salvar token no AsyncStorage:', error);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Ambiente navegador
+      window.localStorage.setItem('jwt_token', token);
+      console.log('windows')
+    } else {
+      // Ambiente móvel
+      await AsyncStorage.setItem('jwt_token', token);
+      console.log('movel')
     }
-    throw error;
+  } catch (error) {
+    console.error('Erro ao salvar token:', error);
   }
 };
 
