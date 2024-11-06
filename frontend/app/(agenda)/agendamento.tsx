@@ -58,6 +58,34 @@ export default function Agendamento() {
     router.push('/(tabs)/inicio');
   };
 
+  const formatTime = (value: string) => {
+    const onlyNumbers = value.replace(/\D/g, '');
+    let formattedValue = onlyNumbers.slice(0, 4);
+
+    if (formattedValue.length >= 3) {
+      formattedValue = `${formattedValue.slice(0, 2)}h:${formattedValue.slice(2)}m`;
+    } else if (formattedValue.length >= 1) {
+      formattedValue = `${formattedValue}h`;
+    }
+
+    return formattedValue;
+  };
+
+  const formatDate = (value: string) => {
+    const onlyNumbers = value.replace(/\D/g, '');
+    let formattedValue = onlyNumbers.slice(0, 8);
+
+    if (formattedValue.length >= 6) {
+      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2, 4)}/${formattedValue.slice(4)}`;
+    } else if (formattedValue.length >= 4) {
+      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2)}`;
+    } else if (formattedValue.length >= 2) {
+      formattedValue = `${formattedValue.slice(0, 2)}`;
+    }
+
+    return formattedValue;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -100,33 +128,56 @@ export default function Agendamento() {
       />
       {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
 
-      <View>
-        <Button title="Selecionar Data" onPress={() => showMode('date')} />
-        {show && (
-          <DateTimePicker
-            testID='DateTimePicker'
-            value={selectedDate || new Date()}
-            mode={mode}
-            is24Hour={true}
-            display="default"
-            onChange={onChange}
+      <Controller
+        control={control}
+        name="data"
+        rules={{ required: 'Data é obrigatória.' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            value={value}
+            onChangeText={onChange}
+            placeholder="Selecione a data"
+            keyboardType="numeric"
+            maxLength={10}
           />
         )}
-      </View>
+      />
+      {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
 
-      <View>
-        <Button title="Selecionar Hora" onPress={() => showMode('time')} />
-        {show && (
-          <DateTimePicker
-            testID='DateTimePicker'
-            value={selectedDate || new Date()}
-            mode={mode}
-            is24Hour={true}
-            display="default"
-            onChange={onChange}
-          />
-        )}
-      </View>
+      <Controller
+        control={control}
+        name="horaInicio"
+        rules={{ required: 'Hora de início é obrigatória.' }}
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            value={value}
+            onChangeText={text => onChange(formatTime(text))}
+            placeholder="Hora de Início"
+            keyboardType="numeric"
+            maxLength={7}
+            />
+          )}
+        />
+        {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
+
+        <Controller
+          control={control}
+          name="horaFim"
+          rules={{ required: 'Hora final é obrigatória.' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={text => onChange(formatTime(text))}
+              placeholder="Hora Final"
+              keyboardType="numeric"
+              maxLength={7}
+            />
+          )}
+        />
+        {errors.horaFim && <Text style={styles.errorText}>{errors.horaFim.message}</Text>}
 
       <Controller
         control={control}
