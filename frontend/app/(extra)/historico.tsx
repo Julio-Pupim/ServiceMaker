@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const ServicosLista = () => {
   const servicos = [
@@ -34,11 +35,15 @@ const ServicosLista = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar hidden />
       <View style={styles.header}>
-        <Ionicons name="person-circle-outline" size={35} color="white" />
-        <Text style={styles.nomeUsuario}>Usuário</Text>
+        <View style={styles.userText}>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>Usuário</Text>
+        </View>
       </View>
-
+      
+      <ScrollView>
       <View style={styles.servicesList}>
         {servicos.map((servico, index) => (
           <View key={index} style={styles.servicosContainer}>
@@ -55,25 +60,28 @@ const ServicosLista = () => {
           </View>
         ))}
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
-    paddingBottom: 20,
+    backgroundColor: '#FFFFFF',
   },
   header: {
     backgroundColor: '#FBCB1C',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 25,
-    alignItems: 'center',
     marginBottom: 20,
   },
-  nomeUsuario: {
+  userText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  userName: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
