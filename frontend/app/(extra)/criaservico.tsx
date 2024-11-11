@@ -3,10 +3,13 @@ import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable 
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import  ServicoService from '../../service/ServicoService'
 
+
+const usuarioLogado = {id: 1, nome: 'p'};
 
 type criarServicoForm = {
-  prestador: string;
+  //prestador: string;
   servico: string;
   descricao: string;
   tempo: string;
@@ -19,14 +22,34 @@ export default function criaServico() {
     defaultValues: {
       descricao: '',
       preco: '',
-      prestador: '',
+   //   prestador: '',
       servico: '',
       setor: '',
       tempo: ''
     },
     mode: "onChange"
   });
-  const onSubmit = (data: criarServicoForm) => console.log(data);
+
+  
+
+  const onSubmit = async (data: criarServicoForm) => {
+
+    try {
+
+      const servicoData ={
+        prestador: {id: usuarioLogado.id},
+        descricao: data.descricao,
+        tempoServico: data.tempo,
+        preco: parseFloat(data.preco.replace(',', '.')), // Converte o preço para número
+        setor: { id: data.setor } 
+      }
+
+      await ServicoService.createServico(servicoData);
+
+    } catch (error) {
+      console.error('Erro ao cadastrar serviço:', error);
+    }
+  };
 
   const onlyText = (text: string) => text.replace(/[^a-zA-Z\s]/g, '');
 
@@ -55,33 +78,12 @@ export default function criaServico() {
       <View style={estilos.header}>
         <View style={estilos.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={estilos.userName}>Usuário</Text>
+          <Text style={estilos.userName}>{usuarioLogado.nome}</Text>
         </View>
       </View>
 
       <ScrollView contentContainerStyle={estilos.scrollViewContainer}>
         <View style={estilos.formulario}>
-
-          <View style={estilos.containerInput}>
-            <Controller
-              control={control}
-              name="prestador"
-              rules={{
-                required: 'Nome do prestador é obrigatório.',
-                pattern: /[a-zA-Z]+$/
-              }}
-              render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={estilos.input}
-                  value={value}
-                  onChangeText={text => onChange(onlyText(text))}
-                  placeholder="Nome do Prestador"
-                  inputMode='text'
-                />
-              )}
-            />
-            {errors.prestador && <Text style={estilos.erro}>{errors.prestador?.message}</Text>}
-          </View>
 
           <View style={estilos.containerInput}>
             <Controller

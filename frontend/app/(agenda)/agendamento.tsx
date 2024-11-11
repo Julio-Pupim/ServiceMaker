@@ -12,7 +12,7 @@ type AgendamentoForm = {
   localizacao: string;
   anotacao: string;
   data: string;
-  horaInicio: string;
+  hora: string;
   horaFim: string;
 };
 
@@ -24,8 +24,7 @@ export default function Agendamento() {
       localizacao: '',
       anotacao: '',
       data: '',
-      horaInicio: '',
-      horaFim: '',
+      hora: '',
     },
     mode: 'onChange',
   });
@@ -137,7 +136,7 @@ export default function Agendamento() {
             style={styles.input}
             value={value}
             onChangeText={onChange}
-            placeholder="Selecione a data"
+            placeholder="Data"
             keyboardType="numeric"
             maxLength={10}
           />
@@ -147,37 +146,20 @@ export default function Agendamento() {
 
       <Controller
         control={control}
-        name="horaInicio"
+        name="hora"
         rules={{ required: 'Hora de início é obrigatória.' }}
         render={({ field: { onChange, value } }) => (
           <TextInput
             style={styles.input}
             value={value}
             onChangeText={text => onChange(formatTime(text))}
-            placeholder="Hora de Início"
+            placeholder="Hora"
             keyboardType="numeric"
             maxLength={7}
             />
           )}
         />
-        {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
-
-        <Controller
-          control={control}
-          name="horaFim"
-          rules={{ required: 'Hora final é obrigatória.' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={text => onChange(formatTime(text))}
-              placeholder="Hora Final"
-              keyboardType="numeric"
-              maxLength={7}
-            />
-          )}
-        />
-        {errors.horaFim && <Text style={styles.errorText}>{errors.horaFim.message}</Text>}
+        {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
       <Controller
         control={control}
