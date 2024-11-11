@@ -77,11 +77,11 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if (Roles.PRESTADOR.equals(this.role)) {
-      return List.of(new SimpleGrantedAuthority(Roles.PRESTADOR.getRole()),
-          new SimpleGrantedAuthority(Roles.CLIENTE.getRole()));
+    if (Roles.ROLE_PRESTADOR.equals(this.role)) {
+      return List.of(new SimpleGrantedAuthority(Roles.ROLE_PRESTADOR.getRole()),
+          new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
     } else {
-      return List.of(new SimpleGrantedAuthority(Roles.CLIENTE.getRole()));
+      return List.of(new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
     }
   }
 

@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsConfiguration;
 @AllArgsConstructor
 public class SecurityConfigurations {
 
-  SecurityFilter securityFilter;
+  private final SecurityFilter securityFilter;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -43,7 +43,7 @@ public class SecurityConfigurations {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/api/auth/registro").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-            .requestMatchers("/api/servicos").hasRole("PRESTADOR")
+            .requestMatchers("/api/servicos/**").hasRole("PRESTADOR")
             .anyRequest().authenticated()
         )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

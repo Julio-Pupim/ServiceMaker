@@ -9,11 +9,12 @@ const getAuthToken = async () => {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       // Ambiente navegador
-      console.log('pegou token')
+      console.log('pegou token', window.localStorage.getItem('jwt_token'))
       return window.localStorage.getItem('jwt_token');
       
     } else {
       // Ambiente móvel
+      console.log(AsyncStorage.getItem('jwt_token'));
       return await AsyncStorage.getItem('jwt_token');
     }
   } catch (error) {
@@ -44,7 +45,8 @@ axiosInstance.interceptors.request.use(
 
 const createServico = async (servicos) => {
   try {
-    const response = await axiosInstance.post('/', servicos);
+    console.log(await axiosInstance.post('', servicos));
+    const response = await axiosInstance.post('', servicos);
     console.log('criou serviço')
     return response.data;
   } catch (error) {
