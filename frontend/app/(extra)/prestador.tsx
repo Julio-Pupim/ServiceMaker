@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar}
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 
 
 const Prestadores = () => {
@@ -17,54 +18,67 @@ const Prestadores = () => {
         { id: '6', nome: 'Sebastião', titulo: 'Instalação de Grama e Tapetes Verdes' },    
     ]
 
-    const prestadorClick = () =>{  
-      navigation.navigate('');
+    const servicoPrestadorClick = () =>{  
+     router.navigate('/(extra)/ServicoPrestador');
+    };
+    const inicioClick =()=>{
+      router.navigate('/(tabs)/inicio');
     };
     
     return(
 
     <View style = {styles.container}>
-      <StatusBar hidden/>
       <View style = {styles.topoTela}>
-        <View style={styles.userText}>
-          <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Prestadores</Text>
-        </View>
-      </View>
+        <TouchableOpacity onPress={inicioClick}>
+          <Ionicons name="arrow-back-outline" size={30} color="white" />
+        </TouchableOpacity>
+         
+         <View style={styles.centralTitulo}>
+            <Ionicons name="bag-handle-outline" size={35} color="white" />
+            <Text style={styles.userName}>Prestadores</Text>
+         </View>
+      </View> 
 
         <ScrollView>
            {tipoPrestador.map(prestador => (
-            <TouchableOpacity key={prestador.id} style = {styles.header} onPress={prestadorClick}>
+            <View style = {styles.header}>
               <View style = {styles.posicao}>
-              <Image source={require('../../assets/images/prestador.jpg')} 
-              style = {styles.imagem}/>
-              <View style = {styles.textoContainer}>
-                <Text style = {styles.nomePrestador}>Nome:{prestador.nome} </Text>
-                <Text style = {styles.infoPrestador}>{prestador.titulo}</Text> 
-               </View>
-               </View>
-             </TouchableOpacity>
-           ))}   
+                <Image source={require('../../assets/images/prestador.jpg')} 
+                style = {styles.imagem}/>
+                <View style = {styles.textoContainer}>
+                  <Text style = {styles.nomePrestador}>Nome:{prestador.nome} </Text>
+                  <Text style = {styles.infoPrestador}>{prestador.titulo}</Text> 
+                </View>
+              </View>
+              <TouchableOpacity key={prestador.id} onPress={servicoPrestadorClick}>
+                <View style={styles.botaoServicos} >
+                  <Text  style={styles.textServicos}>Mais serviços</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}   
         </ScrollView>
-
     </View>
-    );
+  );
 };
     
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        padding: 16,
+        //padding: 16,
         backgroundColor:'white',
         
    
     },
     topoTela:{
-      backgroundColor: '#FFD700',
+      backgroundColor: '#FBCB1C',
       borderBottomLeftRadius: 20,
       borderBottomRightRadius: 20,
       padding: 25,
-      marginBottom: 2,
+      marginBottom: 20,
+      flexDirection: 'row',
+      //alignItems: 'center',
+      justifyContent: 'center',
     },
     userText: {
       flexDirection: 'row',
@@ -82,7 +96,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         padding: 19,
-        height: 100,
+        height: 120,
         margin: 4,
         borderRadius: 10,
     },
@@ -90,6 +104,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: 60,
         height: 60, 
+        borderWidth: 1,
+        borderRadius: 10
     },
     nomePrestador:{
       fontSize: 13,
@@ -106,6 +122,25 @@ const styles = StyleSheet.create({
     },
     posicao:{
       flexDirection: 'row'
+    },
+    textServicos:{
+      fontSize: 12,
+      fontWeight: 'bold',
+      
+    },
+    botaoServicos:{
+      backgroundColor: '#FFD700',
+      borderRadius: 5,
+      marginVertical: 10,
+      borderColor: 'black',
+      borderWidth: 1,
+      alignItems: 'center'
+    },
+    centralTitulo:{
+      margin:'auto',
+      flexDirection:'row',
+      alignItems:'center',
+      justifyContent:'center'
     }
 
 });
