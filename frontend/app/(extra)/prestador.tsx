@@ -18,8 +18,8 @@ const Prestadores = () => {
         { id: '6', nome: 'Sebastião', titulo: 'Instalação de Grama e Tapetes Verdes' },    
     ]
 
-    const servicosPrestadorClick = () =>{  
-     router.navigate('/(extra)servicosPrestador');
+    const servicoPrestadorClick = () =>{  
+     router.navigate('/(extra)/ServicoPrestador');
     };
     const inicioClick =()=>{
       router.navigate('/(tabs)/inicio');
@@ -43,42 +43,41 @@ const Prestadores = () => {
            {tipoPrestador.map(prestador => (
             <View style = {styles.header}>
               <View style = {styles.posicao}>
-              <Image source={require('../../assets/images/prestador.jpg')} 
-              style = {styles.imagem}/>
-              <View style = {styles.textoContainer}>
-                <Text style = {styles.nomePrestador}>Nome:{prestador.nome} </Text>
-                <Text style = {styles.infoPrestador}>{prestador.titulo}</Text> 
+                <Image source={require('../../assets/images/prestador.jpg')} 
+                style = {styles.imagem}/>
+                <View style = {styles.textoContainer}>
+                  <Text style = {styles.nomePrestador}>Nome:{prestador.nome} </Text>
+                  <Text style = {styles.infoPrestador}>{prestador.titulo}</Text> 
+                </View>
               </View>
-              </View>
-              <View style={styles.botaoServicos} >
-                <TouchableOpacity key={prestador.id} onPress={servicosPrestadorClick}>
-                  <Text  style={styles.textServicos} >Mais serviços</Text>
-                </TouchableOpacity>
-              </View>
-             </View>
-           ))}   
+              <TouchableOpacity key={prestador.id} onPress={servicoPrestadorClick}>
+                <View style={styles.botaoServicos} >
+                  <Text  style={styles.textServicos}>Mais serviços</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}   
         </ScrollView>
-
     </View>
-    );
+  );
 };
     
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        padding: 16,
+        //padding: 16,
         backgroundColor:'white',
         
    
     },
     topoTela:{
-      backgroundColor: '#FFD700',
+      backgroundColor: '#FBCB1C',
       borderBottomLeftRadius: 20,
       borderBottomRightRadius: 20,
       padding: 25,
       marginBottom: 20,
       flexDirection: 'row',
-      alignItems: 'center',
+      //alignItems: 'center',
       justifyContent: 'center',
     },
     userText: {
