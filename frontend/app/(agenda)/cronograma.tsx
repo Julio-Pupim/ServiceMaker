@@ -4,6 +4,7 @@ import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MultiSelect from 'react-native-multiple-select';
+import { router } from 'expo-router';
 
 type CronogramaForm = {
   cronogramas: {
@@ -76,11 +77,20 @@ export default function Cronograma() {
     return false;
   };
 
+  const agendaClick =()=>{
+    router.navigate('/(tabs)/agenda');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={agendaClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -214,5 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

@@ -9,7 +9,6 @@ import  ServicoService from '../../service/ServicoService'
 const usuarioLogado = {id: 1, nome: 'p'};
 
 type criarServicoForm = {
-  //prestador: string;
   servico: string;
   descricao: string;
   tempo: string;
@@ -22,7 +21,6 @@ export default function criaServico() {
     defaultValues: {
       descricao: '',
       preco: '',
-   //   prestador: '',
       servico: '',
       setor: '',
       tempo: ''
@@ -40,7 +38,7 @@ export default function criaServico() {
         prestador: {id: usuarioLogado.id},
         descricao: data.descricao,
         tempoServico: data.tempo,
-        preco: parseFloat(data.preco.replace(',', '.')), // Converte o preço para número
+        preco: parseFloat(data.preco.replace(',', '.')),
         setor: { id: data.setor } 
       }
 

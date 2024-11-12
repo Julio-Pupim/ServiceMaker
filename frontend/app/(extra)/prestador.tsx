@@ -64,11 +64,8 @@ const Prestadores = () => {
     
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
-        //padding: 16,
-        backgroundColor:'white',
-        
-   
+      flex: 1,
+      backgroundColor:'white',
     },
     topoTela:{
       backgroundColor: '#FBCB1C',
@@ -77,7 +74,6 @@ const styles = StyleSheet.create({
       padding: 25,
       marginBottom: 20,
       flexDirection: 'row',
-      //alignItems: 'center',
       justifyContent: 'center',
     },
     userText: {
@@ -90,22 +86,21 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       marginLeft: 15,
     },
-
     header:{
-        backgroundColor: '#D9D9D9',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        padding: 19,
-        height: 120,
-        margin: 4,
-        borderRadius: 10,
+      backgroundColor: '#D9D9D9',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      padding: 19,
+      height: 120,
+      margin: 4,
+      borderRadius: 10,
     },
     imagem:{
-        flexDirection: 'row',
-        width: 60,
-        height: 60, 
-        borderWidth: 1,
-        borderRadius: 10
+      flexDirection: 'row',
+      width: 60,
+      height: 60, 
+      borderWidth: 1,
+      borderRadius: 10
     },
     nomePrestador:{
       fontSize: 13,
@@ -114,7 +109,6 @@ const styles = StyleSheet.create({
     infoPrestador:{
       fontSize: 14,
       fontWeight: 'bold',
-     
     },
     textoContainer:{
       justifyContent:'flex-start',
@@ -126,7 +120,6 @@ const styles = StyleSheet.create({
     textServicos:{
       fontSize: 12,
       fontWeight: 'bold',
-      
     },
     botaoServicos:{
       backgroundColor: '#FFD700',
@@ -142,6 +135,5 @@ const styles = StyleSheet.create({
       alignItems:'center',
       justifyContent:'center'
     }
-
 });
 export default Prestadores;

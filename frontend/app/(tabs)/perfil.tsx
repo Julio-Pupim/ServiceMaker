@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -35,6 +35,12 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/historico') }}>
+          <Icon name="history" size={24} color="black" />
+          <Text style={styles.menuText}>Histórico de Serviços</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
+        
         <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/compartilhe') }}>
           <Icon name="share" size={24} color="black" />
           <Text style={styles.menuText}>Compartilhe</Text>
@@ -61,7 +67,7 @@ const Perfil = () => {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -129,12 +135,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     marginLeft: 10,
-  },
-  footer: {
-    backgroundColor: '#FFD700',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
   },
 });
 

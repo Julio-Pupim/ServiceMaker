@@ -19,15 +19,25 @@ export default function Compartilhar() {
     }
   };
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
       <View style={styles.content}>
         <Text style={styles.description}>
           Compartilhe nosso aplicativo com seus amigos e familiares!
@@ -35,10 +45,6 @@ export default function Compartilhar() {
         <Pressable style={styles.shareButton} onPress={onShare}>
           <Ionicons name="share-social-outline" size={24} color="white" />
           <Text style={styles.shareButtonText}>Compartilhar</Text>
-        </Pressable>
-
-        <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-          <Text style={styles.returnText}>Voltar</Text>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -91,11 +97,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
   },
-  returnButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
+  backIcon: {
+    paddingRight: 15,
   },
 });
