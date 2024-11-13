@@ -1,14 +1,16 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, Pressable } from 'react-native';
+import React,{useState} from 'react';
+import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
+import Pesquisa from '../search/[query]';
 
 const Inicio = () => {
   const promocoes = [
     { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
     { id: '2', titulo: 'Reparo de celulares', desconto: '15% de desconto' },
   ];
+  const [searchText, setSearchText] = useState('');
 
   const servicosFrequentes = [
     { id: '1', descricao: 'Encanador', icon: 'construct-outline' },
@@ -49,6 +51,9 @@ const Inicio = () => {
   const pesquisaClick = () => {
     router.navigate('/(tabs)/perfil');
   };
+  const prestadorClick =() =>{
+    router.navigate('/(servico)/prestador');
+  }
   
 
   return (
@@ -63,8 +68,17 @@ const Inicio = () => {
 
       <View>
         <Text style={styles.greetings}>Olá, usuário!</Text>
-        <Text style={styles.subText}>O que você procura hoje?</Text>
       </View>
+
+      <View style={styles.pesquisa}>
+        <Ionicons name = "search" size = {20} color = "black" style={styles.iconPesquisa} />
+        <TextInput
+          style={styles.textoPesquisa}  
+          placeholder="O que você procura hoje?" 
+          value={searchText}
+          onChangeText={setSearchText}  
+        />
+        </View>
 
       <View style={styles.promocoesContainer}>
         {promocoes.map(promo => (
@@ -78,7 +92,7 @@ const Inicio = () => {
       <Text style={styles.sectionTitle}>Serviços frequentes</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {servicosFrequentes.map(servico => (
-          <Pressable key={servico.id} style={styles.servicoItem} onPress={agendaClick}>
+          <Pressable key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>
             <Ionicons name={servico.icon} size={35} color="black"/>
             <Text style={styles.servicoText}>{servico.descricao}</Text>
           </Pressable>
@@ -181,6 +195,24 @@ const styles = StyleSheet.create({
   profissionalNome: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  pesquisa:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10, 
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    height: 40,
+  },
+  iconPesquisa: {
+    marginRight: 10
+  },
+  textoPesquisa:{
+    flex: 1,
+    fontSize: 16,
   },
 });
 

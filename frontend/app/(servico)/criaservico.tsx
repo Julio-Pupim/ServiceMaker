@@ -12,7 +12,6 @@ const usuarioLogado = { id: 1, nome: 'p' };
 
 
 type criarServicoForm = {
-  //prestador: string;
   servico: string;
   descricao: string;
   tempoServico: string;
@@ -25,7 +24,6 @@ export default function criaServico() {
     defaultValues: {
       descricao: '',
       preco: '',
-      //   prestador: '',
       servico: '',
       setor: undefined,
       tempoServico: ''

@@ -10,11 +10,20 @@ export default function EdicaoPerfil() {
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -199,5 +208,8 @@ const styles = StyleSheet.create({
   },
   iconRodape: {
     paddingHorizontal: 20,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });
