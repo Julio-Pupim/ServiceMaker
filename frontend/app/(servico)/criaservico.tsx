@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
+import { router } from 'expo-router';
 
 
 const usuarioLogado = { id: 1, nome: 'p' };
@@ -66,6 +67,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
+      router.navigate("/(servico)/detalhaservicoprestador");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);

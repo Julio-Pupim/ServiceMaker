@@ -59,7 +59,7 @@ const createServico = async (servicos) => {
 // Funções CRUD utilizando axiosInstance com o token já configurado
 const getAllServicos = async () => {
   try {
-    const response = await axiosInstance.get('/');
+    const response = await axiosInstance.get();
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar todos os serviços:', error);

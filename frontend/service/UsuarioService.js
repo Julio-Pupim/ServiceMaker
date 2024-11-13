@@ -1,13 +1,14 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://localhost:8080/api/usuario';
+const API_URL = 'http://localhost:8080/api/usuarios';
 
 // Função para recuperar o token do AsyncStorage
 const getAuthToken = async () => {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       // Ambiente navegador
+      console.log('pegou token', window.localStorage.getItem('jwt_token'))
       return window.localStorage.getItem('jwt_token');
     } else {
       // Ambiente móvel
@@ -42,7 +43,7 @@ axiosInstance.interceptors.request.use(
 
 const getAllUsuarios = async () => {
   try {
-    const response = await axiosInstance.get('/');
+    const response = await axiosInstance.get();
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar todos os usuários:', error);
