@@ -84,7 +84,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public String getPassword() {
-    return this.getSenha();
+    return this.senha;
   }
 
   @Override
@@ -94,6 +94,6 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public boolean isEnabled() {
-    return UserDetails.super.isEnabled();
+    return true;
   }
 }
