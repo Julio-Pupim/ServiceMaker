@@ -19,8 +19,9 @@ const Prestadores = () => {
     ]
 
     const servicoPrestadorClick = () =>{  
-     router.navigate('/(extra)/ServicoPrestador');
+     router.navigate('/(servico)/servicoprestador');
     };
+    
     const inicioClick =()=>{
       router.navigate('/(tabs)/inicio');
     };

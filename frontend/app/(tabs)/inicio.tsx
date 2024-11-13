@@ -52,7 +52,7 @@ const Inicio = () => {
     router.navigate('/(tabs)/perfil');
   };
   const prestadorClick =() =>{
-    router.navigate('/(extra)/prestador');
+    router.navigate('/(servico)/prestador');
   }
   
 
