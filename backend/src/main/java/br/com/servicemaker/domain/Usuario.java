@@ -18,10 +18,12 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,7 +57,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Roles role;
 
-  @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "id_contato")
   private Contato contato;
 
@@ -77,12 +79,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    if (Roles.ROLE_PRESTADOR.equals(this.role)) {
-      return List.of(new SimpleGrantedAuthority(Roles.ROLE_PRESTADOR.getRole()),
-          new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
-    } else {
-      return List.of(new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
-    }
+    return List.of(new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
   }
 
   @Override
@@ -92,7 +89,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
 
   @Override
   public String getUsername() {
-    return this.getContato().getEmail();
+    return Optional.ofNullable(this.getContato()).map(Contato::getEmail).orElse(Strings.EMPTY);
   }
 
   @Override

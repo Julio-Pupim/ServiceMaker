@@ -3,11 +3,11 @@ import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable 
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import  ServicoService from '../../service/ServicoService'
+import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 
 
-const usuarioLogado = {id: 1, nome: 'p'};
+const usuarioLogado = { id: 1, nome: 'p' };
 
 
 
@@ -25,7 +25,7 @@ export default function criaServico() {
     defaultValues: {
       descricao: '',
       preco: '',
-   //   prestador: '',
+      //   prestador: '',
       servico: '',
       setor: undefined,
       tempoServico: ''
@@ -33,16 +33,16 @@ export default function criaServico() {
     mode: "onChange"
   });
 
-  const toNumber= (preco: string):number => {
+  const toNumber = (preco: string): number => {
     preco = preco.replace(',', '.');
-    preco = preco.replace("R$",'');
+    preco = preco.replace("R$", '');
     return parseFloat(preco);
   }
-  const toDateTime = (tempo:string)=>{
+  const toDateTime = (tempo: string) => {
     const match = RegExp(/(\d+)h:(\d+)m/).exec(tempo);
-    
+
     if (!match) {
-        throw new Error("Formato de tempo inválido");
+      throw new Error("Formato de tempo inválido");
     }
 
     const hours = parseInt(match[1], 10);
@@ -51,21 +51,20 @@ export default function criaServico() {
     // Criar um novo objeto Date e definir as horas e minutos
     const date = new Date();
     date.setHours(hours, minutes, 0, 0); // Define horas, minutos, segundos, milissegundos como 0
-    
     return date.toLocaleTimeString("pt-BR");
-  } 
+  }
 
 
   const onSubmit = async (data: criarServicoForm) => {
 
     try {
 
-      const servicoData ={
-        prestador: {id: usuarioLogado.id},
+      const servicoData = {
+        prestador: { id: usuarioLogado.id },
         descricao: data.descricao,
         tempoServico: toDateTime(data.tempoServico),
         preco: toNumber(data.preco),
-        setor: {id: parseInt(data.setor.toString())} 
+        setor: { id: parseInt(data.setor.toString()) }
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
@@ -200,7 +199,7 @@ export default function criaServico() {
                   <Picker.Item label="Escolha um setor" value={null} />
                   <Picker.Item label="Setor 1" value={Setor.SETOR1} />
                   <Picker.Item label="Setor 2" value={Setor.SETOR2} />
-                  <Picker.Item label="Setor 3" value={Setor.SETOR3}/>
+                  <Picker.Item label="Setor 3" value={Setor.SETOR3} />
                 </Picker>
               )}
             />
