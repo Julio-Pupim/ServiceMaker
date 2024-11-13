@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import UsuarioService from '../../service/UsuarioService'
 import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const EdicaoPerfil = () => {
@@ -17,6 +18,13 @@ const EdicaoPerfil = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        const userId = await AsyncStorage.getItem('userId');
+        if (!userId) {
+          console.warn('ID do usuário não encontrado');
+          return;
+        }
+
         const usuarioData = await UsuarioService.getUsuarioById();
         const contatoData = await ContatoService.getContatoById();
         const enderecoData = await EnderecoService.getEnderecoById();

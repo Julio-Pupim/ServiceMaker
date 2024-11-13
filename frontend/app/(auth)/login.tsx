@@ -13,10 +13,8 @@ type LoginForm = {
 
 const login = async (data: LoginForm) => {
   try {
-
     const response = await axios.post('http://localhost:8080/api/auth/login', data);
-    return response.data.token;
-
+    return { token: response.data.token, userId: response.data.userId };
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error('Erro na requisição HTTP:', error.message);
@@ -24,21 +22,14 @@ const login = async (data: LoginForm) => {
       console.error("Erro na requisição de login: ", error);
     }
   }
-}
+};
 
-const storeToken = async (token: string) => {
+const storeCredentials = async (token: string, userId: string) => {
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      // Ambiente navegador
-      window.localStorage.setItem('jwt_token', token);
-      console.log('windows')
-    } else {
-      // Ambiente móvel
-      await AsyncStorage.setItem('jwt_token', token);
-      console.log('movel')
-    }
+    await AsyncStorage.setItem('jwt_token', token);
+    await AsyncStorage.setItem('user_id', userId);
   } catch (error) {
-    console.error('Erro ao salvar token:', error);
+    console.error('Erro ao salvar credenciais:', error);
   }
 };
 
@@ -46,14 +37,15 @@ async function handleLogin(requestData: LoginForm) {
   try {
     const responseData = await login(requestData);
 
-    await storeToken(responseData);
-
-    router.push("/(tabs)/inicio");
-
+    if (responseData?.token && responseData?.userId) {
+      await storeCredentials(responseData.token, responseData.userId);
+      router.push("/(tabs)/inicio");
+    }
   } catch (error) {
     console.error('Falha no processo de login:', error);
   }
 }
+
 
 const LoginScreen = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<LoginForm>({
