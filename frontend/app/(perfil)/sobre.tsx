@@ -3,12 +3,22 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function SobreNos() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
+
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -58,9 +68,6 @@ export default function SobreNos() {
         </Text>
       </ScrollView>
 
-      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-        <Text style={styles.returnText}>Voltar</Text>
-      </Pressable>
     </SafeAreaView>
   );
 }
@@ -128,5 +135,8 @@ const styles = StyleSheet.create({
   },
   returnText: {
     color: '#007BFF',
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

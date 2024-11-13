@@ -4,6 +4,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from 'expo-router';
+import { Pressable } from "react-native";
 
 const servicoPrestador = () => {
 
@@ -25,9 +26,9 @@ const tiposServicos = [
     
     <SafeAreaView style={styles.container}>
       <View style = {styles.topoTela}>
-        <TouchableOpacity onPress={prestadorClick}>
+        <Pressable onPress={prestadorClick}>
           <Ionicons name="arrow-back-outline" size={30} color="white" />
-        </TouchableOpacity>
+        </Pressable>
          
          <View style={styles.centralTitulo}>
             <Ionicons name="bag-handle-outline" size={35} color="white" />

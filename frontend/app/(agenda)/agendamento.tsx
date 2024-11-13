@@ -16,6 +16,10 @@ type AgendamentoForm = {
   horaFim: string;
 };
 
+const prestadorClick = ()=>{
+  router.navigate('/(extra)/prestador')
+}
+
 export default function Agendamento() {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -90,12 +94,17 @@ export default function Agendamento() {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={prestadorClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
 
-      <Text style={styles.title}>Realizar um Agendamento</Text>
+      <Text style={styles.title}>Agendamento</Text>
 
       <Controller
         control={control}
@@ -262,5 +271,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#FF375B',
     marginLeft: 10,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

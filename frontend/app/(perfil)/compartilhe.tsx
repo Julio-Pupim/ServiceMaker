@@ -4,6 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Share } from 'react-native';
 import { router } from 'expo-router';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function Compartilhar() {
   const onShare = async () => {
     try {
@@ -24,6 +28,12 @@ export default function Compartilhar() {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
+
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -37,9 +47,6 @@ export default function Compartilhar() {
           <Text style={styles.shareButtonText}>Compartilhar</Text>
         </Pressable>
 
-        <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-          <Text style={styles.returnText}>Voltar</Text>
-        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -97,5 +104,8 @@ const styles = StyleSheet.create({
   },
   returnText: {
     color: '#007BFF',
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

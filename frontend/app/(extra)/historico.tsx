@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ServicosLista = () => {
@@ -33,11 +34,20 @@ const ServicosLista = () => {
     );
   };
 
+  const prestadorClick = ()=>{
+    router.navigate('/(extra)/prestador')
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={prestadorClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -132,6 +142,9 @@ const styles = StyleSheet.create({
   },
   custoText: {
     justifyContent: 'center',
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });
 

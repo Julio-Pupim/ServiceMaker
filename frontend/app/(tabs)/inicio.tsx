@@ -27,18 +27,18 @@ const Inicio = () => {
   ];
 
   const profissionais = [
-    { id: '1', nome: 'Rafael' },
-    { id: '2', nome: 'Michelle' },
-    { id: '3', nome: 'Rodrigo' },
-    { id: '4', nome: 'Manuel' },
-    { id: '5', nome: 'Emanuelle' },
-    { id: '6', nome: 'Fernanda' },
-    { id: '7', nome: 'Carlos' },
-    { id: '8', nome: 'Ana' },
-    { id: '9', nome: 'Juliano' },
-    { id: '10', nome: 'Patrícia' },
-    { id: '11', nome: 'Cláudio' },
-    { id: '12', nome: 'Sofia' },
+    { id: '1', nome: 'Rafael', icon: 'person-outline' },
+    { id: '2', nome: 'Michelle', icon: 'person-outline' },
+    { id: '3', nome: 'Rodrigo', icon: 'person-outline' },
+    { id: '4', nome: 'Manuel', icon: 'person-outline' },
+    { id: '5', nome: 'Emanuelle', icon: 'person-outline' },
+    { id: '6', nome: 'Fernanda', icon: 'person-outline' },
+    { id: '7', nome: 'Carlos', icon: 'person-outline' },
+    { id: '8', nome: 'Ana', icon: 'person-outline' },
+    { id: '9', nome: 'Juliano', icon: 'person-outline' },
+    { id: '10', nome: 'Patrícia', icon: 'person-outline' },
+    { id: '11', nome: 'Cláudio', icon: 'person-outline' },
+    { id: '12', nome: 'Sofia', icon: 'person-outline' },
   ];
 
   const agendaClick = () => {
@@ -52,6 +52,7 @@ const Inicio = () => {
   const pesquisaClick = () => {
     router.navigate('/(tabs)/perfil');
   };
+
   const prestadorClick =() =>{
     router.navigate('/(extra)/prestador');
   }
@@ -83,7 +84,7 @@ const Inicio = () => {
 
       <View style={styles.promocoesContainer}>
         {promocoes.map(promo => (
-          <Pressable key={promo.id} style={styles.promoCard} onPress={pesquisaClick}>
+          <Pressable key={promo.id} style={styles.promoCard} onPress={prestadorClick}>
             <Text style={styles.promoTitle}>{promo.titulo}</Text>
             <Text style={styles.promoDesc}>{promo.desconto}</Text>
           </Pressable>
@@ -105,6 +106,7 @@ const Inicio = () => {
         {profissionais.map(profissional => (
           <Pressable key={profissional.id} style={styles.servicoItem} onPress={profissionalClick}>
             <View key={profissional.id} style={styles.profissionalItem}>
+              <Ionicons name={profissional.icon} size={35} color="black"/>
               <Text style={styles.profissionalNome}>{profissional.nome}</Text>
             </View>
           </Pressable>

@@ -19,7 +19,7 @@ const Prestadores = () => {
     ]
 
     const servicoPrestadorClick = () =>{  
-     router.navigate('/(extra)/ServicoPrestador');
+     router.navigate('/(extra)/servicoPrestador');
     };
     const inicioClick =()=>{
       router.navigate('/(tabs)/inicio');
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     centralTitulo:{
       margin:'auto',
       flexDirection:'row',
-      alignItems:'center',
-      justifyContent:'center'
+      //alignItems:'center',
+      //justifyContent:'center'
     }
 
 });

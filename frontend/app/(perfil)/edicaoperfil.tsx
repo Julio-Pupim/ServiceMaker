@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function EdicaoPerfil() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -15,6 +19,12 @@ export default function EdicaoPerfil() {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
+          
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -87,9 +97,6 @@ export default function EdicaoPerfil() {
             <Text style={styles.saveText}>Salvar</Text>
           </Pressable>
 
-          <Pressable style={styles.cancelButton} onPress={() => router.push('/(tabs)/perfil')}>
-            <Text style={styles.cancelText}>Cancelar</Text>
-          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -199,5 +206,8 @@ const styles = StyleSheet.create({
   },
   iconRodape: {
     paddingHorizontal: 20,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Pressable, Alert, TextInput, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function Avaliacao() {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
@@ -23,6 +27,11 @@ export default function Avaliacao() {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -51,9 +60,6 @@ export default function Avaliacao() {
         <Text style={styles.submitText}>Enviar Avaliação</Text>
       </Pressable>
 
-      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-        <Text style={styles.returnText}>Voltar</Text>
-      </Pressable>
     </SafeAreaView>
   );
 };
@@ -123,5 +129,8 @@ const styles = StyleSheet.create({
   },
   returnText: {
     color: '#007BFF',
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });
