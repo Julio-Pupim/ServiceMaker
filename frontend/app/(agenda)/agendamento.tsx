@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'; // Importação correta
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -85,11 +85,20 @@ export default function Agendamento() {
     return formattedValue;
   };
 
+  const agendaClick =()=>{
+    router.navigate('/(tabs)/agenda');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={agendaClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -262,5 +271,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#FF375B',
     marginLeft: 10,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

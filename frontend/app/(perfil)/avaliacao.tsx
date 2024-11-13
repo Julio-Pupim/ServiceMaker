@@ -18,15 +18,25 @@ export default function Avaliacao() {
     }
   };
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
       <Text style={styles.description}>Nos Avalie</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
@@ -49,10 +59,6 @@ export default function Avaliacao() {
       />
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitText}>Enviar Avaliação</Text>
-      </Pressable>
-
-      <Pressable style={styles.returnButton} onPress={() => router.push('/(tabs)/perfil')}>
-        <Text style={styles.returnText}>Voltar</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -117,11 +123,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
   },
-  returnButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
+  backIcon: {
+    paddingRight: 15,
   },
 });

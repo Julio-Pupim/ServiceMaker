@@ -8,7 +8,7 @@ import { router } from 'expo-router';
 const servicoPrestador = () => {
 
 const prestadorClick = ()=>{
-  router.navigate('/(extra)/prestador')
+  router.navigate('/(servico)/prestador')
 }
   
 const tiposServicos = [
