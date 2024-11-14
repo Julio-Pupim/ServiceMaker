@@ -2,13 +2,13 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar}
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
-import ServicoService from '../../service/ServicoService'
+import SetorService from '../../service/SetorService'
 import UsuarioService from '../../service/UsuarioService'
 
 
 const Prestadores = () => {
     const [prestadores, setPrestadores] = useState([]);
-    const [servicos, setServicos] = useState([]);
+    const [setores, setSetor] = useState([]);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -16,9 +16,9 @@ const Prestadores = () => {
         const fetchData = async () => {
             try {
                 const usuariosData = await UsuarioService.getAllUsuarios();
-                const servicosData = await ServicoService.getAllServicos();
+                const setoresData = await SetorService.getAllSetores();
                 setPrestadores(usuariosData);
-                setServicos(servicosData);
+                setSetor(setoresData);
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
             }
@@ -33,7 +33,6 @@ const Prestadores = () => {
     const inicioClick =()=>{
       router.navigate('/(tabs)/inicio');
     };
-    
     return(
  <View style={styles.container}>
             <View style={styles.topoTela}>
@@ -54,13 +53,13 @@ const Prestadores = () => {
                                 <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
                                 <Text style={styles.infoPrestador}>
                                     {/* Procurar o serviço correspondente e exibir o título */}
-                                    {servicos.find(servico => servico.id_prestador === prestador.id)?.titulo || 'Serviço não disponível'}
+                                    {setores.find(setor => setor.id_prestador === prestador.id)?.titulo || 'Setor não disponível'}
                                 </Text>
                             </View>
                         </View>
                         <TouchableOpacity onPress={servicoPrestadorClick}>
                             <View style={styles.botaoServicos}>
-                                <Text style={styles.textServicos}>Mais serviços</Text>
+                                <Text style={styles.textServicos}>Serviços</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://localhost:8080/api/setor';
+const API_URL = 'http://localhost:8080/api/setores';
 
 // Função para recuperar o token do AsyncStorage
 const getAuthToken = async () => {
@@ -42,7 +42,7 @@ axiosInstance.interceptors.request.use(
 
 const getAllSetores = async () => {
   try {
-    const response = await axiosInstance.get('/');
+    const response = await axiosInstance.get();
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar todos os setores:', error);

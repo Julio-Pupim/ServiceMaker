@@ -55,6 +55,16 @@ const createServico = async (servicos) => {
   }
 };
 
+const getServicosByPrestador = async (idPrestador) => {
+  try {
+    const response = await axiosInstance.get(`?id_prestador=${idPrestador}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao buscar serviços do prestador:', error);
+    throw error;
+  }
+};
+
 
 // Funções CRUD utilizando axiosInstance com o token já configurado
 const getAllServicos = async () => {
@@ -104,4 +114,5 @@ export default {
   createServico,
   updateServico,
   deleteServico,
+  getServicosByPrestador,
 };
