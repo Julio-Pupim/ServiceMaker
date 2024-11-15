@@ -2,6 +2,7 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -9,6 +10,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -51,20 +53,24 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @NotBlank
   private String senha;
 
-  @OneToMany(mappedBy = "usuario")
+  @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+  @JsonManagedReference
   private List<Endereco> endereco;
 
   @Enumerated(EnumType.STRING)
   private Roles role;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "id_contato")
+  @JsonManagedReference
   private Contato contato;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonManagedReference
   private List<Reserva> reservas;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+  @JsonManagedReference
   private List<Avaliacao> avaliacoes;
 
   public Usuario(String nome, String cpf, String senha, Contato contato, Endereco endereco,

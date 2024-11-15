@@ -4,7 +4,7 @@ import br.com.servicemaker.domain.enums.Roles;
 import java.util.List;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public record UserDetailsDTO(String senha, String email, Roles role) {
+public record UserDetailsDTO(String senha, String email, Roles role, String nome) {
 
   public List<SimpleGrantedAuthority> getAuthorities() {
     if (Roles.ROLE_PRESTADOR.equals(this.role)) {

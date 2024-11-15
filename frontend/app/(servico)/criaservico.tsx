@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,7 +6,18 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
 
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const usuarioLogado = { id: 1, nome: 'Usúario' };
 
@@ -73,7 +84,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(perfil)/listaservicos");
+      router.navigate("/(servico)/editaServico");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);
@@ -113,7 +124,7 @@ export default function criaServico() {
           </Pressable>
 
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={estilos.userName}>{usuarioLogado.nome}</Text>
+          <Text style={estilos.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

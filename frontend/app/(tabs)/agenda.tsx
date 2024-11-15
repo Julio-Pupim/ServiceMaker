@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 type AgendamentoForm = {
   servico: string;
@@ -55,7 +67,7 @@ const AgendaScreen = () => {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

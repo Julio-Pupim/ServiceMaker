@@ -1,6 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -32,12 +33,14 @@ public class Avaliacao extends AbstractEntity {
   @Column(name = "comentario_cliente")
   private String comentarioCliente;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
+  @JsonBackReference
   private Usuario cliente;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_PRESTADOR", nullable = false)
+  @JsonBackReference
   private Prestador prestador;
 
 }
