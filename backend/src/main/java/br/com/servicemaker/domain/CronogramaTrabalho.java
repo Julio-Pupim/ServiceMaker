@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CronogramaTrabalho extends AbstractEntity {
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_AGENDA", nullable = false)
   private Agenda agenda;
 
