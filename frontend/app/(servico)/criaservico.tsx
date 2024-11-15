@@ -3,18 +3,20 @@ import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable 
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import  ServicoService from '../../service/ServicoService'
+import ServicoService from '../../service/ServicoService'
+import { Setor } from '@/constants/SetorEnum';
 
 
-const usuarioLogado = {id: 1, nome: 'p'};
+const usuarioLogado = { id: 1, nome: 'p' };
+
+
 
 type criarServicoForm = {
-  //prestador: string;
   servico: string;
   descricao: string;
-  tempo: string;
+  tempoServico: string;
   preco: string;
-  setor: string;
+  setor: Setor;
 }
 
 export default function criaServico() {
@@ -22,28 +24,47 @@ export default function criaServico() {
     defaultValues: {
       descricao: '',
       preco: '',
-   //   prestador: '',
       servico: '',
-      setor: '',
-      tempo: ''
+      setor: undefined,
+      tempoServico: ''
     },
     mode: "onChange"
   });
 
-  
+  const toNumber = (preco: string): number => {
+    preco = preco.replace(',', '.');
+    preco = preco.replace("R$", '');
+    return parseFloat(preco);
+  }
+  const toDateTime = (tempo: string) => {
+    const match = RegExp(/(\d+)h:(\d+)m/).exec(tempo);
+
+    if (!match) {
+      throw new Error("Formato de tempo inválido");
+    }
+
+    const hours = parseInt(match[1], 10);
+    const minutes = parseInt(match[2], 10);
+
+    // Criar um novo objeto Date e definir as horas e minutos
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0); // Define horas, minutos, segundos, milissegundos como 0
+    return date.toLocaleTimeString("pt-BR");
+  }
+
 
   const onSubmit = async (data: criarServicoForm) => {
 
     try {
 
-      const servicoData ={
-        prestador: {id: usuarioLogado.id},
+      const servicoData = {
+        prestador: { id: usuarioLogado.id },
         descricao: data.descricao,
-        tempoServico: data.tempo,
-        preco: parseFloat(data.preco.replace(',', '.')), // Converte o preço para número
-        setor: { id: data.setor } 
+        tempoServico: toDateTime(data.tempoServico),
+        preco: toNumber(data.preco),
+        setor: { id: parseInt(data.setor.toString()) }
       }
-
+      console.log(servicoData)
       await ServicoService.createServico(servicoData);
 
     } catch (error) {
@@ -129,7 +150,7 @@ export default function criaServico() {
           <View style={estilos.containerInput}>
             <Controller
               control={control}
-              name="tempo"
+              name="tempoServico"
               rules={{ required: 'Tempo é obrigatório.' }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
@@ -142,7 +163,7 @@ export default function criaServico() {
                 />
               )}
             />
-            {errors.tempo && <Text style={estilos.erro}>{errors.tempo?.message}</Text>}
+            {errors.tempoServico && <Text style={estilos.erro}>{errors.tempoServico?.message}</Text>}
           </View>
 
           <View style={estilos.containerInput}>
@@ -154,7 +175,7 @@ export default function criaServico() {
                 <TextInput
                   style={estilos.input}
                   value={value}
-                  onChangeText={text => onChange(formatCurrency(text))}
+                  onChangeText={valor => onChange(formatCurrency(valor))}
                   placeholder="Preço"
                   inputMode="numeric"
                 />
@@ -171,12 +192,12 @@ export default function criaServico() {
                 <Picker
                   selectedValue={value}
                   style={estilos.input}
-                  onValueChange={(itemValue: any) => onChange(itemValue)}
+                  onValueChange={(itemValue: Setor) => onChange(itemValue)}
                 >
-                  <Picker.Item label="Escolha um setor" value="" />
-                  <Picker.Item label="Setor 1" value="setor1" />
-                  <Picker.Item label="Setor 2" value="setor2" />
-                  <Picker.Item label="Setor 3" value="setor3" />
+                  <Picker.Item label="Escolha um setor" value={null} />
+                  <Picker.Item label="Setor 1" value={Setor.SETOR1} />
+                  <Picker.Item label="Setor 2" value={Setor.SETOR2} />
+                  <Picker.Item label="Setor 3" value={Setor.SETOR3} />
                 </Picker>
               )}
             />

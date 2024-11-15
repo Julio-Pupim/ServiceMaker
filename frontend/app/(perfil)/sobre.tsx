@@ -8,6 +8,10 @@ const perfilClick = ()=>{
 }
 
 export default function SobreNos() {
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -18,11 +22,11 @@ export default function SobreNos() {
               color="white"
             />
           </Pressable>
-
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Sobre o Service Maker</Text>
 
@@ -67,7 +71,6 @@ export default function SobreNos() {
           Venha fazer parte da nossa comunidade! Experimente o Service Maker e descubra como podemos facilitar o seu dia a dia.
         </Text>
       </ScrollView>
-
     </SafeAreaView>
   );
 }
@@ -129,14 +132,7 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 5,
   },
-  returnButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
-  },
   backIcon: {
     paddingRight: 15,
-  },
+  }
 });

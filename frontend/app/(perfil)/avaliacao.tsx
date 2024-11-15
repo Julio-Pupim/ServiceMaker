@@ -22,6 +22,10 @@ export default function Avaliacao() {
     }
   };
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -36,6 +40,7 @@ export default function Avaliacao() {
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
       <Text style={styles.description}>Nos Avalie</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
@@ -59,7 +64,6 @@ export default function Avaliacao() {
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitText}>Enviar Avaliação</Text>
       </Pressable>
-
     </SafeAreaView>
   );
 };
@@ -122,13 +126,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
     color: 'black',
-  },
-  returnButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
   },
   backIcon: {
     paddingRight: 15,

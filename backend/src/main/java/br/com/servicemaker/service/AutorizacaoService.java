@@ -1,23 +1,32 @@
 package br.com.servicemaker.service;
 
 
+import br.com.servicemaker.DTO.UserDetailsDTO;
+import br.com.servicemaker.domain.Contato;
+import br.com.servicemaker.domain.Usuario;
 import br.com.servicemaker.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class AutorizacaoService implements UserDetailsService {
 
-    @Autowired
-    UsuarioRepository repository;
+  private final UsuarioRepository repository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByContatoEmail(username);
-    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    UserDetailsDTO userDetailsDTO = repository.findByContatoEmail(username);
+    Usuario usuario = new Usuario();
+    usuario.setSenha(userDetailsDTO.senha());
+    Contato contato = new Contato(null, userDetailsDTO.email());
+    usuario.setContato(contato);
+    usuario.setRole(userDetailsDTO.role());
+    return usuario;
+  }
 }
 
 

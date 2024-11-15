@@ -9,7 +9,7 @@ import { Pressable } from "react-native";
 const servicoPrestador = () => {
 
 const prestadorClick = ()=>{
-  router.navigate('/(extra)/prestador')
+  router.navigate('/(servico)/prestador')
 }
   
 const tiposServicos = [

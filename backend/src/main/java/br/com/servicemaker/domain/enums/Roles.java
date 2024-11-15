@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Roles {
 
-  PRESTADOR("PRESTADOR"),
-  CLIENTE("CLIENTE");
+  ROLE_PRESTADOR("ROLE_PRESTADOR"),
+  ROLE_CLIENTE("ROLE_CLIENTE");
 
   private final String role;
 

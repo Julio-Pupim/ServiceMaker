@@ -24,6 +24,10 @@ export default function GerenciarEndereco() {
     setEnderecos(prevEnderecos => prevEnderecos.filter((_, i) => i !== index));
   };
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -34,7 +38,6 @@ export default function GerenciarEndereco() {
               color="white"
             />
           </Pressable>
-
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -72,7 +75,6 @@ export default function GerenciarEndereco() {
           </View>
         )}
       />
- 
     </SafeAreaView>
   );
 };
@@ -130,14 +132,6 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     flex: 1,
-  },
-  returnButton: {
-    marginTop: 10,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
-    fontSize: 16,
   },
   backIcon: {
     paddingRight: 15,

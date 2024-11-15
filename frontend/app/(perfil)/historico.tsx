@@ -34,16 +34,16 @@ const ServicosLista = () => {
     );
   };
 
-  const prestadorClick = ()=>{
-    router.navigate('/(extra)/prestador')
-  }
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
-          <Pressable onPress={prestadorClick}>
+          <Pressable onPress={perfilClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />

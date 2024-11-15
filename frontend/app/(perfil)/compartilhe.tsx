@@ -23,6 +23,10 @@ export default function Compartilhar() {
     }
   };
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -33,11 +37,11 @@ export default function Compartilhar() {
               color="white"
             />
           </Pressable>
-
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
       <View style={styles.content}>
         <Text style={styles.description}>
           Compartilhe nosso aplicativo com seus amigos e familiares!
@@ -46,7 +50,6 @@ export default function Compartilhar() {
           <Ionicons name="share-social-outline" size={24} color="white" />
           <Text style={styles.shareButtonText}>Compartilhar</Text>
         </Pressable>
-
       </View>
     </SafeAreaView>
   );
@@ -97,13 +100,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginLeft: 10,
     fontSize: 16,
-  },
-  returnButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  returnText: {
-    color: '#007BFF',
   },
   backIcon: {
     paddingRight: 15,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'; // Importação correta
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -17,7 +17,7 @@ type AgendamentoForm = {
 };
 
 const prestadorClick = ()=>{
-  router.navigate('/(extra)/prestador')
+  router.navigate('/(servico)/prestador')
 }
 
 export default function Agendamento() {
@@ -89,12 +89,16 @@ export default function Agendamento() {
     return formattedValue;
   };
 
+  const agendaClick =()=>{
+    router.navigate('/(tabs)/agenda');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
-          <Pressable onPress={prestadorClick}>
+          <Pressable onPress={agendaClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />

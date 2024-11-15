@@ -26,7 +26,7 @@ const login = async (data: LoginForm) => {
   }
 }
 
-const storeToken = async (token) => {
+const storeToken = async (token: string) => {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       // Ambiente navegador
@@ -42,11 +42,11 @@ const storeToken = async (token) => {
   }
 };
 
-async function handleLogin(data: LoginForm) {
+async function handleLogin(requestData: LoginForm) {
   try {
-    const token = await login(data);
+    const responseData = await login(requestData);
 
-    await storeToken(token);
+    await storeToken(responseData);
 
     router.push("/(tabs)/inicio");
 

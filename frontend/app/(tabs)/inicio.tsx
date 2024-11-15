@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import Pesquisa from '../search/[query]';
-//import { useState } from 'react';
 
 const Inicio = () => {
   const promocoes = [
@@ -54,7 +53,7 @@ const Inicio = () => {
   };
 
   const prestadorClick =() =>{
-    router.navigate('/(extra)/prestador');
+    router.navigate('/(servico)/prestador');
   }
   
 

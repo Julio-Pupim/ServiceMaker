@@ -7,11 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.Collection;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -22,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Prestador extends Usuario {
 
 
-  @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "id_agenda", nullable = false, referencedColumnName = "id")
   private Agenda agenda;
 
@@ -38,5 +41,11 @@ public class Prestador extends Usuario {
       Agenda agenda) {
     super(nome, cpf, senha, contato, endereco, role);
     this.agenda = agenda;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of(new SimpleGrantedAuthority(Roles.ROLE_PRESTADOR.getRole()),
+        new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
   }
 }

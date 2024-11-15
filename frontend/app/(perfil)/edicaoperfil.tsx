@@ -14,6 +14,10 @@ export default function EdicaoPerfil() {
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
 
+  const perfilClick =()=>{
+    router.navigate('/(tabs)/perfil');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -24,7 +28,6 @@ export default function EdicaoPerfil() {
               color="white"
             />
           </Pressable>
-          
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
