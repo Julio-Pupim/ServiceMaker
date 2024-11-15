@@ -24,10 +24,7 @@ const Prestadores = () => {
             try {
                 const usuariosData = await UsuarioService.getAllUsuarios();
                 console.log('Dados de usuários:', usuariosData);
-                const setoresData = await SetorService.getAllSetores();
-                console.log('Dados de setores:', setoresData);
                 setPrestadores(usuariosData);
-                setSetor(setoresData);
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
             }
@@ -56,21 +53,15 @@ const Prestadores = () => {
             </View>
 
             <ScrollView>
-                {prestadores.map(prestador => {
-                    const setorAssociado = setores.find(setor => setor.id_prestador === prestador.id);
-                    return (
-                        <View style={styles.header} key={prestador.id}>
-                            <View style={styles.posicao}>
-                                <Image
-                                    source={require('../../assets/images/prestador.jpg')}
-                                    style={styles.imagem}
-                                />
-                                <View style={styles.textoContainer}>
-                                    <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
-                                    <Text style={styles.infoPrestador}>
-                                        {setorAssociado ? setorAssociado.titulo : 'Setor não disponível'}
-                                    </Text>
-                                </View>
+                {prestadores.map(prestador => (
+                    <View style={styles.header} key={prestador.id}>
+                        <View style={styles.posicao}>
+                            <Image source={require('../../assets/images/prestador.jpg')} style={styles.imagem} />
+                            <View style={styles.textoContainer}>
+                                <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
+                                <Text style={styles.infoPrestador}>
+                                    {prestador.setor?.descricao}
+                                </Text>
                             </View>
                             <TouchableOpacity onPress={() => servicoPrestadorClick(prestador.id)}>
                                 <View style={styles.botaoServicos}>
