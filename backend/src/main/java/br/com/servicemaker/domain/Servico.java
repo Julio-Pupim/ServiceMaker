@@ -24,11 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Servico extends AbstractEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "ID_SETOR", nullable = false)
-  @JsonBackReference
-  private Setor setor;
-
   private String descricao;
 
   @Column(name = "tempo_servico")

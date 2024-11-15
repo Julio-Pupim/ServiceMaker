@@ -17,10 +17,7 @@ const Prestadores = () => {
             try {
                 const usuariosData = await UsuarioService.getAllUsuarios();
                 console.log('Dados de usuários:', usuariosData);
-                const setoresData = await SetorService.getAllSetores();
-                console.log('Dados de setores:', setoresData);
                 setPrestadores(usuariosData);
-                setSetor(setoresData);
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
             }
@@ -54,8 +51,7 @@ const Prestadores = () => {
                             <View style={styles.textoContainer}>
                                 <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
                                 <Text style={styles.infoPrestador}>
-                                    {/* Procurar o serviço correspondente e exibir o título */}
-                                    {setores.find(setor => setor.id_prestador === prestador.id)?.titulo || 'Setor não disponível'}
+                                    {prestador.setor?.descricao}
                                 </Text>
                             </View>
                         </View>
