@@ -53,6 +53,8 @@ const ServicosLista = () => {
         </View>
       </View>
       
+      <Text style={styles.title}>Histórico de Serviços</Text>
+
       <ScrollView>
       <View style={styles.servicesList}>
         {servicos.map((servico, index) => (
@@ -96,6 +98,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   servicesList: {
     padding: 10,

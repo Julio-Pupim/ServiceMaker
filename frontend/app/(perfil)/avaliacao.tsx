@@ -41,7 +41,7 @@ export default function Avaliacao() {
         </View>
       </View>
 
-      <Text style={styles.description}>Nos Avalie</Text>
+      <Text style={styles.title}>Nos Avalie</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Pressable key={star} onPress={() => setRating(star)}>
@@ -93,9 +93,10 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   ratingContainer: {
     flexDirection: 'row',

@@ -60,6 +60,8 @@ export default function EdicaoPerfil() {
         </View>
       </View>
 
+      <Text style={styles.title}>Edição do Perfil</Text>
+
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.containerPerfil}>
           <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.imagemPerfil} />
@@ -133,6 +135,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   scrollViewContainer: {
     paddingBottom: 100, 

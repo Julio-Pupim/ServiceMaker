@@ -42,6 +42,8 @@ export default function GerenciarEndereco() {
           <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
+
+      <Text style={styles.title}>Gerenciar Endereços</Text>
       
       <View style={styles.inputContainer}>
         <Controller
@@ -100,6 +102,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   inputContainer: {
     flexDirection: 'row',
