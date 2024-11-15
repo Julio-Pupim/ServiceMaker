@@ -16,6 +16,10 @@ type AgendamentoForm = {
   horaFim: string;
 };
 
+const prestadorClick = ()=>{
+  router.navigate('/(servico)/prestador')
+}
+
 export default function Agendamento() {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -104,7 +108,7 @@ export default function Agendamento() {
         </View>
       </View>
 
-      <Text style={styles.title}>Realizar um Agendamento</Text>
+      <Text style={styles.title}>Agendamento</Text>
 
       <Controller
         control={control}

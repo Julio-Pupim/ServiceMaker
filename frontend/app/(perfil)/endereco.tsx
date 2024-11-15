@@ -5,6 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useForm, Controller } from 'react-hook-form';
 import { router } from 'expo-router';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function GerenciarEndereco() {
   const { control, handleSubmit, reset } = useForm();
   const [enderecos, setEnderecos] = useState<string[]>([]);

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function EdicaoPerfil() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -96,9 +100,6 @@ export default function EdicaoPerfil() {
             <Text style={styles.saveText}>Salvar</Text>
           </Pressable>
 
-          <Pressable style={styles.cancelButton} onPress={() => router.push('/(tabs)/perfil')}>
-            <Text style={styles.cancelText}>Cancelar</Text>
-          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -13,6 +13,10 @@ type AgendamentoForm = {
   anotacao: string;
 };
 
+const prestadorClick = ()=>{
+  router.navigate('/(extra)/prestador')
+}
+
 const AgendaScreen = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -41,10 +45,15 @@ const AgendaScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
+          <Pressable onPress={prestadorClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
         </View>
@@ -139,6 +148,9 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: 'white',
     fontSize: 30,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });
 

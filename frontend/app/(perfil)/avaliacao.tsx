@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Pressable, Alert, TextInput, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function Avaliacao() {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
