@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     centralTitulo:{
       margin:'auto',
       flexDirection:'row',
-      alignItems:'center',
-      justifyContent:'center'
+      //alignItems:'center',
+      //justifyContent:'center'
     }
 });
 export default Prestadores;

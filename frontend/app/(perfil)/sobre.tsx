@@ -3,6 +3,10 @@ import { router } from 'expo-router';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function SobreNos() {
   const perfilClick =()=>{
     router.navigate('/(tabs)/perfil');
@@ -130,5 +134,5 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     paddingRight: 15,
-  },
+  }
 });

@@ -8,8 +8,11 @@ import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
 
-const EdicaoPerfil = () => {
+export default function EdicaoPerfil() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
@@ -103,9 +106,6 @@ const EdicaoPerfil = () => {
             <Text style={styles.saveText}>Salvar</Text>
           </Pressable>
 
-          <Pressable style={styles.cancelButton} onPress={() => router.push('/(tabs)/perfil')}>
-            <Text style={styles.cancelText}>Cancelar</Text>
-          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -220,5 +220,3 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
 });
-
-export default EdicaoPerfil;

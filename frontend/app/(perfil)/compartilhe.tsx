@@ -4,6 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { Share } from 'react-native';
 import { router } from 'expo-router';
 
+const perfilClick = ()=>{
+  router.navigate('/(tabs)/perfil')
+}
+
 export default function Compartilhar() {
   const onShare = async () => {
     try {
