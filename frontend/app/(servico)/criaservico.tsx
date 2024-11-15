@@ -10,8 +10,6 @@ import { router } from 'expo-router';
 
 const usuarioLogado = { id: 1, nome: 'p' };
 
-
-
 type criarServicoForm = {
   servico: string;
   descricao: string;
@@ -67,7 +65,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(servico)/detalhaservicoprestador");
+      router.navigate("/(servico)/editaServico");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);

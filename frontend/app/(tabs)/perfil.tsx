@@ -35,7 +35,7 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(servico)/criaServico') }}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(servico)/criaservico') }}>
           <Icon name="add" size={24} color="black" />
           <Text style={styles.menuText}>Cadastrar Serviço</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />
