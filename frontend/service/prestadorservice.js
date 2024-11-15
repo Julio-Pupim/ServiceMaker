@@ -60,6 +60,8 @@ const getPrestadorById = async (id) => {
   }
 };
 
+
+
 const createPrestador = async (prestador) => {
   try {
     const response = await axiosInstance.post('/', prestador);

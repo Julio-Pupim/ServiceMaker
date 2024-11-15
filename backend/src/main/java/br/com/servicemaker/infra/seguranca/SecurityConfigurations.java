@@ -47,7 +47,7 @@ public class SecurityConfigurations {
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(HttpMethod.POST, "/api/auth/registro").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-            .requestMatchers("/api/servicos/**").hasRole("PRESTADOR")
+            .requestMatchers("/api/servicos/put","/api/servicos/delete", "/api/servicos/post").hasRole("PRESTADOR")
             .anyRequest().authenticated()
         )
 

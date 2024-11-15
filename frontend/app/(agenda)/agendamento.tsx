@@ -210,9 +210,6 @@ export default function Agendamento() {
         <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
       </Pressable>
 
-      <Pressable style={styles.cancelButton} onPress={() => router.push('/(tabs)/agenda')}>
-        <Text style={styles.cancelText}>Cancelar</Text>
-      </Pressable>
     </SafeAreaView>
   );
 };

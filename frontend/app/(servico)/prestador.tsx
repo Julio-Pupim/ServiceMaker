@@ -1,22 +1,30 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
+import SetorService from '../../service/SetorService'
+import UsuarioService from '../../service/UsuarioService'
 
 
 const Prestadores = () => {
-
+    const [prestadores, setPrestadores] = useState([]);
+    const [setores, setSetor] = useState([]);
     const navigation = useNavigation();
 
-    const tipoPrestador = [
-        { id: '1', nome: 'Claudemir',titulo: 'Manutenção Geral de Jardins'  },
-        { id: '2', nome: 'Julia', titulo: 'Paisagismo' },    
-        { id: '3', nome: 'Junior',titulo: 'Poda de Árvores e Arbustos'  },
-        { id: '4', nome: 'Ceuma', titulo: 'Instalação de Sistemas de Irrigação' },    
-        { id: '5', nome: 'Jurandir',titulo: 'Preparação do Solo'  },
-        { id: '6', nome: 'Sebastião', titulo: 'Instalação de Grama e Tapetes Verdes' },    
-    ]
+    useEffect(() => {
+      
+        const fetchData = async () => {
+            try {
+                const usuariosData = await UsuarioService.getAllUsuarios();
+                const setoresData = await SetorService.getAllSetores();
+                setPrestadores(usuariosData);
+                setSetor(setoresData);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const servicoPrestadorClick = () =>{  
      router.navigate('/(servico)/servicoprestador');
@@ -25,41 +33,39 @@ const Prestadores = () => {
     const inicioClick =()=>{
       router.navigate('/(tabs)/inicio');
     };
-    
     return(
-
-    <View style = {styles.container}>
-      <View style = {styles.topoTela}>
-        <TouchableOpacity onPress={inicioClick}>
-          <Ionicons name="arrow-back-outline" size={30} color="white" />
-        </TouchableOpacity>
-         
-         <View style={styles.centralTitulo}>
-            <Ionicons name="bag-handle-outline" size={35} color="white" />
-            <Text style={styles.userName}>Prestadores</Text>
-         </View>
-      </View> 
-
-        <ScrollView>
-           {tipoPrestador.map(prestador => (
-            <View style = {styles.header}>
-              <View style = {styles.posicao}>
-                <Image source={require('../../assets/images/prestador.jpg')} 
-                style = {styles.imagem}/>
-                <View style = {styles.textoContainer}>
-                  <Text style = {styles.nomePrestador}>Nome:{prestador.nome} </Text>
-                  <Text style = {styles.infoPrestador}>{prestador.titulo}</Text> 
+ <View style={styles.container}>
+            <View style={styles.topoTela}>
+                <TouchableOpacity onPress={inicioClick}>
+                    <Ionicons name="arrow-back-outline" size={30} color="white" />
+                </TouchableOpacity>
+                <View style={styles.centralTitulo}>
+                    <Ionicons name="bag-handle-outline" size={35} color="white" />
+                    <Text style={styles.userName}>Prestadores</Text>
                 </View>
-              </View>
-              <TouchableOpacity key={prestador.id} onPress={servicoPrestadorClick}>
-                <View style={styles.botaoServicos} >
-                  <Text  style={styles.textServicos}>Mais serviços</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}   
-        </ScrollView>
-    </View>
+            </View> 
+            <ScrollView>
+                {prestadores.map(prestador => (
+                    <View style={styles.header} key={prestador.id}>
+                        <View style={styles.posicao}>
+                            <Image source={require('../../assets/images/prestador.jpg')} style={styles.imagem} />
+                            <View style={styles.textoContainer}>
+                                <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
+                                <Text style={styles.infoPrestador}>
+                                    {/* Procurar o serviço correspondente e exibir o título */}
+                                    {setores.find(setor => setor.id_prestador === prestador.id)?.titulo || 'Setor não disponível'}
+                                </Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={servicoPrestadorClick}>
+                            <View style={styles.botaoServicos}>
+                                <Text style={styles.textServicos}>Serviços</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ))}
+            </ScrollView>
+        </View>
   );
 };
     

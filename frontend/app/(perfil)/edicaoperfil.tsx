@@ -1,8 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import UsuarioService from '../../service/UsuarioService'
+import ContatoService from '../../service/ContatoService'
+import EnderecoService from '../../service/EnderecoService'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -14,7 +18,32 @@ export default function EdicaoPerfil() {
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
 
-  const perfilClick =()=>{
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+        const userId = await AsyncStorage.getItem('userId');
+        if (!userId) {
+          console.warn('ID do usuário não encontrado');
+          return;
+        }
+
+        const usuarioData = await UsuarioService.getUsuarioById();
+        const contatoData = await ContatoService.getContatoById();
+        const enderecoData = await EnderecoService.getEnderecoById();
+
+        setNome(usuarioData.nome);
+        setEmail(contatoData.email);
+        setTelefone(contatoData.telefone);
+        setEndereco(enderecoData.endereco);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const perfilClick = () => {
     router.navigate('/(tabs)/perfil');
   };
 
@@ -24,9 +53,7 @@ export default function EdicaoPerfil() {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Pressable onPress={perfilClick}>
-            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
-              color="white"
-            />
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon} color="white" />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>Usuário</Text>
@@ -35,10 +62,7 @@ export default function EdicaoPerfil() {
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.containerPerfil}>
-          <Image
-            source={{ uri: 'https://via.placeholder.com/100' }} 
-            style={styles.imagemPerfil}
-          />
+          <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.imagemPerfil} />
         </View>
 
         <Pressable style={styles.iconEditarPerfil}>
@@ -46,52 +70,34 @@ export default function EdicaoPerfil() {
         </Pressable>
 
         <View style={styles.formulario}>
-          <View >
+          <View>
             <Text style={styles.label}>Nome Completo</Text>
             <View style={styles.wrapperInput}>
-              <TextInput
-                value={nome}
-                onChangeText={setNome}
-                style={styles.input}
-              />
+              <TextInput value={nome} onChangeText={setNome} style={styles.input} />
               <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View >
+          <View>
             <Text style={styles.label}>E-mail</Text>
             <View style={styles.wrapperInput}>
-              <TextInput
-                value={email}
-                onChangeText={setEmail}
-                style={styles.input}
-                keyboardType="email-address"
-              />
+              <TextInput value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
               <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View >
+          <View>
             <Text style={styles.label}>Número de Celular</Text>
             <View style={styles.wrapperInput}>
-              <TextInput
-                value={telefone}
-                onChangeText={setTelefone}
-                style={styles.input}
-                keyboardType="phone-pad"
-              />
+              <TextInput value={telefone} onChangeText={setTelefone} style={styles.input} keyboardType="phone-pad" />
               <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
 
-          <View >
+          <View>
             <Text style={styles.label}>Endereço</Text>
             <View style={styles.wrapperInput}>
-              <TextInput
-                value={endereco}
-                onChangeText={setEndereco}
-                style={styles.input}
-              />
+              <TextInput value={endereco} onChangeText={setEndereco} style={styles.input} />
               <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
@@ -104,7 +110,7 @@ export default function EdicaoPerfil() {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
