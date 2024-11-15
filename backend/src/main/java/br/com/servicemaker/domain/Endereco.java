@@ -2,6 +2,7 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.DTO.EnderecoDTO;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -29,8 +30,9 @@ public class Endereco extends AbstractEntity {
 
   private String tipo;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_USUARIO", nullable = false)
+  @JsonBackReference
   private Usuario usuario;
 
   public Endereco(EnderecoDTO enderecoDTO) {
