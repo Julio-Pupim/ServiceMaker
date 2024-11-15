@@ -8,9 +8,15 @@ import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
 
 
-const usuarioLogado = { id: 1, nome: 'p' };
+const usuarioLogado = { id: 1, nome: 'Usúario' };
 
+const perfilClick =()=>{
+  router.navigate('/(tabs)/perfil');
+};
 
+const salvarClick =()=>{
+  router.navigate('/(servico)/prestador');
+};
 
 type criarServicoForm = {
   servico: string;
@@ -67,7 +73,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(servico)/detalhaservicoprestador");
+      router.navigate("/(perfil)/listaservicos");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);
@@ -100,13 +106,25 @@ export default function criaServico() {
     <SafeAreaView style={estilos.container}>
       <View style={estilos.header}>
         <View style={estilos.userText}>
+        <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={estilos.backIcon}
+              color="white"
+            />
+          </Pressable>
+
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={estilos.userName}>{usuarioLogado.nome}</Text>
         </View>
       </View>
 
+      <View style={estilos.tituloContainer}>
+        <Text style={estilos.titulo}>Cadastro de Serviço</Text>
+      </View>
+
       <ScrollView contentContainerStyle={estilos.scrollViewContainer}>
         <View style={estilos.formulario}>
+
+
 
           <View style={estilos.containerInput}>
             <Controller
@@ -278,5 +296,17 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 15,
+  },
+  backIcon: {
+    paddingRight: 15,
+  },
+  tituloContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  titulo: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });

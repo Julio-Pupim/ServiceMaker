@@ -90,16 +90,18 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   shareButton: {
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 10,
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 20,
   },
   shareButtonText: {
-    color: 'white',
     marginLeft: 10,
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   backIcon: {
     paddingRight: 15,

@@ -41,7 +41,7 @@ export default function Avaliacao() {
         </View>
       </View>
 
-      <Text style={styles.description}>Nos Avalie</Text>
+      <Text style={styles.description}>Nos Avalie!</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Pressable key={star} onPress={() => setRating(star)}>
@@ -62,7 +62,7 @@ export default function Avaliacao() {
         numberOfLines={4}
       />
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitText}>Enviar Avaliação</Text>
+        <Text style={styles.submitText}>Enviar</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -113,13 +113,18 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   submitButton: {
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
     padding: 15,
-    borderRadius: 5,
+    paddingLeft: 25,
+    paddingRight: 25,
+    alignItems: 'center',
+    marginTop: 20,
   },
   submitText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   description: {
     fontSize: 18,

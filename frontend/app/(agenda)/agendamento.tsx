@@ -110,106 +110,107 @@ export default function Agendamento() {
 
       <Text style={styles.title}>Agendamento</Text>
 
-      <Controller
-        control={control}
-        name="servico"
-        rules={{ required: 'Serviço é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Serviço"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
-
-      <Controller
-        control={control}
-        name="prestador"
-        rules={{ required: 'Prestador é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Prestador"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
-
-      <Controller
-        control={control}
-        name="data"
-        rules={{ required: 'Data é obrigatória.' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            value={value}
-            onChangeText={onChange}
-            placeholder="Data"
-            keyboardType="numeric"
-            maxLength={10}
-          />
-        )}
-      />
-      {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
-
-      <Controller
-        control={control}
-        name="hora"
-        rules={{ required: 'Hora de início é obrigatória.' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            value={value}
-            onChangeText={text => onChange(formatTime(text))}
-            placeholder="Hora"
-            keyboardType="numeric"
-            maxLength={7}
+      <View style={{ margin: 20 }}>
+        <Controller
+          control={control}
+          name="servico"
+          rules={{ required: 'Serviço é um campo obrigatório' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Serviço"
+              value={value}
+              onChangeText={onChange}
             />
           )}
         />
-        {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
+        {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
 
-      <Controller
-        control={control}
-        name="localizacao"
-        rules={{ required: 'Localização é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Localização"
-            value={value}
-            onChangeText={onChange}
+        <Controller
+          control={control}
+          name="prestador"
+          rules={{ required: 'Prestador é um campo obrigatório' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Prestador"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
+        {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
+
+        <Controller
+          control={control}
+          name="data"
+          rules={{ required: 'Data é obrigatória.' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={onChange}
+              placeholder="Data"
+              keyboardType="numeric"
+              maxLength={10}
+            />
+          )}
+        />
+        {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
+
+        <Controller
+          control={control}
+          name="hora"
+          rules={{ required: 'Hora de início é obrigatória.' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              value={value}
+              onChangeText={text => onChange(formatTime(text))}
+              placeholder="Hora"
+              keyboardType="numeric"
+              maxLength={7}
+              />
+            )}
           />
-        )}
-      />
-      {errors.localizacao && <Text style={styles.errorText}>{errors.localizacao.message}</Text>}
+          {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
-      <Controller
-        control={control}
-        name="anotacao"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Anotação"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="localizacao"
+          rules={{ required: 'Localização é um campo obrigatório' }}
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Localização"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
+        {errors.localizacao && <Text style={styles.errorText}>{errors.localizacao.message}</Text>}
 
-      <Pressable
-        style={[styles.button]}
-        onPress={handleSubmit(addTask)}
-        disabled={!isValid || !selectedDate}
-      >
-        <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
-      </Pressable>
+        <Controller
+          control={control}
+          name="anotacao"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Anotação"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
 
+        <Pressable
+          style={[styles.button]}
+          onPress={handleSubmit(addTask)}
+          disabled={!isValid || !selectedDate}
+        >
+          <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 };
@@ -252,15 +253,17 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   button: {
+    marginTop: 25,
     height: 50,
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   cancelButton: {
     marginTop: 15,
