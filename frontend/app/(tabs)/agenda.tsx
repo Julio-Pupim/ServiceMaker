@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 type AgendamentoForm = {
   servico: string;
@@ -15,7 +15,10 @@ type AgendamentoForm = {
 
 const prestadorClick = ()=>{
   router.navigate('/(extra)/prestador')
+  router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador, idServico: idServico} })
 }
+
+const {idPrestador: any, idServico: any} = useLocalSearchParams();
 
 const AgendaScreen = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
