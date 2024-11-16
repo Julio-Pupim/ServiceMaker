@@ -5,7 +5,6 @@ import { router, useNavigation } from 'expo-router';
 import SetorService from '../../service/SetorService'
 import UsuarioService from '../../service/UsuarioService'
 
-
 const Prestadores = () => {
     const [prestadores, setPrestadores] = useState([]);
     const [setores, setSetor] = useState([]);
@@ -35,37 +34,36 @@ const Prestadores = () => {
     };
     return(
  <View style={styles.container}>
-            <View style={styles.topoTela}>
-                <TouchableOpacity onPress={inicioClick}>
-                    <Ionicons name="arrow-back-outline" size={30} color="white" />
-                </TouchableOpacity>
-                <View style={styles.centralTitulo}>
-                    <Ionicons name="bag-handle-outline" size={35} color="white" />
-                    <Text style={styles.userName}>Prestadores</Text>
-                </View>
-            </View> 
-            <ScrollView>
-                {prestadores.map(prestador => (
-                    <View style={styles.header} key={prestador.id}>
-                        <View style={styles.posicao}>
-                            <Image source={require('../../assets/images/prestador.jpg')} style={styles.imagem} />
-                            <View style={styles.textoContainer}>
-                                <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
-                                <Text style={styles.infoPrestador}>
-                                    {/* Procurar o serviço correspondente e exibir o título */}
-                                    {setores.find(setor => setor.id_prestador === prestador.id)?.titulo || 'Setor não disponível'}
-                                </Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity onPress={servicoPrestadorClick}>
-                            <View style={styles.botaoServicos}>
-                                <Text style={styles.textServicos}>Serviços</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                ))}
-            </ScrollView>
+    <View style={styles.topoTela}>
+        <TouchableOpacity onPress={inicioClick}>
+            <Ionicons name="arrow-back-outline" size={30} color="white" />
+        </TouchableOpacity>
+        <View style={styles.centralTitulo}>
+            <Ionicons name="bag-handle-outline" size={35} color="white" />
+            <Text style={styles.userName}>Prestadores</Text>
         </View>
+    </View> 
+    <ScrollView>
+        {prestadores.map(prestador => (
+            <View style={styles.header} key={prestador.id}>
+                <View style={styles.posicao}>
+                    <Image source={require('../../assets/images/prestador.jpg')} style={styles.imagem} />
+                    <View style={styles.textoContainer}>
+                        <Text style={styles.nomePrestador}>Nome: {prestador.nome}</Text>
+                        <Text style={styles.infoPrestador}>
+                            {setores.find(setor => setor.id_prestador === prestador.id)?.titulo || 'Setor não disponível'}
+                        </Text>
+                    </View>
+                </View>
+                <TouchableOpacity onPress={servicoPrestadorClick}>
+                    <View style={styles.botaoServicos}>
+                        <Text style={styles.textServicos}>Serviços</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        ))}
+    </ScrollView>
+  </View>
   );
 };
     
@@ -139,8 +137,7 @@ const styles = StyleSheet.create({
     centralTitulo:{
       margin:'auto',
       flexDirection:'row',
-      //alignItems:'center',
-      //justifyContent:'center'
     }
 });
+
 export default Prestadores;
