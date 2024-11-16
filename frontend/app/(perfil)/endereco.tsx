@@ -1,9 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, TextInput, Pressable, FlatList, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useForm, Controller } from 'react-hook-form';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
+
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -39,7 +52,7 @@ export default function GerenciarEndereco() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

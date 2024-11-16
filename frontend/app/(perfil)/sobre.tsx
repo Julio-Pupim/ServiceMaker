@@ -1,7 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -23,7 +35,7 @@ export default function SobreNos() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

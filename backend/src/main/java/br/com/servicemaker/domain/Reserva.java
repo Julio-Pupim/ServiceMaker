@@ -2,6 +2,7 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,20 +25,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Reserva extends AbstractEntity {
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
+  @JsonBackReference
   private Usuario cliente;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_AGENDA", nullable = false)
+  @JsonBackReference
   private Agenda agenda;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "ID_SERVICO", nullable = false)
+  @JsonBackReference
   private Servico servico;
 
-  @ManyToOne(optional = false)
+  @ManyToOne()
   @JoinColumn(name = "id_prestador", nullable = false)
+  @JsonBackReference
   private Prestador prestador;
 
   @Enumerated(EnumType.STRING)

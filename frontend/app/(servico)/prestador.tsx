@@ -23,7 +23,9 @@ const Prestadores = () => {
         const fetchData = async () => {
             try {
                 const usuariosData = await UsuarioService.getAllUsuarios();
+                console.log('Dados de usuários:', usuariosData);
                 const setoresData = await SetorService.getAllSetores();
+                console.log('Dados de setores:', setoresData);
                 setPrestadores(usuariosData);
                 setSetor(setoresData);
             } catch (error) {

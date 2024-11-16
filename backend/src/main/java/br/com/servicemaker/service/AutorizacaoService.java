@@ -29,6 +29,7 @@ public class AutorizacaoService implements UserDetailsService {
       Contato contato = new Contato(null, userDetailsDTO.email());
       prestador.setContato(contato);
       prestador.setRole(userDetailsDTO.role());
+      prestador.setNome(userDetailsDTO.nome());
       return prestador;
     }
 
@@ -37,6 +38,7 @@ public class AutorizacaoService implements UserDetailsService {
     Contato contato = new Contato(null, userDetailsDTO.email());
     usuario.setContato(contato);
     usuario.setRole(userDetailsDTO.role());
+    usuario.setNome(userDetailsDTO.nome());
     return usuario;
   }
 }

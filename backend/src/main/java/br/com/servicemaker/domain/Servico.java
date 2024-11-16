@@ -1,6 +1,8 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -24,6 +26,7 @@ public class Servico extends AbstractEntity {
 
   @ManyToOne
   @JoinColumn(name = "ID_SETOR", nullable = false)
+  @JsonBackReference
   private Setor setor;
 
   private String descricao;
@@ -35,9 +38,11 @@ public class Servico extends AbstractEntity {
 
   @ManyToOne
   @JoinColumn(name = "ID_PRESTADOR", nullable = false)
+  @JsonBackReference
   private Prestador prestador;
 
   @OneToMany(mappedBy = "servico")
+  @JsonManagedReference
   private List<Reserva> reservas;
 
 }
