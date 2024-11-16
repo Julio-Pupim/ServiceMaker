@@ -54,16 +54,8 @@ const Inicio = () => {
     carregarNomeUsuario();
   }, []);
 
-  const agendaClick = () => {
-    router.navigate('/(tabs)/agenda');
-  };
-
   const profissionalClick = () => {
-    router.navigate('/(tabs)/perfil');
-  };
-  
-  const pesquisaClick = () => {
-    router.navigate('/(tabs)/perfil');
+    router.navigate('/(servico)/prestador');
   };
 
   const prestadorClick =() =>{
