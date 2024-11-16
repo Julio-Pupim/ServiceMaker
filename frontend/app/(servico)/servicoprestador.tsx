@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { View,Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { router, useNavigation } from 'expo-router';
+import { router, useNavigation,  useLocalSearchParams, SearchParams } from 'expo-router';
 import ServicoService from "@/service/ServicoService";
 
 
@@ -22,8 +22,11 @@ const servicoPrestador = () => {
       fetchData();
   }, []);
 
-  const servicoAgendaClick = () =>{  
-   router.navigate('/(tabs)/agenda');
+  const idPrestador: any = useLocalSearchParams();
+
+  const servicoAgendaClick = (idServico: number) =>{  
+   router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador.id, idServico: idServico} })
+
   };
   
   const inicioClick =()=>{
@@ -41,7 +44,7 @@ const servicoPrestador = () => {
               </View>
           </View> 
           <ScrollView>
-              {servicos.map(servico => (
+              {servicos.map((servico: any) => (
                   <View style={styles.header} key={servico.id}>
                       <View style={styles.posicao}>
                           <View style={styles.textoContainer}>
@@ -54,9 +57,9 @@ const servicoPrestador = () => {
                               </Text>
                           </View>
                       </View>
-                      <TouchableOpacity onPress={servicoAgendaClick}>
+                      <TouchableOpacity onPress={() =>servicoAgendaClick(servico.id)}>
                           <View style={styles.botaoServicos}>
-                              <Text style={styles.textServicos}>Serviços</Text>
+                              <Text style={styles.textServicos}>Agendamento</Text>
                           </View>
                       </TouchableOpacity>
                   </View>
