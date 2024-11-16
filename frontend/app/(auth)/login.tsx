@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
+import UsuarioService from '../../service/UsuarioService'
 
 type LoginForm = {
   email: string;
@@ -15,7 +16,7 @@ const login = async (data: LoginForm) => {
   try {
 
     const response = await axios.post('http://localhost:8080/api/auth/login', data);
-    return response.data.token;
+    return response.data;
 
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -26,15 +27,17 @@ const login = async (data: LoginForm) => {
   }
 }
 
-const storeToken = async (token: string) => {
+const storeToken = async (data: any) => {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       // Ambiente navegador
-      window.localStorage.setItem('jwt_token', token);
+      window.localStorage.setItem('jwt_token', data.token);
+      window.localStorage.setItem('nome_usuario', data.nome)
       console.log('windows')
     } else {
       // Ambiente móvel
-      await AsyncStorage.setItem('jwt_token', token);
+      await AsyncStorage.setItem('jwt_token', data.token);
+      await AsyncStorage.setItem('nome_usuario', data.nome);
       console.log('movel')
     }
   } catch (error) {
@@ -47,7 +50,7 @@ async function handleLogin(requestData: LoginForm) {
     const responseData = await login(requestData);
 
     await storeToken(responseData);
-
+    
     router.push("/(tabs)/inicio");
 
   } catch (error) {

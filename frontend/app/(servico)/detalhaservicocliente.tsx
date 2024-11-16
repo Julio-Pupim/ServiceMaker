@@ -1,7 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const DetalhesServico = () => {
   const [descricao, setDescricao] = useState('');
@@ -14,7 +26,7 @@ const DetalhesServico = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

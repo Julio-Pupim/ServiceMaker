@@ -1,10 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, ScrollView, Pressable, StatusBar } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { FontAwesome } from '@expo/vector-icons';
 import { TextInputMask } from 'react-native-masked-text';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 type editaServicoProps = {
   nome: string;
@@ -49,7 +59,7 @@ export default function editaServico({
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>

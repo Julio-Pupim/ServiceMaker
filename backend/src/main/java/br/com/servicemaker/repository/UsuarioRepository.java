@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface UsuarioRepository extends AbstractRepository<Usuario> {
 
   @Query(
-      "SELECT NEW  br.com.servicemaker.DTO.UserDetailsDTO(u.senha, c.email, u.role) FROM Usuario u "
+      "SELECT NEW  br.com.servicemaker.DTO.UserDetailsDTO(u.senha, c.email, u.role, u.nome) FROM Usuario u "
           + " INNER JOIN u.contato c"
           + " WHERE c.email = :email")
   UserDetailsDTO findByContatoEmail(String email);

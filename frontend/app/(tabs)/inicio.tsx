@@ -1,16 +1,21 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import Pesquisa from '../search/[query]';
+import { obterNomeUsuario } from '@/utils/storageUtils';
 
 const Inicio = () => {
+
+  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+  const [searchText, setSearchText] = useState('');
+
   const promocoes = [
     { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
     { id: '2', titulo: 'Reparo de celulares', desconto: '15% de desconto' },
   ];
-  const [searchText, setSearchText] = useState('');
+  
 
   const servicosFrequentes = [
     { id: '1', descricao: 'Encanador', icon: 'construct-outline' },
@@ -40,6 +45,15 @@ const Inicio = () => {
     { id: '12', nome: 'Sofia', icon: 'person-outline' },
   ];
 
+  useEffect(() => {
+    const carregarNomeUsuario = async () => {
+      const nome = await obterNomeUsuario();
+      setNomeUsuario(nome);
+    };
+
+    carregarNomeUsuario();
+  }, []);
+
   const agendaClick = () => {
     router.navigate('/(tabs)/agenda');
   };
@@ -63,12 +77,12 @@ const Inicio = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
       <View>
-        <Text style={styles.greetings}>Olá, usuário!</Text>
+        <Text style={styles.greetings}>Olá, {nomeUsuario}</Text>
       </View>
 
       <View style={styles.pesquisa}>

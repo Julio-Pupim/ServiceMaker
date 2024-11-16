@@ -7,6 +7,18 @@ import UsuarioService from '../../service/UsuarioService'
 import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -56,7 +68,7 @@ export default function EdicaoPerfil() {
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon} color="white" />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

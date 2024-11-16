@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,11 +6,28 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
 
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-const usuarioLogado = { id: 1, nome: 'p' };
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
 
+  carregarNomeUsuario();
+}, []);
 
+const usuarioLogado = { id: 1, nome: 'Usúario' };
+
+const perfilClick =()=>{
+  router.navigate('/(tabs)/perfil');
+};
+
+const salvarClick =()=>{
+  router.navigate('/(servico)/prestador');
+};
 
 type criarServicoForm = {
   servico: string;
@@ -67,7 +84,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(servico)/detalhaservicoprestador");
+      router.navigate("/(servico)/editaServico");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);
@@ -100,13 +117,25 @@ export default function criaServico() {
     <SafeAreaView style={estilos.container}>
       <View style={estilos.header}>
         <View style={estilos.userText}>
+        <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={estilos.backIcon}
+              color="white"
+            />
+          </Pressable>
+
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={estilos.userName}>{usuarioLogado.nome}</Text>
+          <Text style={estilos.userName}>{nomeUsuario}</Text>
         </View>
+      </View>
+
+      <View style={estilos.tituloContainer}>
+        <Text style={estilos.titulo}>Cadastro de Serviço</Text>
       </View>
 
       <ScrollView contentContainerStyle={estilos.scrollViewContainer}>
         <View style={estilos.formulario}>
+
+
 
           <View style={estilos.containerInput}>
             <Controller
@@ -278,5 +307,17 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 15,
+  },
+  backIcon: {
+    paddingRight: 15,
+  },
+  tituloContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  titulo: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
   },
 });
