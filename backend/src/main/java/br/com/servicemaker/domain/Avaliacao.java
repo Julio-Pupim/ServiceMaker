@@ -38,10 +38,5 @@ public class Avaliacao extends AbstractEntity {
   @JsonBackReference
   private Usuario cliente;
 
-  @ManyToOne()
-  @JoinColumn(name = "ID_PRESTADOR", nullable = false)
-  @JsonBackReference
-  private Prestador prestador;
-
 }
 

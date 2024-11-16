@@ -23,11 +23,10 @@ public class Agenda extends AbstractEntity {
 
 
   @OneToMany(mappedBy = "agenda", cascade = CascadeType.REMOVE)
-  @JsonManagedReference
   private List<CronogramaTrabalho> cronogramas;
 
   @OneToMany(mappedBy = "agenda")
-  @JsonManagedReference
+  @JsonManagedReference("agenda-reservas")
   private List<Reserva> reservas;
 
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/agenda")
+@RequestMapping("/api/agenda")
 public class AgendaController extends AbstractController<Agenda, AgendaRepository, AgendaService> {
 
   public AgendaController(AgendaService service) {

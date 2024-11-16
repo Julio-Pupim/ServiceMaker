@@ -1,6 +1,6 @@
 package br.com.servicemaker.domain;
+
 import br.com.servicemaker.domain.enums.Roles;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
@@ -28,16 +28,15 @@ public class Prestador extends Usuario {
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "id_agenda", nullable = false, referencedColumnName = "id")
-  @JsonManagedReference
   private Agenda agenda;
 
   @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
-  @JsonManagedReference
+  @JsonManagedReference("prestador-servico")
   private List<Servico> servicos;
 
   @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE,
       CascadeType.MERGE}, orphanRemoval = true)
-  @JsonManagedReference
+  @JsonManagedReference("prestador-certificados")
   private List<Certificado> certificados;
 
   @ManyToOne

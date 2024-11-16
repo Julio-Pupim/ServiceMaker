@@ -27,23 +27,18 @@ public class Reserva extends AbstractEntity {
 
   @ManyToOne()
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("clientes-reservas")
   private Usuario cliente;
 
   @ManyToOne()
   @JoinColumn(name = "ID_AGENDA", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("agenda-reservas")
   private Agenda agenda;
 
   @ManyToOne()
   @JoinColumn(name = "ID_SERVICO", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("reservas-servicos")
   private Servico servico;
-
-  @ManyToOne()
-  @JoinColumn(name = "id_prestador", nullable = false)
-  @JsonBackReference
-  private Prestador prestador;
 
   @Enumerated(EnumType.STRING)
   private Status status;
