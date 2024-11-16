@@ -33,6 +33,8 @@ const prestadorClick = ()=>{
   router.navigate('/(servico)/prestador')
 }
 
+const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
+
 export default function Agendamento() {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -40,11 +42,12 @@ export default function Agendamento() {
       prestador: '',
       localizacao: '',
       anotacao: '',
-      data: '',
+      data: dataAgendamento,
       hora: '',
     },
     mode: 'onChange',
   });
+
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [showDatePicker, setShowDatePicker] = useState(false);
