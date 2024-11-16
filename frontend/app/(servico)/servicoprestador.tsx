@@ -24,10 +24,8 @@ const servicoPrestador = () => {
 
   const idPrestador: any = useLocalSearchParams();
 
-  const servicoAgendaClick = (idServico: any) =>{  
-   router.navigate('/(tabs)/agenda');
-   router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador, idServico: idServico} })
-   
+  const servicoAgendaClick = (idServico: number) =>{  
+   router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador.id, idServico: idServico} })
 
   };
   
@@ -61,7 +59,7 @@ const servicoPrestador = () => {
                       </View>
                       <TouchableOpacity onPress={() =>servicoAgendaClick(servico.id)}>
                           <View style={styles.botaoServicos}>
-                              <Text style={styles.textServicos}>Serviços</Text>
+                              <Text style={styles.textServicos}>Agendamento</Text>
                           </View>
                       </TouchableOpacity>
                   </View>

@@ -13,12 +13,17 @@ type AgendamentoForm = {
   anotacao: string;
 };
 
-const prestadorClick = ()=>{
-  router.navigate('/(extra)/prestador')
-  router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador, idServico: idServico} })
+const prestadorClick = () => {
+  router.navigate('/(servico)/prestador')
+
 }
 
-const {idPrestador: any, idServico: any} = useLocalSearchParams();
+const { idPrestador, idServico } = useLocalSearchParams();
+
+
+const agandamentoClick = (dataAgendamento: string) => {
+  router.push({ pathname: "/(agenda)/agendamento", params: { idPrestador: idPrestador, idServico: idServico, dataAgendamento: dataAgendamento } })
+}
 
 const AgendaScreen = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
@@ -30,6 +35,13 @@ const AgendaScreen = () => {
     },
     mode: 'onChange',
   });
+
+  const { idPrestador, idServico } = useLocalSearchParams();
+
+
+  const agandamentoClick = (dataAgendamento: string) => {
+    router.push({ pathname: "/(agenda)/agendamento", params: { idPrestador: idPrestador, idServico: idServico, dataAgendamento: dataAgendamento } })
+  }
 
   const [selectedDate, setSelectedDate] = useState<string>('');
 
@@ -48,7 +60,7 @@ const AgendaScreen = () => {
   };
 
   return (
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
@@ -63,36 +75,36 @@ const AgendaScreen = () => {
       </View>
 
       <ScrollView>
-      <Text style={styles.title}>Agenda</Text>
-      <Calendar
-        style={styles.calendar}
-        onDayPress={handleDayPress}
-        current={'2024-10-22'}
-        markedDates={{
-          [selectedDate]: { selected: true, selectedColor: '#00ADF5' },
-        }}
-        markingType={'multi-dot'}
-        theme={{
-          calendarBackground: '#ffffff',
-          textSectionTitleColor: '#b6c1cd',
-          selectedDayBackgroundColor: '#00ADF5',
-          todayTextColor: '#00ADF5',
-          dayTextColor: '#2d4150',
-          textDisabledColor: '#d9e1e8',
-          arrowColor: 'black',
-          monthTextColor: 'black',
-        }}
-      />
+        <Text style={styles.title}>Agenda</Text>
+        <Calendar
+          style={styles.calendar}
+          onDayPress={handleDayPress}
+          current={'2024-10-22'}
+          markedDates={{
+            [selectedDate]: { selected: true, selectedColor: '#00ADF5' },
+          }}
+          markingType={'multi-dot'}
+          theme={{
+            calendarBackground: '#ffffff',
+            textSectionTitleColor: '#b6c1cd',
+            selectedDayBackgroundColor: '#00ADF5',
+            todayTextColor: '#00ADF5',
+            dayTextColor: '#2d4150',
+            textDisabledColor: '#d9e1e8',
+            arrowColor: 'black',
+            monthTextColor: 'black',
+          }}
+        />
 
-      <View style={styles.tasks}>
-        <Text style={[styles.task, { color: 'red' }]}>Aparar a grama - José - 7:00</Text>
-        <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
-        <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
-      </View>
-      
-      <Pressable style={styles.addButton} onPress={() => router.navigate('/(agenda)/agendamento')}>
-        <Text style={styles.addButtonText}>+</Text>
-      </Pressable>
+        <View style={styles.tasks}>
+          <Text style={[styles.task, { color: 'red' }]}>Aparar a grama - José - 7:00</Text>
+          <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
+          <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
+        </View>
+
+        <Pressable style={styles.addButton} onPress={() => agandamentoClick(selectedDate)}>
+          <Text style={styles.addButtonText}>+</Text>
+        </Pressable>
       </ScrollView>
     </SafeAreaView>
   );

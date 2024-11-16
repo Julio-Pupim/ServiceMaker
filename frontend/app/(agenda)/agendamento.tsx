@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 type AgendamentoForm = {
   servico: string;
@@ -20,6 +20,8 @@ const prestadorClick = ()=>{
   router.navigate('/(servico)/prestador')
 }
 
+const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
+
 export default function Agendamento() {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -27,11 +29,12 @@ export default function Agendamento() {
       prestador: '',
       localizacao: '',
       anotacao: '',
-      data: '',
+      data: dataAgendamento,
       hora: '',
     },
     mode: 'onChange',
   });
+
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [showDatePicker, setShowDatePicker] = useState(false);
