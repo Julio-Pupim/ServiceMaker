@@ -83,7 +83,7 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/') }}>
           <Icon name="logout" size={24} color="black" />
           <Text style={styles.menuText}>Sair</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />
