@@ -33,11 +33,11 @@ public class Servico extends AbstractEntity {
 
   @ManyToOne
   @JoinColumn(name = "ID_PRESTADOR", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("prestador-servico")
   private Prestador prestador;
 
   @OneToMany(mappedBy = "servico")
-  @JsonManagedReference
+  @JsonManagedReference("reservas-servicos")
   private List<Reserva> reservas;
 
 }
