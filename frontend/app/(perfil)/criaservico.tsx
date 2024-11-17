@@ -8,18 +8,6 @@ import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
 import { obterNomeUsuario } from '@/utils/storageUtils';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
-const usuarioLogado = { id: 1, nome: 'Usúario' };
 
 const perfilClick =()=>{
   router.navigate('/(tabs)/perfil');
@@ -37,7 +25,17 @@ type criarServicoForm = {
   setor: Setor;
 }
 
-export default function criaServico() {
+export default function CriaServico() {
+  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+  useEffect(() => {
+    const carregarNomeUsuario = async () => {
+      const nome = await obterNomeUsuario();
+      setNomeUsuario(nome);
+    };
+  
+    carregarNomeUsuario();
+  }, []);
   const { control, handleSubmit, formState: { errors } } = useForm<criarServicoForm>({
     defaultValues: {
       descricao: '',
@@ -55,20 +53,19 @@ export default function criaServico() {
     return parseFloat(preco);
   }
   const toDateTime = (tempo: string) => {
-    const match = RegExp(/(\d+)h:(\d+)m/).exec(tempo);
-
+    const match = RegExp(/(\d+)h(?::(\d+)m)?/).exec(tempo);
+  
     if (!match) {
       throw new Error("Formato de tempo inválido");
     }
-
+  
     const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-
+    const minutes = parseInt(match[2] || "0", 10); 
+  
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
     return date.toLocaleTimeString("pt-BR");
-  }
-
+  };
 
   const onSubmit = async (data: criarServicoForm) => {
 
