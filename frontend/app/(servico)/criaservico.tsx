@@ -36,21 +36,19 @@ export default function criaServico() {
     return parseFloat(preco);
   }
   const toDateTime = (tempo: string) => {
-    const match = RegExp(/(\d+)h:(\d+)m/).exec(tempo);
-
+    const match = RegExp(/(\d+)h(?::(\d+)m)?/).exec(tempo);
+  
     if (!match) {
       throw new Error("Formato de tempo inválido");
     }
-
+  
     const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-
-    // Criar um novo objeto Date e definir as horas e minutos
+    const minutes = parseInt(match[2] || "0", 10); 
+  
     const date = new Date();
-    date.setHours(hours, minutes, 0, 0); // Define horas, minutos, segundos, milissegundos como 0
+    date.setHours(hours, minutes, 0, 0);
     return date.toLocaleTimeString("pt-BR");
-  }
-
+  };
 
   const onSubmit = async (data: criarServicoForm) => {
 

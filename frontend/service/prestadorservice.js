@@ -42,7 +42,7 @@ axiosInstance.interceptors.request.use(
 
 const getAllPrestadores = async () => {
   try {
-    const response = await axiosInstance.get('/');
+    const response = await axiosInstance.get('');
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar todos os prestadores:', error);

@@ -1,100 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, Form, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { DateInput } from '@/components/DateInput';
+import { TimeInput } from '@/components/HoraInput';
+import ReservaService from '../../service/ReservaService'
+import PrestadorService from '../../service/prestadorservice'
+import ServicoService from '../../service/ServicoService'
+import { AutocompleteInput } from '@/components/AutocompleteInput';
 
 type AgendamentoForm = {
-  servico: string;
-  prestador: string;
-  localizacao: string;
+  servico: any;
+  prestador: any;
   anotacao: string;
-  data: string;
-  hora: string;
-  horaFim: string;
+  data: Date | null;
+  hora: Date | null;
+  horaFim: Date;
 };
 
-const prestadorClick = ()=>{
+const prestadorClick = () => {
   router.navigate('/(servico)/prestador')
 }
 
-const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
+
 
 export default function Agendamento() {
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
+
+  const [prestadores, setPrestadores] = useState([]);
+  const [servicos, setServicos] = useState([]);
+  const [filteredServicos, setFilteredServicos] = useState([]);
+
+
+  const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
+
+  const parsedDataAgendamento = dataAgendamento ? new Date(dataAgendamento.toString()) : null;
+  const parsedIdServico = idServico ? parseInt(idServico.toString()) : null
+  const parsedIdPrestador = idPrestador ? parseInt(idPrestador.toString()) : null
+
+  const agendaClick = () => {
+    router.navigate('/(tabs)/agenda');
+  };
+
+  const fetchPrestadores = async () => {
+    try {
+      const response = await PrestadorService.getAllPrestadores();
+      setPrestadores(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar prestadores:', error);
+    }
+  };
+
+  const fetchServicos = async () => {
+    try {
+      const response = await ServicoService.getServicosByPrestador();
+      setServicos(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar serviços:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPrestadores();
+    fetchServicos();
+  }, []);
+
+  const { control, handleSubmit, formState: { errors, isValid }, watch } = useForm<AgendamentoForm>({
     defaultValues: {
       servico: '',
       prestador: '',
-      localizacao: '',
       anotacao: '',
-      data: dataAgendamento,
-      hora: '',
+      data: parsedDataAgendamento,
+      hora: null,
     },
     mode: 'onChange',
   });
-
-
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-  const [show, setShow] = useState(false);
-
-  const onChange = (event: DateTimePickerEvent, selectedValue?: Date) => {
-    const currentDate = selectedValue || selectedDate;
-    setShowDatePicker(false);
-    setShowTimePicker(false);
-    setSelectedDate(currentDate);
-  };
-
-  const showMode = (currentMode: 'date' | 'time') => {
-    setMode(currentMode);
-    setShow(true);
-  };
-
-  const addTask = async (data: AgendamentoForm) => {
-    if (!selectedDate || !data.servico || !data.prestador || !data.localizacao || !data.anotacao) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos e selecione uma data.');
-      return;
-    }
-    console.log('Agendamento adicionado:', { ...data, date: selectedDate });
-    Alert.alert('Agendamento adicionado com sucesso!');
-    router.push('/(tabs)/inicio');
-  };
-
-  const formatTime = (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    let formattedValue = onlyNumbers.slice(0, 4);
-
-    if (formattedValue.length >= 3) {
-      formattedValue = `${formattedValue.slice(0, 2)}h:${formattedValue.slice(2)}m`;
-    } else if (formattedValue.length >= 1) {
-      formattedValue = `${formattedValue}h`;
-    }
-
-    return formattedValue;
-  };
-
-  const formatDate = (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    let formattedValue = onlyNumbers.slice(0, 8);
-
-    if (formattedValue.length >= 6) {
-      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2, 4)}/${formattedValue.slice(4)}`;
-    } else if (formattedValue.length >= 4) {
-      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2)}`;
-    } else if (formattedValue.length >= 2) {
-      formattedValue = `${formattedValue.slice(0, 2)}`;
-    }
-
-    return formattedValue;
-  };
-
-  const agendaClick =()=>{
-    router.navigate('/(tabs)/agenda');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,32 +94,28 @@ export default function Agendamento() {
       </View>
 
       <Text style={styles.title}>Agendamento</Text>
-
-      <Controller
-        control={control}
-        name="servico"
-        rules={{ required: 'Serviço é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Serviço"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
-      {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
-
       <Controller
         control={control}
         name="prestador"
         rules={{ required: 'Prestador é um campo obrigatório' }}
+        defaultValue={async ()=>{
+          if(parsedIdPrestador){
+            const response =await PrestadorService.getPrestadorById()
+            return response.data
+          }
+          return ''
+        }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Prestador"
+          <AutocompleteInput
+            placeholder="Digite para buscar prestador"
+            data={prestadores}
             value={value}
-            onChangeText={onChange}
+            onChange={onChange}
+            onSelect={(item) => {
+              onChange(item.id);
+              setFilteredServicos(servicos.filter((s) => s.prestadorId === item.id));
+            }}
+            filterKey="nome"
           />
         )}
       />
@@ -145,52 +123,43 @@ export default function Agendamento() {
 
       <Controller
         control={control}
-        name="data"
-        rules={{ required: 'Data é obrigatória.' }}
+        name="servico"
+        rules={{ required: 'Serviço é um campo obrigatório' }}
+        defaultValue={async ()=>{
+          if(parsedIdServico){
+            const response = await ServicoService.getServicoById()
+            return response.data;
+          }
+          return ''
+        }}
         render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
+          <AutocompleteInput
+            placeholder="Digite para buscar serviço"
+            data={filteredServicos}
             value={value}
-            onChangeText={onChange}
-            placeholder="Data"
-            keyboardType="numeric"
-            maxLength={10}
+            onChange={onChange}
+            onSelect={(item) => onChange(item.id)}
+            filterKey="nome"
           />
         )}
       />
+      {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
+
+
+      <DateInput
+        control={control}
+        name="data"
+        label="Data de Agendamento"
+      />
+
       {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
 
-      <Controller
+      <TimeInput
         control={control}
         name="hora"
-        rules={{ required: 'Hora de início é obrigatória.' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            value={value}
-            onChangeText={text => onChange(formatTime(text))}
-            placeholder="Hora"
-            keyboardType="numeric"
-            maxLength={7}
-            />
-          )}
-        />
-        {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
-
-      <Controller
-        control={control}
-        name="localizacao"
-        rules={{ required: 'Localização é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Localização"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
+        label="Escolha um horário para atendimento"
       />
-      {errors.localizacao && <Text style={styles.errorText}>{errors.localizacao.message}</Text>}
+      {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
       <Controller
         control={control}
@@ -207,8 +176,8 @@ export default function Agendamento() {
 
       <Pressable
         style={[styles.button]}
-        onPress={handleSubmit(addTask)}
-        disabled={!isValid || !selectedDate}
+        onPress={handleSubmit(saveReserva)}
+        disabled={!isValid || watch('data') !== null}
       >
         <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
       </Pressable>

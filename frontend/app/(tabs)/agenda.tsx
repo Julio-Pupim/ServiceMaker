@@ -18,12 +18,6 @@ const prestadorClick = () => {
 
 }
 
-const { idPrestador, idServico } = useLocalSearchParams();
-
-
-const agandamentoClick = (dataAgendamento: string) => {
-  router.push({ pathname: "/(agenda)/agendamento", params: { idPrestador: idPrestador, idServico: idServico, dataAgendamento: dataAgendamento } })
-}
 
 const AgendaScreen = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({

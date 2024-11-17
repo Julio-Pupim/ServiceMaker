@@ -45,7 +45,6 @@ axiosInstance.interceptors.request.use(
 
 const createServico = async (servicos) => {
   try {
-    console.log(await axiosInstance.post('', servicos));
     const response = await axiosInstance.post('', servicos);
     console.log('criou serviço')
     return response.data;
