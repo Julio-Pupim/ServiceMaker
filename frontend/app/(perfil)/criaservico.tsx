@@ -64,9 +64,8 @@ export default function criaServico() {
     const hours = parseInt(match[1], 10);
     const minutes = parseInt(match[2], 10);
 
-    // Criar um novo objeto Date e definir as horas e minutos
     const date = new Date();
-    date.setHours(hours, minutes, 0, 0); // Define horas, minutos, segundos, milissegundos como 0
+    date.setHours(hours, minutes, 0, 0);
     return date.toLocaleTimeString("pt-BR");
   }
 
@@ -84,7 +83,7 @@ export default function criaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(servico)/editaServico");
+      router.navigate("/(servico)/editaservico");
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);
@@ -113,31 +112,30 @@ export default function criaServico() {
     return formattedValue;
   };
 
+  const perfilClick = ()=>{
+    router.navigate('/(tabs)/perfil')
+  }
+
   return (
-    <SafeAreaView style={estilos.container}>
-      <View style={estilos.header}>
-        <View style={estilos.userText}>
-        <Pressable onPress={perfilClick}>
-            <Ionicons name="arrow-back-outline" size={30} style={estilos.backIcon}
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.userText}>
+          <Pressable onPress={perfilClick}>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />
           </Pressable>
-
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={estilos.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>Usuário</Text>
         </View>
       </View>
 
-      <View style={estilos.tituloContainer}>
-        <Text style={estilos.titulo}>Cadastro de Serviço</Text>
-      </View>
+      <Text style={styles.title}>Cadastrar Serviço</Text>
 
-      <ScrollView contentContainerStyle={estilos.scrollViewContainer}>
-        <View style={estilos.formulario}>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.formulario}>
 
-
-
-          <View style={estilos.containerInput}>
+          <View style={styles.containerInput}>
             <Controller
               control={control}
               name="servico"
@@ -147,17 +145,17 @@ export default function criaServico() {
               }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={estilos.input}
+                  style={styles.input}
                   value={value}
                   onChangeText={text => onChange(onlyText(text))}
                   placeholder="Nome do Serviço"
                 />
               )}
             />
-            {errors.servico && <Text style={estilos.erro}>{errors.servico.message}</Text>}
+            {errors.servico && <Text style={styles.erro}>{errors.servico.message}</Text>}
           </View>
 
-          <View style={estilos.containerInput}>
+          <View style={styles.containerInput}>
             <Controller
               control={control}
               name="descricao"
@@ -167,7 +165,7 @@ export default function criaServico() {
               }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[estilos.input, { height: 100, textAlignVertical: 'top' }]}
+                  style={[styles.input, { height: 100, textAlignVertical: 'top' }]}
                   value={value}
                   onChangeText={text => onChange(onlyText(text))}
                   placeholder="Descrição do Serviço"
@@ -175,17 +173,17 @@ export default function criaServico() {
                 />
               )}
             />
-            {errors.descricao && <Text style={estilos.erro}>{errors.descricao.message}</Text>}
+            {errors.descricao && <Text style={styles.erro}>{errors.descricao.message}</Text>}
           </View>
 
-          <View style={estilos.containerInput}>
+          <View style={styles.containerInput}>
             <Controller
               control={control}
               name="tempoServico"
               rules={{ required: 'Tempo é obrigatório.' }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={estilos.input}
+                  style={styles.input}
                   value={value}
                   onChangeText={text => onChange(formatTime(text))}
                   placeholder="Tempo (HH:MM)"
@@ -194,17 +192,17 @@ export default function criaServico() {
                 />
               )}
             />
-            {errors.tempoServico && <Text style={estilos.erro}>{errors.tempoServico?.message}</Text>}
+            {errors.tempoServico && <Text style={styles.erro}>{errors.tempoServico?.message}</Text>}
           </View>
 
-          <View style={estilos.containerInput}>
+          <View style={styles.containerInput}>
             <Controller
               control={control}
               name="preco"
               rules={{ required: 'Preço é obrigatório.' }}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={estilos.input}
+                  style={styles.input}
                   value={value}
                   onChangeText={valor => onChange(formatCurrency(valor))}
                   placeholder="Preço"
@@ -212,17 +210,17 @@ export default function criaServico() {
                 />
               )}
             />
-            {errors.preco && <Text style={estilos.erro}>{errors.preco?.message}</Text>}
+            {errors.preco && <Text style={styles.erro}>{errors.preco?.message}</Text>}
           </View>
 
-          <View style={estilos.containerInput}>
+          <View style={styles.containerInput}>
             <Controller
               control={control}
               name="setor"
               render={({ field: { onChange, value } }) => (
                 <Picker
                   selectedValue={value}
-                  style={estilos.input}
+                  style={styles.input}
                   onValueChange={(itemValue: Setor) => onChange(itemValue)}
                 >
                   <Picker.Item label="Escolha um setor" value={null} />
@@ -233,8 +231,8 @@ export default function criaServico() {
               )}
             />
           </View>
-          <Pressable style={estilos.botaoSalvar} onPress={handleSubmit(onSubmit)}>
-            <Text style={estilos.textoBotaoSalvar}>Salvar</Text>
+          <Pressable style={styles.botaoSalvar} onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.textoBotaoSalvar}>Salvar</Text>
           </Pressable>
 
         </View>
@@ -243,13 +241,13 @@ export default function criaServico() {
   );
 }
 
-const estilos = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#FBCB1C',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 25,
@@ -264,6 +262,12 @@ const estilos = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   headerTexto: {
     fontSize: 20,

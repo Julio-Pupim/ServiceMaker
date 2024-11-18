@@ -55,6 +55,7 @@ export default function Compartilhar() {
       </View>
 
       <View style={styles.content}>
+      <Text style={styles.title}>Compartilhe</Text>
         <Text style={styles.description}>
           Compartilhe nosso aplicativo com seus amigos e familiares!
         </Text>
@@ -90,6 +91,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   content: {
     padding: 20,

@@ -26,7 +26,7 @@ type AgendamentoForm = {
 };
 
 const prestadorClick = ()=>{
-  router.navigate('/(extra)/prestador')
+  router.navigate('/(servico)/prestador')
 }
 
 const AgendaScreen = () => {
@@ -100,7 +100,11 @@ const AgendaScreen = () => {
       </View>
       
       <Pressable style={styles.addButton} onPress={() => router.navigate('/(agenda)/agendamento')}>
-        <Text style={styles.addButtonText}>+</Text>
+        <Ionicons name="add" size={30} color="white" />
+      </Pressable>
+
+      <Pressable style={styles.cronogramaButton} onPress={() => router.navigate('/(agenda)/cronograma')}>
+        <Ionicons name="timer-outline" size={30} color="white" />
       </Pressable>
       </ScrollView>
     </SafeAreaView>
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: -30,
     right: 20,
     width: 60,
     height: 60,
@@ -157,9 +161,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
   },
-  addButtonText: {
-    color: 'white',
-    fontSize: 30,
+  cronogramaButton: {
+    position: 'absolute',
+    bottom: 50,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#007BFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
   },
   backIcon: {
     paddingRight: 15,

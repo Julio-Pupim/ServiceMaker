@@ -47,12 +47,18 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(servico)/criaservico') }}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/criaservico') }}>
           <Icon name="add" size={24} color="black" />
           <Text style={styles.menuText}>Cadastrar Serviço</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
-
+        
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/listaservicos') }}>
+          <Icon name="work" size={24} color="black" />
+          <Text style={styles.menuText}>Listar Serviços</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
+        
         <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/historico') }}>
           <Icon name="history" size={24} color="black" />
           <Text style={styles.menuText}>Histórico de Serviços</Text>
@@ -77,7 +83,7 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/') }}>
           <Icon name="logout" size={24} color="black" />
           <Text style={styles.menuText}>Sair</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />

@@ -111,6 +111,7 @@ export default function Cronograma() {
       <ScrollView style={styles.form}>
         {fields.map((item, index) => (
           <View key={item.id} style={styles.containerInput}>
+            <Text style={styles.title}>Cronograma de Atendimento</Text>
             <Controller
               control={control}
               name={`cronogramas[${index}].diasSemana`}
@@ -210,6 +211,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   form: {
     marginBottom: 20,
