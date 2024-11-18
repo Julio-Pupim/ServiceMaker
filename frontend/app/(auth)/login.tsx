@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import UsuarioService from '../../service/UsuarioService'
 
 type LoginForm = {
   email: string;
