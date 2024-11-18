@@ -5,6 +5,11 @@ import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pre
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Perfil = () => {
+
+  const loginClick = () => {
+    router.navigate ('/(auth)/login');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -65,7 +70,7 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem}>
+        <Pressable style={styles.menuItem} onPress={loginClick}>
           <Icon name="logout" size={24} color="black" />
           <Text style={styles.menuText}>Sair</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />

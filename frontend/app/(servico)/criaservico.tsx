@@ -6,9 +6,14 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-const usuarioLogado = { id: 1, nome: 'p' };
+const usuarioLogado = { id: 1, nome: 'Usuário' };
+const perfilClick =()=>{
+  router.navigate('/(tabs)/perfil');
+};
+
 
 type criarServicoForm = {
   servico: string;
@@ -96,6 +101,11 @@ export default function criaServico() {
     <SafeAreaView style={estilos.container}>
       <View style={estilos.header}>
         <View style={estilos.userText}>
+        <TouchableOpacity onPress={perfilClick}>
+        <Ionicons name="arrow-back-outline" size={30} style={estilos.backIcon}
+              color="white"
+            />
+          </TouchableOpacity>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={estilos.userName}>{usuarioLogado.nome}</Text>
         </View>
@@ -274,5 +284,8 @@ const estilos = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 15,
+  },
+  backIcon: {
+    paddingRight: 15,
   },
 });

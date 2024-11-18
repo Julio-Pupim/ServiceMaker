@@ -141,10 +141,10 @@ export default function Agendamento() {
         rules={{ required: 'Serviço é um campo obrigatório' }}
         defaultValue={async () => {
           if (parsedIdServico) {
-            return await ServicoService.getServic oById().then((response)=>{
+            return await ServicoService.getServicoById().then((response)=>{
               setValue('servico',response.descricao)
               setServicos(response)
-            })
+            })  
           }
           return ''
         }}
@@ -164,21 +164,24 @@ export default function Agendamento() {
       />
       {errors.servico && <Text style={styles.errorText}>{errors.servico.message?.toString()}</Text>}
 
+      <View style={styles.dataTempo}>  
+        <DateInput
+          control={control}
+          name="data"
+          label="Data de Agendamento"
+        />
+        
 
-      <DateInput
-        control={control}
-        name="data"
-        label="Data de Agendamento"
-      />
+        {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
 
-      {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
+        <TimeInput
+          control={control}
+          name="hora"
+          label="Escolha um horário para atendimento"
+        />
+        {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
-      <TimeInput
-        control={control}
-        name="hora"
-        label="Escolha um horário para atendimento"
-      />
-      {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
+      </View>
 
       <Controller
         control={control}
@@ -267,4 +270,8 @@ const styles = StyleSheet.create({
   backIcon: {
     paddingRight: 15,
   },
+  dataTempo:{
+    paddingRight:25,
+    paddingLeft:3
+  }
 });

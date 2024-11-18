@@ -8,6 +8,7 @@ import UsuarioService from '../../service/UsuarioService'
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
+  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
   const [setores, setSetor] = useState([]);
   const navigation = useNavigation();
 
@@ -36,15 +37,20 @@ const Prestadores = () => {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.topoTela}>
+      <View style={styles.header}>
+        <View style={styles.userText}>
         <TouchableOpacity onPress={inicioClick}>
-          <Ionicons name="arrow-back-outline" size={30} color="white" />
-        </TouchableOpacity>
-        <View style={styles.centralTitulo}>
-          <Ionicons name="bag-handle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Prestadores</Text>
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
+              color="white"
+            />
+          </TouchableOpacity>
+          <Ionicons name="person-circle-outline" size={35} color="white" />
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
+
+      <Text style={styles.title}>Prestador</Text>
+
       <ScrollView>
         {prestadores.map((prestador: any) => (
           <View style={styles.header} key={prestador.id}>
@@ -72,16 +78,14 @@ const Prestadores = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f5f5f5',
   },
   topoTela: {
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#FFD700',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 25,
     marginBottom: 20,
-    flexDirection: 'row',
-    justifyContent: 'center',
   },
   userText: {
     flexDirection: 'row',
@@ -94,13 +98,11 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   header: {
-    backgroundColor: '#D9D9D9',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
-    padding: 19,
-    height: 120,
-    margin: 4,
-    borderRadius: 10,
+    backgroundColor: '#FBCB1C',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    padding: 25,
+    marginBottom: 20,
   },
   imagem: {
     flexDirection: 'row',
@@ -136,11 +138,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center'
   },
-  centralTitulo: {
-    margin: 'auto',
-    flexDirection: 'row',
-    //alignItems:'center',
-    //justifyContent:'center'
-  }
+  backIcon: {
+    paddingRight: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
 });
 export default Prestadores;
