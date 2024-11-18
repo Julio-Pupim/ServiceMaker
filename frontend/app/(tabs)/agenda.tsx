@@ -16,8 +16,8 @@ type AgendamentoForm = {
   anotacao: string;
 };
 
-const prestadorClick = () => {
-  router.navigate('/(servico)/prestador')
+const inicioClick = () => {
+  router.navigate('/(tabs)/inicio')
 
 }
 
@@ -72,7 +72,7 @@ const AgendaScreen = () => {
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
-          <Pressable onPress={prestadorClick}>
+          <Pressable onPress={inicioClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />

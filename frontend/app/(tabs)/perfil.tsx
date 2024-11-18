@@ -5,18 +5,20 @@ import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pre
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { obterNomeUsuario } from '@/utils/storageUtils';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
 
 const Perfil = () => {
+  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+  useEffect(() => {
+    const carregarNomeUsuario = async () => {
+      const nome = await obterNomeUsuario();
+      setNomeUsuario(nome);
+    };
+  
+    carregarNomeUsuario();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />

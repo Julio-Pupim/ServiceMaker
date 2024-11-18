@@ -6,16 +6,14 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
+const usuarioLogado = { id: 1, nome: 'Usuário' };
 const perfilClick =()=>{
   router.navigate('/(tabs)/perfil');
 };
 
-const salvarClick =()=>{
-  router.navigate('/(servico)/prestador');
-};
 
 type criarServicoForm = {
   servico: string;
@@ -311,14 +309,5 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     paddingRight: 15,
-  },
-  tituloContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  titulo: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
   },
 });
