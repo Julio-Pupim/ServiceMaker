@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { Controller, Form, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-
-
+import { router, useLocalSearchParams } from 'expo-router';
+import { DateInput } from '@/components/DateInput';
+import { TimeInput } from '@/components/HoraInput';
+import PrestadorService from '../../service/prestadorservice'
+import ServicoService from '../../service/ServicoService'
+import ReservaService from '../../service/ReservaService'
+import { AutocompleteInput } from '@/components/AutocompleteInput';
 
 type AgendamentoForm = {
   servico: any;
@@ -38,10 +39,8 @@ export default function Agendamento() {
     carregarNomeUsuario();
   }, []);
 
-  const [prestadores, setPrestadores] = useState([]);
-  const [servicos, setServicos] = useState([]);
-  const [filteredServicos, setFilteredServicos] = useState([]);
-
+  const [prestadores, setPrestadores] = useState<any>([]);
+  const [servicos, setServicos] = useState<any>([]);
 
   const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
 
@@ -56,36 +55,49 @@ export default function Agendamento() {
   const fetchPrestadores = async () => {
     try {
       const response = await PrestadorService.getAllPrestadores();
-      setPrestadores(response.data);
+      setPrestadores(response);
     } catch (error) {
       console.error('Erro ao buscar prestadores:', error);
     }
   };
 
-  const fetchServicos = async () => {
+  const fetchPrestadorUrl = async (idPrestador: any) => {
     try {
-      const response = await ServicoService.getServicosByPrestador();
-      setServicos(response.data);
+      const response = await PrestadorService.getPrestadorById(idPrestador);
+      setPrestadores(response);
+    } catch (error) {
+      console.error('Erro ao buscar prestadores:', error);
+    }
+  };
+
+  const fetchServicoUrl = async (idServico: any) => {
+    try {
+      const response = await ServicoService.getServicoById(idServico);
+      setServicos(response);
     } catch (error) {
       console.error('Erro ao buscar serviços:', error);
     }
   };
 
   useEffect(() => {
-    fetchPrestadores();
-    fetchServicos();
+    if (!parsedIdPrestador && !parsedIdServico) {
+      fetchPrestadores();
+      
+    }
   }, []);
 
-  const { control, handleSubmit, formState: { errors, isValid }, watch } = useForm<AgendamentoForm>({
+  const { control, handleSubmit, formState: { errors, isValid }, watch, setValue } = useForm<AgendamentoForm>({
     defaultValues: {
-      servico: '',
-      prestador: '',
       anotacao: '',
       data: parsedDataAgendamento,
       hora: null,
     },
     mode: 'onChange',
   });
+
+  const saveReserva = (reserva: AgendamentoForm) => {
+    console.log(reserva)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -107,52 +119,61 @@ export default function Agendamento() {
         control={control}
         name="prestador"
         rules={{ required: 'Prestador é um campo obrigatório' }}
-        defaultValue={async ()=>{
-          if(parsedIdPrestador){
-            const response =await PrestadorService.getPrestadorById()
-            return response.data
+        defaultValue={async () => {
+          if (parsedIdPrestador) {
+            PrestadorService.getPrestadorById(parsedIdPrestador).then((response) => {
+              setValue("prestador", response.nome); // Atualiza o valor do campo
+              setPrestadores(prestadores);
+            });
           }
           return ''
         }}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, value, } }) => (
           <AutocompleteInput
             placeholder="Digite para buscar prestador"
             data={prestadores}
             value={value}
             onChange={onChange}
             onSelect={(item) => {
-              onChange(item.id);
-              setFilteredServicos(servicos.filter((s) => s.prestadorId === item.id));
+              console.log("AAAA",item)
+              onChange(item.nome);
+             value={item}
+             setServicos(item.servicos || []);
             }}
             filterKey="nome"
           />
         )}
       />
-      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
+      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message?.toString()}</Text>}
 
       <Controller
         control={control}
         name="servico"
         rules={{ required: 'Serviço é um campo obrigatório' }}
-        defaultValue={async ()=>{
-          if(parsedIdServico){
-            const response = await ServicoService.getServicoById()
-            return response.data;
+        defaultValue={async () => {
+          if (parsedIdServico) {
+            return await ServicoService.getServic oById().then((response)=>{
+              setValue('servico',response.descricao)
+              setServicos(response)
+            })
           }
           return ''
         }}
         render={({ field: { onChange, value } }) => (
           <AutocompleteInput
             placeholder="Digite para buscar serviço"
-            data={filteredServicos}
+            data={servicos}
             value={value}
             onChange={onChange}
-            onSelect={(item) => onChange(item.id)}
-            filterKey="nome"
+            onSelect={(item) => {
+              value={item} 
+              onChange(item.descricao)}
+            }
+            filterKey="descricao"
           />
         )}
       />
-      {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
+      {errors.servico && <Text style={styles.errorText}>{errors.servico.message?.toString()}</Text>}
 
 
       <DateInput
