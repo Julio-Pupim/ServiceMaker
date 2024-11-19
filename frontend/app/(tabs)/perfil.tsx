@@ -1,8 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const Perfil = () => {
 
@@ -16,7 +28,7 @@ const Perfil = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.content}>
@@ -40,12 +52,18 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(servico)/criaservico') }}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/criaservico') }}>
           <Icon name="add" size={24} color="black" />
           <Text style={styles.menuText}>Cadastrar Serviço</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
-
+        
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/listaservicos') }}>
+          <Icon name="work" size={24} color="black" />
+          <Text style={styles.menuText}>Listar Serviços</Text>
+          <Ionicons name="chevron-forward" size={20} color="black" />
+        </Pressable>
+        
         <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/historico') }}>
           <Icon name="history" size={24} color="black" />
           <Text style={styles.menuText}>Histórico de Serviços</Text>
@@ -70,7 +88,7 @@ const Perfil = () => {
           <Ionicons name="chevron-forward" size={20} color="black" />
         </Pressable>
 
-        <Pressable style={styles.menuItem} onPress={loginClick}>
+        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/') }}>
           <Icon name="logout" size={24} color="black" />
           <Text style={styles.menuText}>Sair</Text>
           <Ionicons name="chevron-forward" size={20} color="black" />

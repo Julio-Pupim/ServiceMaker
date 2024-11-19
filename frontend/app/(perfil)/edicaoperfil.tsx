@@ -7,6 +7,18 @@ import UsuarioService from '../../service/UsuarioService'
 import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -56,9 +68,11 @@ export default function EdicaoPerfil() {
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon} color="white" />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
+
+      <Text style={styles.title}>Edição do Perfil</Text>
 
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.containerPerfil}>
@@ -133,6 +147,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   scrollViewContainer: {
     paddingBottom: 100, 

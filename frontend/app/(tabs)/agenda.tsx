@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 type AgendamentoForm = {
   servico: string;
@@ -13,9 +25,8 @@ type AgendamentoForm = {
   anotacao: string;
 };
 
-const inicioClick = () => {
-  router.navigate('/(tabs)/inicio')
-
+const prestadorClick = ()=>{
+  router.navigate('/(servico)/prestador')
 }
 
 
@@ -64,7 +75,7 @@ const AgendaScreen = () => {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
@@ -90,15 +101,19 @@ const AgendaScreen = () => {
           }}
         />
 
-        <View style={styles.tasks}>
-          <Text style={[styles.task, { color: 'red' }]}>Aparar a grama - José - 7:00</Text>
-          <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
-          <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
-        </View>
+      <View style={styles.tasks}>
+        <Text style={[styles.task, { color: 'red' }]}>Aparar a grama - José - 7:00</Text>
+        <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
+        <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
+      </View>
+      
+      <Pressable style={styles.addButton} onPress={() => router.navigate('/(agenda)/agendamento')}>
+        <Ionicons name="add" size={30} color="white" />
+      </Pressable>
 
-        <Pressable style={styles.addButton} onPress={() => agandamentoClick(selectedDate)}>
-          <Text style={styles.addButtonText}>+</Text>
-        </Pressable>
+      <Pressable style={styles.cronogramaButton} onPress={() => router.navigate('/(agenda)/cronograma')}>
+        <Ionicons name="timer-outline" size={30} color="white" />
+      </Pressable>
       </ScrollView>
     </SafeAreaView>
   );
@@ -144,7 +159,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 20,
+    bottom: -30,
     right: 20,
     width: 60,
     height: 60,
@@ -154,9 +169,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
   },
-  addButtonText: {
-    color: 'white',
-    fontSize: 30,
+  cronogramaButton: {
+    position: 'absolute',
+    bottom: 50,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#007BFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
   },
   backIcon: {
     paddingRight: 15,

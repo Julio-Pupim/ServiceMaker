@@ -99,7 +99,7 @@ export default function Agendamento() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
@@ -183,18 +183,18 @@ export default function Agendamento() {
 
       </View>
 
-      <Controller
-        control={control}
-        name="anotacao"
-        render={({ field: { onChange, value } }) => (
-          <TextInput
-            style={styles.input}
-            placeholder="Anotação"
-            value={value}
-            onChangeText={onChange}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="anotacao"
+          render={({ field: { onChange, value } }) => (
+            <TextInput
+              style={styles.input}
+              placeholder="Anotação"
+              value={value}
+              onChangeText={onChange}
+            />
+          )}
+        />
 
       <Pressable
         style={[styles.button]}
@@ -246,15 +246,17 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   button: {
+    marginTop: 25,
     height: 50,
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   cancelButton: {
     marginTop: 15,
