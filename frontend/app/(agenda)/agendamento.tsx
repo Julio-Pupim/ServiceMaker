@@ -183,18 +183,18 @@ export default function Agendamento() {
 
       </View>
 
-        <Controller
-          control={control}
-          name="anotacao"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Anotação"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
+      <Controller
+        control={control}
+        name="anotacao"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            style={styles.input}
+            placeholder="Anotação"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
+      />
 
       <Pressable
         style={[styles.button]}
@@ -246,17 +246,15 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   button: {
-    marginTop: 25,
     height: 50,
-    backgroundColor: '#007BFF',
+    backgroundColor: '#FBCB1C',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
   },
   buttonText: {
-    color: 'white',
+    color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
   },
   cancelButton: {
     marginTop: 15,
