@@ -1,8 +1,20 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Pressable, Alert, TextInput, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -37,11 +49,11 @@ export default function Avaliacao() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
-      <Text style={styles.description}>Nos Avalie</Text>
+      <Text style={styles.title}>Nos Avalie</Text>
       <View style={styles.ratingContainer}>
         {[1, 2, 3, 4, 5].map((star) => (
           <Pressable key={star} onPress={() => setRating(star)}>
@@ -62,7 +74,7 @@ export default function Avaliacao() {
         numberOfLines={4}
       />
       <Pressable style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitText}>Enviar Avaliação</Text>
+        <Text style={styles.submitText}>Enviar</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -93,9 +105,10 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -113,13 +126,18 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   submitButton: {
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
     padding: 15,
-    borderRadius: 5,
+    paddingLeft: 25,
+    paddingRight: 25,
+    alignItems: 'center',
+    marginTop: 20,
   },
   submitText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   description: {
     fontSize: 18,

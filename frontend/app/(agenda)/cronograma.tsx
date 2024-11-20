@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Alert, Pressable, ScrollView, StatusBar } from 'react-native';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MultiSelect from 'react-native-multiple-select';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 type CronogramaForm = {
   cronogramas: {
@@ -92,13 +104,14 @@ export default function Cronograma() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
       <ScrollView style={styles.form}>
         {fields.map((item, index) => (
           <View key={item.id} style={styles.containerInput}>
+            <Text style={styles.title}>Cronograma de Atendimento</Text>
             <Controller
               control={control}
               name={`cronogramas[${index}].diasSemana`}
@@ -198,6 +211,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   form: {
     marginBottom: 20,

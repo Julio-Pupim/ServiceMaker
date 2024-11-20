@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, StatusBar, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Share } from 'react-native';
 import { router } from 'expo-router';
+import { obterNomeUsuario } from '@/utils/storageUtils';
+
+const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+
+useEffect(() => {
+  const carregarNomeUsuario = async () => {
+    const nome = await obterNomeUsuario();
+    setNomeUsuario(nome);
+  };
+
+  carregarNomeUsuario();
+}, []);
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -38,11 +50,12 @@ export default function Compartilhar() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
       <View style={styles.content}>
+      <Text style={styles.title}>Compartilhe</Text>
         <Text style={styles.description}>
           Compartilhe nosso aplicativo com seus amigos e familiares!
         </Text>
@@ -79,6 +92,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 15,
   },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
   content: {
     padding: 20,
     alignItems: 'center',
@@ -90,16 +109,18 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   shareButton: {
-    backgroundColor: '#FBCB1C',
+    backgroundColor: '#007BFF',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 10,
+    padding: 15,
+    borderRadius: 8,
+    marginTop: 20,
   },
   shareButtonText: {
-    color: 'white',
     marginLeft: 10,
+    color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
   backIcon: {
     paddingRight: 15,

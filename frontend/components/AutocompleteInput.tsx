@@ -32,7 +32,7 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     );
 
     return (
-        <View>
+        <View style={styles.posicao}>
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
@@ -82,4 +82,8 @@ const styles = StyleSheet.create({
         borderColor: '#EEE',
         backgroundColor: '#FFF',
     },
+    posicao:{
+        paddingLeft:3,
+        paddingRight:5
+    }
 });
