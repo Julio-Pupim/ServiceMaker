@@ -1,16 +1,13 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar, Pressable } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { router, useNavigation } from 'expo-router';
-import SetorService from '../../service/SetorService'
+import { router } from 'expo-router';
 import UsuarioService from '../../service/UsuarioService'
 
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
-  const [setores, setSetor] = useState([]);
-  const navigation = useNavigation();
-
+  
   useEffect(() => {
 
     const fetchData = async () => {
