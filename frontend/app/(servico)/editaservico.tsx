@@ -7,15 +7,6 @@ import { obterNomeUsuario } from '@/utils/storageUtils';
 
 const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
 type editaServicoProps = {
   nome: string;
   data: string;

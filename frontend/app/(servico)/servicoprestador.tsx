@@ -6,7 +6,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import ServicoService from "@/service/ServicoService";
 
 
-const servicoPrestador = () => {
+const ServicoPrestador = () => {
   const [servicos, setServicos] = useState([]);
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');  
 

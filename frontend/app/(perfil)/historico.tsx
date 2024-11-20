@@ -7,15 +7,6 @@ import { obterNomeUsuario } from '@/utils/storageUtils';
 
 const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
 const ServicosLista = () => {
   const servicos = [
     { titulo: 'Conserto de Ar-Condicionado', empresa: 'CoolTech', data: '03/05/2024', avaliacao: 4, custo: 250.0 },

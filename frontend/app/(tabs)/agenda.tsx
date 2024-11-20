@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { obterNomeUsuario } from '@/utils/storageUtils';
 
 
@@ -25,14 +25,6 @@ const inicioClick = () => {
 const AgendaScreen = () => {
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-
-    carregarNomeUsuario();
-  }, []);
 
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {

@@ -22,3 +22,17 @@ export const obterNomeUsuario = async () => {
     return 'Usuário'; // Valor padrão em caso de erro
   }
 };
+
+export const limparStorage = async () => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      // Ambiente navegador
+      window.localStorage.clear();
+    } else {
+      // Ambiente móvel
+      await AsyncStorage.clear();
+    }
+  } catch (error) {
+    console.error('Erro ao limpar o armazenamento:', error);
+  }
+};

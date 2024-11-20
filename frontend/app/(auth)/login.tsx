@@ -14,7 +14,7 @@ type LoginForm = {
 const login = async (data: LoginForm) => {
   try {
 
-    const response = await axios.post('http://localhost:8080/api/auth/login', data);
+    const response = await axios.post('http://46.202.144.47:8080/api/auth/login', data);
     return response.data;
 
   } catch (error) {

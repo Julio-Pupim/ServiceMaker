@@ -45,15 +45,6 @@ const Inicio = () => {
     { id: '12', nome: 'Sofia', icon: 'person-outline' },
   ];
 
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-
-    carregarNomeUsuario();
-  }, []);
-
   const profissionalClick = () => {
     router.navigate('/(servico)/prestador');
   };

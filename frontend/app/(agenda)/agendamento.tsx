@@ -8,8 +8,8 @@ import { DateInput } from '@/components/DateInput';
 import { TimeInput } from '@/components/HoraInput';
 import PrestadorService from '../../service/prestadorservice'
 import ServicoService from '../../service/ServicoService'
-import ReservaService from '../../service/ReservaService'
 import { AutocompleteInput } from '@/components/AutocompleteInput';
+import { obterNomeUsuario } from '@/utils/storageUtils';
 
 type AgendamentoForm = {
   servico: any;
@@ -44,15 +44,6 @@ const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
 export default function Agendamento() {
   
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-  
-    carregarNomeUsuario();
-  }, []);
 
   const [prestadores, setPrestadores] = useState<any[]>([]);
   const [servicos, setServicos] = useState<any[]>([]);
@@ -113,7 +104,7 @@ export default function Agendamento() {
   });
 
 
-  const handleHoraFimUpdate = (horaInicio, servicoSelecionado) => {
+  const handleHoraFimUpdate = (horaInicio: any, servicoSelecionado: any) => {
     const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado);
     const tempoServico = servicoEncontrado?.tempoServico ?? '';
 
@@ -199,13 +190,6 @@ export default function Agendamento() {
         
 
         {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
-
-        <TimeInput
-          control={control}
-          name="hora"
-          label="Escolha um horário para atendimento"
-        />
-        {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
       <Controller
         control={control}

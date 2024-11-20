@@ -26,14 +26,7 @@ type criarServicoForm = {
 export default function CriaServico() {
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-  
-    carregarNomeUsuario();
-  }, []);
+
   const { control, handleSubmit, formState: { errors } } = useForm<criarServicoForm>({
     defaultValues: {
       descricao: '',

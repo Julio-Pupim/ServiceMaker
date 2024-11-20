@@ -10,15 +10,6 @@ import { obterNomeUsuario } from '@/utils/storageUtils';
 const Perfil = () => {
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-  
-    carregarNomeUsuario();
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
