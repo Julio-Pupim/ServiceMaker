@@ -1,9 +1,8 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, StatusBar, Pressable } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import SetorService from '../../service/SetorService';
-import UsuarioService from '../../service/UsuarioService';
+import UsuarioService from '../../service/UsuarioService'
 
 interface Setor {
     id_prestador: number;
@@ -18,8 +17,6 @@ interface Prestador {
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-  const [setores, setSetor] = useState([]);
-  const navigation = useNavigation();
 
   useEffect(() => {
 

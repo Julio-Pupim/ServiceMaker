@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -24,6 +25,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @AllArgsConstructor
 @NoArgsConstructor
 @DiscriminatorValue("prestador")
+@ToString(exclude = "servicos")
 public class Prestador extends Usuario {
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { View,Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
-import { router, useNavigation,  useLocalSearchParams, SearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import ServicoService from "@/service/ServicoService";
 
 
@@ -10,11 +10,13 @@ const servicoPrestador = () => {
   const [servicos, setServicos] = useState([]);
   const [nomeUsuario, setNomeUsuario] = useState('Usuário');  
 
+  const idPrestador: any = useLocalSearchParams();
+
   useEffect(() => {
     
       const fetchData = async () => {
           try {
-              const usuariosData = await ServicoService.getAllServicos();
+              const usuariosData = await ServicoService.getServicosByPrestador(idPrestador.id);
               setServicos(usuariosData);
           } catch (error) {
               console.error('Erro ao buscar dados:', error);
@@ -23,7 +25,6 @@ const servicoPrestador = () => {
       fetchData();
   }, []);
 
-  const idPrestador: any = useLocalSearchParams();
 
   const servicoAgendaClick = (idServico: number) =>{  
    router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador.id, idServico: idServico} })

@@ -18,7 +18,7 @@ export const DateInput = ({ control, name, label }: any) => {
             {Platform.OS === 'web' ? (
               <input
                 type="date"
-                value={value ? value.split('T')[0] : ''}
+                value={value ? new Date(value).toISOString().split('T')[0] : ''}
                 onChange={(e) => onChange(e.target.value)}
                 style={{
                   borderWidth: 1,

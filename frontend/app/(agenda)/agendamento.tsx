@@ -16,14 +16,29 @@ type AgendamentoForm = {
   prestador: any;
   anotacao: string;
   data: Date | null;
-  hora: Date | null;
-  horaFim: Date;
+  horaInicio: string;
+  horaFim: string;
 };
 
 const prestadorClick = () => {
   router.navigate('/(servico)/prestador')
 }
 
+const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
+
+  if (!horaInicio || !tempoServico) {
+    return '';
+  }
+  const [hours, minutes] = horaInicio.split(':').map(Number);
+  const [serviceHours, serviceMinutes] = tempoServico.split(':').map(Number);
+
+  const totalMinutes = hours * 60 + minutes + serviceHours * 60 + serviceMinutes;
+
+  const finalHours = Math.floor(totalMinutes / 60) % 24;
+  const finalMinutes = totalMinutes % 60;
+
+  return `${finalHours.toString().padStart(2, '0')}:${finalMinutes.toString().padStart(2, '0')}`;
+};
 
 
 export default function Agendamento() {
@@ -39,8 +54,8 @@ export default function Agendamento() {
     carregarNomeUsuario();
   }, []);
 
-  const [prestadores, setPrestadores] = useState<any>([]);
-  const [servicos, setServicos] = useState<any>([]);
+  const [prestadores, setPrestadores] = useState<any[]>([]);
+  const [servicos, setServicos] = useState<any[]>([]);
 
   const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
 
@@ -61,39 +76,54 @@ export default function Agendamento() {
     }
   };
 
-  const fetchPrestadorUrl = async (idPrestador: any) => {
+  const fetchDataFromUrl = async () => {
     try {
-      const response = await PrestadorService.getPrestadorById(idPrestador);
-      setPrestadores(response);
+      if (parsedIdPrestador) {
+        const prestador = await PrestadorService.getPrestadorById(parsedIdPrestador);
+        setValue('prestador', prestador?.nome || '');
+        setServicos(prestador?.servicos || []);
+      }
+      if (parsedIdServico) {
+        const servico = await ServicoService.getServicoById(parsedIdServico);
+        setValue('servico', servico?.descricao || '');
+      }
     } catch (error) {
-      console.error('Erro ao buscar prestadores:', error);
-    }
-  };
-
-  const fetchServicoUrl = async (idServico: any) => {
-    try {
-      const response = await ServicoService.getServicoById(idServico);
-      setServicos(response);
-    } catch (error) {
-      console.error('Erro ao buscar serviços:', error);
+      console.error('Erro ao buscar dados da URL:', error);
     }
   };
 
   useEffect(() => {
-    if (!parsedIdPrestador && !parsedIdServico) {
+    if (parsedIdPrestador || parsedIdServico) {
+      fetchDataFromUrl();
+    } else {
       fetchPrestadores();
-      
     }
   }, []);
 
-  const { control, handleSubmit, formState: { errors, isValid }, watch, setValue } = useForm<AgendamentoForm>({
+  const { control, handleSubmit, formState: { errors, isValid }, watch, setValue, getValues } = useForm<AgendamentoForm>({
     defaultValues: {
+      prestador: '',
+      servico: '',
       anotacao: '',
       data: parsedDataAgendamento,
-      hora: null,
+      horaInicio: '',
+      horaFim: '',
     },
     mode: 'onChange',
   });
+
+
+  const handleHoraFimUpdate = (horaInicio, servicoSelecionado) => {
+    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado);
+    const tempoServico = servicoEncontrado?.tempoServico ?? '';
+
+    const newHoraFim = calculateHoraFim(horaInicio, tempoServico);
+    console.log("DADOS SERVICO: ", servicoEncontrado)
+    console.log("Dadods Hora: ", horaInicio)
+    setValue('horaFim', newHoraFim, { shouldDirty: true });
+  };
+
+
 
   const saveReserva = (reserva: AgendamentoForm) => {
     console.log(reserva)
@@ -113,32 +143,20 @@ export default function Agendamento() {
           <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
-
       <Text style={styles.title}>Agendamento</Text>
       <Controller
         control={control}
         name="prestador"
         rules={{ required: 'Prestador é um campo obrigatório' }}
-        defaultValue={async () => {
-          if (parsedIdPrestador) {
-            PrestadorService.getPrestadorById(parsedIdPrestador).then((response) => {
-              setValue("prestador", response.nome); // Atualiza o valor do campo
-              setPrestadores(prestadores);
-            });
-          }
-          return ''
-        }}
-        render={({ field: { onChange, value, } }) => (
+        render={({ field: { onChange, value } }) => (
           <AutocompleteInput
             placeholder="Digite para buscar prestador"
-            data={prestadores}
+            data={prestadores || []}
             value={value}
             onChange={onChange}
             onSelect={(item) => {
-              console.log("AAAA",item)
               onChange(item.nome);
-             value={item}
-             setServicos(item.servicos || []);
+              setServicos(item.servicos || []);
             }}
             filterKey="nome"
           />
@@ -150,25 +168,22 @@ export default function Agendamento() {
         control={control}
         name="servico"
         rules={{ required: 'Serviço é um campo obrigatório' }}
-        defaultValue={async () => {
-          if (parsedIdServico) {
-            return await ServicoService.getServicoById().then((response)=>{
-              setValue('servico',response.descricao)
-              setServicos(response)
-            })  
-          }
-          return ''
-        }}
-        render={({ field: { onChange, value } }) => (
+        render={({ field: { onChange, value }, formState }) => (
           <AutocompleteInput
             placeholder="Digite para buscar serviço"
-            data={servicos}
+            data={servicos || []}
             value={value}
-            onChange={onChange}
-            onSelect={(item) => {
-              value={item} 
-              onChange(item.descricao)}
-            }
+            onChange={(value) => {
+              console.log('onChange:', value); 
+              onChange(value)
+              handleHoraFimUpdate(watch('horaInicio'), value);
+              console.log(formState.dirtyFields)
+            }}
+            onSelect={item => {
+              console.log('onSelect:', item.descricao); 
+              onChange(item.descricao);
+              handleHoraFimUpdate(watch('horaInicio'), value);
+            }}
             filterKey="descricao"
           />
         )}
@@ -192,7 +207,37 @@ export default function Agendamento() {
         />
         {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
 
-      </View>
+      <Controller
+        control={control}
+        name="horaInicio"
+        disabled={true}
+        render={({ field: { onChange, value } }) => (
+          <TimeInput
+            placeholder="Escolha uma hora de início "
+            value={value}
+            onChange={value => {
+              onChange(value);
+              setValue('horaInicio', value, { shouldDirty: true });
+              handleHoraFimUpdate(value, getValues('servico'));
+            }}
+          />
+        )}
+      />
+
+      {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
+      <Controller
+        control={control}
+        name="horaFim"
+        disabled={true}
+        render={({ field: { onChange, value } }) => (
+          <TimeInput
+            placeholder="Previsão de Conclusão"
+            value={value}
+            onChange={onChange}
+            disabled={true}
+          />
+        )}
+      />
 
 
       <Pressable
