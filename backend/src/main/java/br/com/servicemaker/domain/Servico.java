@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -22,12 +23,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "prestador")
 public class Servico extends AbstractEntity {
-
-  @ManyToOne
-  @JoinColumn(name = "ID_SETOR", nullable = false)
-  @JsonBackReference
-  private Setor setor;
 
   private String descricao;
 
@@ -38,11 +35,11 @@ public class Servico extends AbstractEntity {
 
   @ManyToOne
   @JoinColumn(name = "ID_PRESTADOR", nullable = false)
-  @JsonBackReference
+  @JsonBackReference("prestador-servico")
   private Prestador prestador;
 
   @OneToMany(mappedBy = "servico")
-  @JsonManagedReference
+  @JsonManagedReference("reservas-servicos")
   private List<Reserva> reservas;
 
 }

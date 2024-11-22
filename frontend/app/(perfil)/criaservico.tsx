@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
 import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,28 +6,14 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
-const usuarioLogado = { id: 1, nome: 'Usúario' };
-
+const usuarioLogado = { id: 1, nome: 'Usuário' };
 const perfilClick =()=>{
   router.navigate('/(tabs)/perfil');
 };
 
-const salvarClick =()=>{
-  router.navigate('/(servico)/prestador');
-};
 
 type criarServicoForm = {
   servico: string;
@@ -37,7 +23,9 @@ type criarServicoForm = {
   setor: Setor;
 }
 
-export default function criaServico() {
+export default function CriaServico() {
+  const { nomeUsuario } = useUser();
+
   const { control, handleSubmit, formState: { errors } } = useForm<criarServicoForm>({
     defaultValues: {
       descricao: '',
@@ -55,20 +43,19 @@ export default function criaServico() {
     return parseFloat(preco);
   }
   const toDateTime = (tempo: string) => {
-    const match = RegExp(/(\d+)h:(\d+)m/).exec(tempo);
-
+    const match = RegExp(/(\d+)h(?::(\d+)m)?/).exec(tempo);
+  
     if (!match) {
       throw new Error("Formato de tempo inválido");
     }
-
+  
     const hours = parseInt(match[1], 10);
-    const minutes = parseInt(match[2], 10);
-
+    const minutes = parseInt(match[2] || "0", 10); 
+  
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
     return date.toLocaleTimeString("pt-BR");
-  }
-
+  };
 
   const onSubmit = async (data: criarServicoForm) => {
 
@@ -126,7 +113,7 @@ export default function criaServico() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
@@ -314,14 +301,5 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     paddingRight: 15,
-  },
-  tituloContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  titulo: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333',
   },
 });

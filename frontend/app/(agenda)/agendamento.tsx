@@ -1,110 +1,131 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Button, StatusBar, Alert, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Controller, useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
+import { router, useLocalSearchParams } from 'expo-router';
+import { DateInput } from '@/components/DateInput';
+import { TimeInput } from '@/components/HoraInput';
+import PrestadorService from '../../service/prestadorservice'
+import ServicoService from '../../service/ServicoService'
+import ReservaService from '../../service/ReservaService'
+import { AutocompleteInput } from '@/components/AutocompleteInput';
+import { useUser } from '@/components/contextoApi';
 
 type AgendamentoForm = {
-  servico: string;
-  prestador: string;
-  localizacao: string;
-  anotacao: string;
-  data: string;
-  hora: string;
+  servico: any;
+  prestador: any;
+  data: Date | null;
+  horaInicio: string;
   horaFim: string;
+  status: any,
+  usuario: any
 };
 
-const prestadorClick = ()=>{
-  router.navigate('/(servico)/prestador')
-}
+const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
+
+  if (!horaInicio || !tempoServico) {
+    return '';
+  }
+  const [hours, minutes] = horaInicio.split(':').map(Number);
+  const [serviceHours, serviceMinutes] = tempoServico.split(':').map(Number);
+
+  const totalMinutes = hours * 60 + minutes + serviceHours * 60 + serviceMinutes;
+
+  const finalHours = Math.floor(totalMinutes / 60) % 24;
+  const finalMinutes = totalMinutes % 60;
+
+  return `${finalHours.toString().padStart(2, '0')}:${finalMinutes.toString().padStart(2, '0')}`;
+};
+
 
 export default function Agendamento() {
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
+
+  const { nomeUsuario } = useUser();
+
+  const [prestadores, setPrestadores] = useState<any[]>([]);
+  const [servicos, setServicos] = useState<any[]>([]);
+
+  const { idPrestador, idServico, dataAgendamento } = useLocalSearchParams();
+
+  const parsedDataAgendamento = dataAgendamento ? new Date(dataAgendamento.toString()) : null;
+  const parsedIdServico = idServico ? parseInt(idServico.toString()) : null
+  const parsedIdPrestador = idPrestador ? parseInt(idPrestador.toString()) : null
+
+  const agendaClick = () => {
+    router.navigate('/(tabs)/agenda');
+  };
+
+  const fetchPrestadores = async () => {
+    try {
+      const response = await PrestadorService.getAllPrestadores();
+      setPrestadores(response);
+    } catch (error) {
+      console.error('Erro ao buscar prestadores:', error);
+    }
+  };
+
+  const fetchDataFromUrl = async () => {
+    try {
+      if (parsedIdPrestador) {
+        const prestador = await PrestadorService.getPrestadorById(parsedIdPrestador);
+        setValue('prestador', prestador?.nome || '');
+        setServicos(prestador?.servicos || []);
+      }
+      if (parsedIdServico) {
+        const servico = await ServicoService.getServicoById(parsedIdServico);
+        setValue('servico', servico?.descricao || '');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar dados da URL:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (parsedIdPrestador || parsedIdServico) {
+      fetchDataFromUrl();
+    } else {
+      fetchPrestadores();
+    }
+  }, []);
+
+  const { control, handleSubmit, formState: { errors, isValid }, watch, setValue, getValues } = useForm<AgendamentoForm>({
     defaultValues: {
-      servico: '',
       prestador: '',
-      localizacao: '',
-      anotacao: '',
-      data: '',
-      hora: '',
+      servico: '',
+      data: parsedDataAgendamento,
+      horaInicio: '',
+      horaFim: '',
     },
     mode: 'onChange',
   });
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showTimePicker, setShowTimePicker] = useState(false);
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-  const [show, setShow] = useState(false);
 
-  const onChange = (event: DateTimePickerEvent, selectedValue?: Date) => {
-    const currentDate = selectedValue || selectedDate;
-    setShowDatePicker(false);
-    setShowTimePicker(false);
-    setSelectedDate(currentDate);
+  const handleHoraFimUpdate = (horaInicio: any, servicoSelecionado: any) => {
+    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado);
+    const tempoServico = servicoEncontrado?.tempoServico ?? '';
+
+    const newHoraFim = calculateHoraFim(horaInicio, tempoServico);
+    console.log("Calculando horaFim: ", newHoraFim);
+
+    setValue('horaFim', newHoraFim, { shouldDirty: true, shouldTouch: true });
   };
 
-  const showMode = (currentMode: 'date' | 'time') => {
-    setMode(currentMode);
-    setShow(true);
-  };
+  const saveReserva = async (reserva: AgendamentoForm) => {
+    reserva.usuario = { id: 2 };
+    reserva.status = "PENDENTE";
+    console.log(reserva);
 
-  const addTask = async (data: AgendamentoForm) => {
-    if (!selectedDate || !data.servico || !data.prestador || !data.localizacao || !data.anotacao) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos e selecione uma data.');
-      return;
-    }
-    console.log('Agendamento adicionado:', { ...data, date: selectedDate });
-    Alert.alert('Agendamento adicionado com sucesso!');
-    router.push('/(tabs)/inicio');
-  };
+    try {
+   //   await ReservaService.createReserva(reserva);
+      router.navigate("/agenda");
+      
+    } catch (error) {
+      console.error('Erro ao cadastrar reserva:', error);
 
-  const formatTime = (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    let formattedValue = onlyNumbers.slice(0, 4);
-
-    if (formattedValue.length >= 3) {
-      formattedValue = `${formattedValue.slice(0, 2)}h:${formattedValue.slice(2)}m`;
-    } else if (formattedValue.length >= 1) {
-      formattedValue = `${formattedValue}h`;
     }
 
-    return formattedValue;
-  };
-
-  const formatDate = (value: string) => {
-    const onlyNumbers = value.replace(/\D/g, '');
-    let formattedValue = onlyNumbers.slice(0, 8);
-
-    if (formattedValue.length >= 6) {
-      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2, 4)}/${formattedValue.slice(4)}`;
-    } else if (formattedValue.length >= 4) {
-      formattedValue = `${formattedValue.slice(0, 2)}/${formattedValue.slice(2)}`;
-    } else if (formattedValue.length >= 2) {
-      formattedValue = `${formattedValue.slice(0, 2)}`;
-    }
-
-    return formattedValue;
-  };
-
-  const agendaClick =()=>{
-    router.navigate('/(tabs)/agenda');
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -120,109 +141,89 @@ export default function Agendamento() {
           <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
-
       <Text style={styles.title}>Agendamento</Text>
+      <Controller
+        control={control}
+        name="prestador"
+        rules={{ required: 'Prestador é um campo obrigatório' }}
+        render={({ field: { onChange, value } }) => (
+          <AutocompleteInput
+            placeholder="Digite para buscar prestador"
+            data={prestadores || []}
+            value={value}
+            onChange={onChange}
+            onSelect={(item) => {
+              onChange(item);
+              setServicos(item.servicos || []);
+            }}
+            filterKey="nome"
+          />
+        )}
+      />
+      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message?.toString()}</Text>}
 
-      <View style={{ margin: 20 }}>
-        <Controller
-          control={control}
-          name="servico"
-          rules={{ required: 'Serviço é um campo obrigatório' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Serviço"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
-        {errors.servico && <Text style={styles.errorText}>{errors.servico.message}</Text>}
+      <Controller
+        control={control}
+        name="servico"
+        rules={{ required: 'Serviço é um campo obrigatório' }}
+        render={({ field: { onChange, value }, formState }) => (
+          <AutocompleteInput
+            placeholder="Digite para buscar serviço"
+            data={servicos || []}
+            value={value}
+            onChange={(value) => {
+              console.log('onChange:', value);
+              onChange(value)
+              handleHoraFimUpdate(watch('horaInicio'), value);
+              console.log(formState.dirtyFields)
+            }}
+            onSelect={item => {
+              console.log('onSelect:', item.descricao);
+              onChange(item.descricao);
+              handleHoraFimUpdate(watch('horaInicio'), value);
+            }}
+            filterKey="descricao"
+          />
+        )}
+      />
+      {errors.servico && <Text style={styles.errorText}>{errors.servico.message?.toString()}</Text>}
 
-        <Controller
-          control={control}
-          name="prestador"
-          rules={{ required: 'Prestador é um campo obrigatório' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Prestador"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
-        />
-        {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message}</Text>}
-
-        <Controller
+      <View style={styles.dataTempo}>
+        <DateInput
           control={control}
           name="data"
-          rules={{ required: 'Data é obrigatória.' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={onChange}
-              placeholder="Data"
-              keyboardType="numeric"
-              maxLength={10}
-            />
-          )}
+          label="Data de Agendamento"
         />
+
+
         {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
 
-        <Controller
-          control={control}
-          name="hora"
-          rules={{ required: 'Hora de início é obrigatória.' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              value={value}
-              onChangeText={text => onChange(formatTime(text))}
-              placeholder="Hora"
-              keyboardType="numeric"
-              maxLength={7}
-              />
-            )}
-          />
-          {errors.hora && <Text style={styles.errorText}>{errors.hora.message}</Text>}
-
-        <Controller
-          control={control}
-          name="localizacao"
-          rules={{ required: 'Localização é um campo obrigatório' }}
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Localização"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
+        <TimeInput
+          placeholder="Escolha uma hora de início"
+          value={watch('horaInicio')} // Garanta que o valor observado é usado
+          onChange={(value) => {
+            setValue('horaInicio', value, { shouldDirty: true, shouldTouch: true });
+            handleHoraFimUpdate(value, watch('servico')); // Atualiza também horaFim
+          }}
         />
-        {errors.localizacao && <Text style={styles.errorText}>{errors.localizacao.message}</Text>}
 
-        <Controller
-          control={control}
-          name="anotacao"
-          render={({ field: { onChange, value } }) => (
-            <TextInput
-              style={styles.input}
-              placeholder="Anotação"
-              value={value}
-              onChangeText={onChange}
-            />
-          )}
+        {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
+        <TimeInput
+          placeholder="Previsão de Conclusão"
+          value={watch('horaFim')} // Use o valor diretamente do estado
+          disabled={true}
         />
+
+
 
         <Pressable
           style={[styles.button]}
-          onPress={handleSubmit(addTask)}
-          disabled={!isValid || !selectedDate}
+          onPress={handleSubmit(saveReserva)}
+          disabled={!isValid || watch('data') == null}
         >
-          <Text style={styles.buttonText} onPress={() => router.push('/(tabs)/agenda')}>Adicionar Agendamento</Text>
+          <Text style={styles.buttonText} >Adicionar Agendamento</Text>
         </Pressable>
+
       </View>
     </SafeAreaView>
   );
@@ -292,4 +293,8 @@ const styles = StyleSheet.create({
   backIcon: {
     paddingRight: 15,
   },
+  dataTempo: {
+    paddingRight: 25,
+    paddingLeft: 3
+  }
 });

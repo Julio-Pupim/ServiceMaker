@@ -60,13 +60,12 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Roles role;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "id_contato")
-  @JsonManagedReference
   private Contato contato;
 
   @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JsonManagedReference
+  @JsonManagedReference("clientes-reservas")
   private List<Reserva> reservas;
 
   @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

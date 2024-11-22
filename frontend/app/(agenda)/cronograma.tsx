@@ -1,22 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, Alert, Pressable, ScrollView, StatusBar } from 'react-native';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MultiSelect from 'react-native-multiple-select';
 import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
 
 type CronogramaForm = {
   cronogramas: {
@@ -37,6 +27,8 @@ const diasSemana = [
 ];
 
 export default function Cronograma() {
+  const { nomeUsuario } = useUser();
+
   const { control, handleSubmit, formState: { errors } } = useForm<CronogramaForm>({
     defaultValues: {
       cronogramas: [{

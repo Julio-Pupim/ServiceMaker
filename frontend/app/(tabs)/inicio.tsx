@@ -1,14 +1,13 @@
-import React,{useEffect, useState} from 'react';
+import React,{useState} from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
-import Pesquisa from '../search/[query]';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
 const Inicio = () => {
 
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+  const { nomeUsuario } = useUser();
   const [searchText, setSearchText] = useState('');
 
   const promocoes = [
@@ -44,15 +43,6 @@ const Inicio = () => {
     { id: '11', nome: 'Cláudio', icon: 'person-outline' },
     { id: '12', nome: 'Sofia', icon: 'person-outline' },
   ];
-
-  useEffect(() => {
-    const carregarNomeUsuario = async () => {
-      const nome = await obterNomeUsuario();
-      setNomeUsuario(nome);
-    };
-
-    carregarNomeUsuario();
-  }, []);
 
   const profissionalClick = () => {
     router.navigate('/(servico)/prestador');

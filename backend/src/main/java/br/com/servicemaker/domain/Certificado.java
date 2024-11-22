@@ -1,7 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -32,7 +32,7 @@ public class Certificado extends AbstractEntity {
 
   @ManyToOne()
   @JoinColumn(name = "ID_PRESTADOR", nullable = false)
-  @JsonManagedReference
+  @JsonBackReference("prestador-certificados")
   private Prestador prestador;
 
 }

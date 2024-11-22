@@ -45,7 +45,6 @@ axiosInstance.interceptors.request.use(
 
 const createServico = async (servicos) => {
   try {
-    console.log(await axiosInstance.post('', servicos));
     const response = await axiosInstance.post('', servicos);
     console.log('criou serviço')
     return response.data;
@@ -57,7 +56,7 @@ const createServico = async (servicos) => {
 
 const getServicosByPrestador = async (idPrestador) => {
   try {
-    const response = await axiosInstance.get(`?id_prestador=${idPrestador}`);
+    const response = await axiosInstance.get(`/prestador/${idPrestador}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao buscar serviços do prestador:', error);

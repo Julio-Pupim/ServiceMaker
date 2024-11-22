@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, View, StatusBar, Pressable } from 'react-native';
+import React from 'react';
+import { Text, SafeAreaView, StyleSheet, View, StatusBar, Pressable, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Share } from 'react-native';
 import { router } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
-const perfilClick = ()=>{
-  router.navigate('/(tabs)/perfil')
-}
 
 export default function Compartilhar() {
+  const { nomeUsuario } = useUser();
+
   const onShare = async () => {
     try {
       await Share.share({
@@ -35,7 +22,7 @@ export default function Compartilhar() {
     }
   };
 
-  const perfilClick =()=>{
+  const perfilClick = () => {
     router.navigate('/(tabs)/perfil');
   };
 
@@ -55,7 +42,7 @@ export default function Compartilhar() {
       </View>
 
       <View style={styles.content}>
-      <Text style={styles.title}>Compartilhe</Text>
+        <Text style={styles.title}>Compartilhe</Text>
         <Text style={styles.description}>
           Compartilhe nosso aplicativo com seus amigos e familiares!
         </Text>

@@ -7,28 +7,17 @@ import UsuarioService from '../../service/UsuarioService'
 import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
-
-const perfilClick = ()=>{
-  router.navigate('/(tabs)/perfil')
-}
 
 export default function EdicaoPerfil() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
+  const { nomeUsuario } = useUser();
+
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,4 +1,4 @@
-INSERT INTO servicemaker.public.setor (DESCRICAO)
+INSERT INTO setor (DESCRICAO)
 VALUES
     ('Encanador'),
     ('Eletricista'),

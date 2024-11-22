@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
 
 export default function InicioLogin() {
   return (

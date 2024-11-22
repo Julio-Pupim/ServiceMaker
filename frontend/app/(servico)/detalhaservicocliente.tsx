@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, ScrollView, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-useEffect(() => {
-  const carregarNomeUsuario = async () => {
-    const nome = await obterNomeUsuario();
-    setNomeUsuario(nome);
-  };
-
-  carregarNomeUsuario();
-}, []);
+import { useUser } from '@/components/contextoApi';
 
 const DetalhesServico = () => {
   const [descricao, setDescricao] = useState('');
   const descricaoMaxLength = 240;
+  const { nomeUsuario } = useUser();
+
 
   return (
     <SafeAreaView style={styles.container}>
