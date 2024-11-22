@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
 import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useUser } from '@/components/contextoApi';
 
 
 const usuarioLogado = { id: 1, nome: 'Usuário' };
@@ -24,8 +24,7 @@ type criarServicoForm = {
 }
 
 export default function CriaServico() {
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
+  const { nomeUsuario } = useUser();
 
   const { control, handleSubmit, formState: { errors } } = useForm<criarServicoForm>({
     defaultValues: {
@@ -114,7 +113,7 @@ export default function CriaServico() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 

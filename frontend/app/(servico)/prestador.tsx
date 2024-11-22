@@ -3,20 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import UsuarioService from '../../service/UsuarioService'
-
-interface Setor {
-    id_prestador: number;
-    titulo: string;
-}
-
-interface Prestador {
-    id: number;
-    nome: string;
-}
+import { useUser } from '@/components/contextoApi';
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+  const { nomeUsuario } = useUser();
 
   useEffect(() => {
 
@@ -45,7 +36,7 @@ const Prestadores = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.userText}>
-        <TouchableOpacity onPress={inicioClick}>
+          <TouchableOpacity onPress={inicioClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />

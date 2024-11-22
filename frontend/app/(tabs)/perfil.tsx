@@ -1,14 +1,18 @@
+import { useUser } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
 
 
 const Perfil = () => {
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+  const { nomeUsuario } = useUser();
+
+  
+useEffect(()=>{
+console.log(nomeUsuario)  
+})
 
   return (
     <SafeAreaView style={styles.container}>

@@ -28,7 +28,7 @@ type CadastroForm = {
 async function handleCadastro(data: CadastroForm) {
   console.log("TO AQUI ", data);
   try {
-    await axios.post("http://46.202.144.47:8080/api/auth/registro", data);
+    await axios.post("http://localhost:8080/api/auth/registro", data);
     router.navigate("/(auth)/login");
 
   } catch (error) {

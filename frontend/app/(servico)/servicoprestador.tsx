@@ -1,44 +1,50 @@
 import { Ionicons } from "@expo/vector-icons";
-import { View,Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import { router, useLocalSearchParams } from 'expo-router';
 import ServicoService from "@/service/ServicoService";
+import { useUser } from "@/components/contextoApi";
 
 
 const ServicoPrestador = () => {
   const [servicos, setServicos] = useState([]);
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');  
+  const { nomeUsuario } = useUser();
 
   const idPrestador: any = useLocalSearchParams();
 
   useEffect(() => {
-    
-      const fetchData = async () => {
-          try {
-              const usuariosData = await ServicoService.getServicosByPrestador(idPrestador.id);
-              setServicos(usuariosData);
-          } catch (error) {
-              console.error('Erro ao buscar dados:', error);
-          }
-      };
-      fetchData();
+    console.log(nomeUsuario)
+
+    if (!idPrestador.id) {
+      console.warn('Nenhum idPrestador fornecido.');
+      return;
+    }
+  
+    const fetchData = async () => {
+      try {
+        const usuariosData = await ServicoService.getServicosByPrestador(idPrestador.id);
+        setServicos(usuariosData);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    };
+    fetchData();
   }, []);
 
 
-  const servicoAgendaClick = (idServico: number) =>{  
-   router.push({ pathname: "/(tabs)/agenda", params: {idPrestador: idPrestador.id, idServico: idServico} })
+  const servicoAgendaClick = (idServico: number) => {
+    router.push({ pathname: "/(tabs)/agenda", params: { idPrestador: idPrestador.id, idServico: idServico } })
 
   };
-  
-  const inicioClick =()=>{
+
+  const inicioClick = () => {
     router.navigate('/(tabs)/inicio');
   };
-  return(
-<View style={styles.container}>
+  return (
+    <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.userText}>
-        <TouchableOpacity onPress={inicioClick}>
+          <TouchableOpacity onPress={inicioClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />
@@ -46,42 +52,42 @@ const ServicoPrestador = () => {
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
-      </View> 
+      </View>
 
       <Text style={styles.title}>Serviços do Prestador</Text>
 
-          <ScrollView>
-              {servicos.map((servico: any) => (
-                  <View style={styles.header} key={servico.id}>
-                      <View style={styles.posicao}>
-                          <View style={styles.textoContainer}>
-                              <Text style={styles.nomePrestador}>Nome: {servico.descricao}</Text>
-                              <Text style={styles.infoPrestador}>
-                                  {servico.tempoServico}
-                              </Text>
-                              <Text style={styles.infoPrestador}>
-                                  {servico.preco}
-                              </Text>
-                          </View>
-                      </View>
-                      <TouchableOpacity onPress={() =>servicoAgendaClick(servico.id)}>
-                          <View style={styles.botaoServicos}>
-                              <Text style={styles.textServicos}>Agendamento</Text>
-                          </View>
-                      </TouchableOpacity>
-                  </View>
-              ))}
-          </ScrollView>
-      </View>
-);
+      <ScrollView>
+        {servicos.map((servico: any) => (
+          <View style={styles.header} key={servico.id}>
+            <View style={styles.posicao}>
+              <View style={styles.textoContainer}>
+                <Text style={styles.nomePrestador}>Nome: {servico.descricao}</Text>
+                <Text style={styles.infoPrestador}>
+                  {servico.tempoServico}
+                </Text>
+                <Text style={styles.infoPrestador}>
+                  {servico.preco}
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity onPress={() => servicoAgendaClick(servico.id)}>
+              <View style={styles.botaoServicos}>
+                <Text style={styles.textServicos}>Agendamento</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  );
 };
-  
+
 const styles = StyleSheet.create({
-  container:{
+  container: {
     flex: 1,
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
-  topoTela:{
+  topoTela: {
     backgroundColor: '#FBCB1C',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
@@ -107,40 +113,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 15,
   },
-  header:{
+  header: {
     backgroundColor: '#FBCB1C',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 25,
     marginBottom: 20,
   },
-  imagem:{
+  imagem: {
     flexDirection: 'row',
     width: 60,
-    height: 60, 
+    height: 60,
     borderWidth: 1,
     borderRadius: 10
   },
-  nomePrestador:{
+  nomePrestador: {
     fontSize: 13,
     fontWeight: 'bold',
   },
-  infoPrestador:{
+  infoPrestador: {
     fontSize: 14,
     fontWeight: 'bold',
   },
-  textoContainer:{
-    justifyContent:'flex-start',
+  textoContainer: {
+    justifyContent: 'flex-start',
     margin: 10
   },
-  posicao:{
+  posicao: {
     flexDirection: 'row'
   },
-  textServicos:{
+  textServicos: {
     fontSize: 12,
     fontWeight: 'bold',
   },
-  botaoServicos:{
+  botaoServicos: {
     backgroundColor: '#FFD700',
     borderRadius: 5,
     marginVertical: 10,
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center'
   },
-  
+
   backIcon: {
     paddingRight: 15,
   },

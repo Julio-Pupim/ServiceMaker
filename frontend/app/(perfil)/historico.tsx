@@ -1,13 +1,13 @@
+import { useUser } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
 const ServicosLista = () => {
+  const { nomeUsuario } = useUser();
+
   const servicos = [
     { titulo: 'Conserto de Ar-Condicionado', empresa: 'CoolTech', data: '03/05/2024', avaliacao: 4, custo: 250.0 },
     

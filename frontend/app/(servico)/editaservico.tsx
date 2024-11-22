@@ -1,11 +1,9 @@
+import { useUser } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, ScrollView, Pressable, StatusBar } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
 type editaServicoProps = {
   nome: string;
@@ -30,6 +28,8 @@ export default function editaServico({
 }: editaServicoProps) {
   const [data, setData] = useState<string>(initialData); 
   const [custo, setCusto] = useState<string>(initialCusto);
+  const { nomeUsuario } = useUser();
+
 
   const handleChange = (text: string) => {
     setData(text);

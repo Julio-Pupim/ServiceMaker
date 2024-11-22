@@ -1,14 +1,13 @@
-import React,{useEffect, useState} from 'react';
+import React,{useState} from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
-import Pesquisa from '../search/[query]';
-import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useUser } from '@/components/contextoApi';
 
 const Inicio = () => {
 
-  const [nomeUsuario, setNomeUsuario] = useState('Usuário');
+  const { nomeUsuario } = useUser();
   const [searchText, setSearchText] = useState('');
 
   const promocoes = [

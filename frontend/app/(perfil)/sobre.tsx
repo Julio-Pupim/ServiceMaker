@@ -1,21 +1,17 @@
+import { useUser } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaView, StyleSheet, View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
-import { obterNomeUsuario } from '@/utils/storageUtils';
-
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
-
-const perfilClick = ()=>{
-  router.navigate('/(tabs)/perfil')
-}
 
 export default function SobreNos() {
   const perfilClick =()=>{
     router.navigate('/(tabs)/perfil');
   };
+  const { nomeUsuario } = useUser();
 
   return (
+    
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
       <View style={styles.header}>

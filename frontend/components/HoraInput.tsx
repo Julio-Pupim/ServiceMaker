@@ -7,7 +7,7 @@ type TimeInputProps = {
   placeholder: string;
   value: string;
   disabled?: boolean;
-  onChange: (text: string) => void;
+  onChange?: (text: string) => void;
 };
 
 export const TimeInput: React.FC<TimeInputProps> = ({

@@ -1,11 +1,10 @@
+import { useUser } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, View, Text, Pressable, Alert, TextInput, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { obterNomeUsuario } from '@/utils/storageUtils';
 
-const [nomeUsuario, setNomeUsuario] = useState('Usuário');
 
 const perfilClick = ()=>{
   router.navigate('/(tabs)/perfil')
@@ -14,6 +13,7 @@ const perfilClick = ()=>{
 export default function Avaliacao() {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const { nomeUsuario } = useUser();
 
   const handleSubmit = () => {
     if (rating === 0) {
