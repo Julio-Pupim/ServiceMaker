@@ -117,7 +117,7 @@ export default function Agendamento() {
     console.log(reserva);
 
     try {
-      await ReservaService.createReserva(reserva);
+   //   await ReservaService.createReserva(reserva);
       router.navigate("/agenda");
       
     } catch (error) {
