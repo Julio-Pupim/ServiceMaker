@@ -1,4 +1,4 @@
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, SafeAreaView, StatusBar, Pressable } from 'reac
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ServicosLista = () => {
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const servicos = [
     { titulo: 'Conserto de Ar-Condicionado', empresa: 'CoolTech', data: '03/05/2024', avaliacao: 4, custo: 250.0 },
@@ -52,7 +52,7 @@ const ServicosLista = () => {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
       

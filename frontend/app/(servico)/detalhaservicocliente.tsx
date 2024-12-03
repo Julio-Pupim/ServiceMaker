@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 const DetalhesServico = () => {
   const [descricao, setDescricao] = useState('');
   const descricaoMaxLength = 240;
-  const { nomeUsuario } = useUser();
+  const { user} = useAuth();
 
 
   return (
@@ -17,7 +17,7 @@ const DetalhesServico = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

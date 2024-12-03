@@ -10,7 +10,7 @@ import PrestadorService from '../../service/prestadorservice'
 import ServicoService from '../../service/ServicoService'
 import ReservaService from '../../service/ReservaService'
 import { AutocompleteInput } from '@/components/AutocompleteInput';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 type AgendamentoForm = {
   servico: any;
@@ -41,7 +41,7 @@ const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
 
 export default function Agendamento() {
 
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const [prestadores, setPrestadores] = useState<any[]>([]);
   const [servicos, setServicos] = useState<any[]>([]);
@@ -138,7 +138,7 @@ export default function Agendamento() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
       <Text style={styles.title}>Agendamento</Text>

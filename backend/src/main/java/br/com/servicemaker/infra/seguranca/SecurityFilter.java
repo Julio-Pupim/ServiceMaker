@@ -1,6 +1,5 @@
 package br.com.servicemaker.infra.seguranca;
 
-import br.com.servicemaker.DTO.UserDetailsDTO;
 import br.com.servicemaker.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     var token = this.recoverToken(request);
     if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       var login = tokenService.validaToken(token);
-      UserDetailsDTO usuario = usuarioRepository.findByContatoEmail(login);
+      UserDetails usuario = usuarioRepository.findByContatoEmail(login);
 
       var authentication = new UsernamePasswordAuthenticationToken(usuario, null,
           usuario.getAuthorities());

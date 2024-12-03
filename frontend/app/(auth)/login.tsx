@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
-import { useUser } from '../../components/contextoApi';
+import { useAuth } from '../../components/contextoApi';
 
 type LoginForm = {
   email: string;
@@ -43,21 +43,8 @@ const storeToken = async (data: any) => {
   }
 };
 
-async function handleLogin(requestData: LoginForm, setNomeUsuario: (name: string) => void) {
-  try {
-    const responseData = await login(requestData);
-    console.log('Resposta do login:', responseData);
-    setNomeUsuario(responseData.nome)
-    await storeToken(responseData);
-
-    router.push("/(tabs)/inicio");
-
-  } catch (error) {
-    console.error('Falha no processo de login:', error);
-  }
-}
-
 const LoginScreen = () => {
+  const { setAuthData } = useAuth()
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<LoginForm>({
     defaultValues: {
       email: '',
@@ -65,8 +52,21 @@ const LoginScreen = () => {
     },
     mode: "onChange"
   });
+  const handleLogin = async (credentials: LoginForm) => {
 
-  const { setNomeUsuario } = useUser(); 
+    try {
+      const response = await login(credentials); // Função de login
+      console.log(response);
+      const { token, usuario} = response;
+  
+      setAuthData(token, usuario);
+      console.log(`Bem-vindo, ${usuario.nome}!`);
+      router.push('/(tabs)/inicio');
+  } catch (error) {
+      console.error('Erro durante o login:', error);
+    }
+  };
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +104,7 @@ const LoginScreen = () => {
       />
       {<Text style={styles.labelError}>{errors?.senha?.message}</Text>}
 
-      <Pressable style={styles.button} onPress={handleSubmit((data) => handleLogin(data, setNomeUsuario))}
+      <Pressable style={styles.button} onPress={handleSubmit((data) => handleLogin(data))}
         disabled={!isValid}  >
         <Text style={{ color: 'white', textAlign: 'center' }}>Continuar</Text>
       </Pressable>

@@ -1,18 +1,13 @@
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 const Perfil = () => {
-  const { nomeUsuario } = useUser();
-
-  
-useEffect(()=>{
-console.log(nomeUsuario)  
-})
+  const { user } = useAuth();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,7 +15,7 @@ console.log(nomeUsuario)
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.content}>

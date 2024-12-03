@@ -1,4 +1,4 @@
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -28,7 +28,7 @@ export default function editaServico({
 }: editaServicoProps) {
   const [data, setData] = useState<string>(initialData); 
   const [custo, setCusto] = useState<string>(initialCusto);
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
 
   const handleChange = (text: string) => {
@@ -50,7 +50,7 @@ export default function editaServico({
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
