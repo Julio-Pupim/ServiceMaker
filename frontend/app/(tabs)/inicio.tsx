@@ -3,11 +3,11 @@ import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 const Inicio = () => {
 
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
   const [searchText, setSearchText] = useState('');
 
   const promocoes = [
@@ -59,12 +59,12 @@ const Inicio = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 
       <View>
-        <Text style={styles.greetings}>Olá, {nomeUsuario}</Text>
+        <Text style={styles.greetings}>Olá, {user?.nome}</Text>
       </View>
 
       <View style={styles.pesquisa}>

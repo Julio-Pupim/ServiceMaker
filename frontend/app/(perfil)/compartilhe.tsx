@@ -2,11 +2,11 @@ import React from 'react';
 import { Text, SafeAreaView, StyleSheet, View, StatusBar, Pressable, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 
 export default function Compartilhar() {
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const onShare = async () => {
     try {
@@ -37,7 +37,7 @@ export default function Compartilhar() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

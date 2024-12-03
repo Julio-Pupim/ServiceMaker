@@ -7,6 +7,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -25,17 +26,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Reserva extends AbstractEntity {
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
   @JsonBackReference("clientes-reservas")
   private Usuario cliente;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_AGENDA", nullable = false)
   @JsonBackReference("agenda-reservas")
   private Agenda agenda;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_SERVICO", nullable = false)
   @JsonBackReference("reservas-servicos")
   private Servico servico;

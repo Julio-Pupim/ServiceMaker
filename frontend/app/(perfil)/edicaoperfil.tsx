@@ -7,7 +7,7 @@ import UsuarioService from '../../service/UsuarioService'
 import ContatoService from '../../service/ContatoService'
 import EnderecoService from '../../service/EnderecoService'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 
 
@@ -16,7 +16,7 @@ export default function EdicaoPerfil() {
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [endereco, setEndereco] = useState('');
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function EdicaoPerfil() {
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon} color="white" />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

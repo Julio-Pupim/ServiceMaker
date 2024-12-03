@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MultiSelect from 'react-native-multiple-select';
 import { router } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 
 type CronogramaForm = {
@@ -27,7 +27,7 @@ const diasSemana = [
 ];
 
 export default function Cronograma() {
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const { control, handleSubmit, formState: { errors } } = useForm<CronogramaForm>({
     defaultValues: {
@@ -96,7 +96,7 @@ export default function Cronograma() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

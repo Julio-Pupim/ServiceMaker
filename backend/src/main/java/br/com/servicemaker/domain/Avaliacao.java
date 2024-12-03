@@ -4,6 +4,7 @@ import br.com.servicemaker.abstractcrud.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -33,7 +34,7 @@ public class Avaliacao extends AbstractEntity {
   @Column(name = "comentario_cliente")
   private String comentarioCliente;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
   @JsonBackReference
   private Usuario cliente;
