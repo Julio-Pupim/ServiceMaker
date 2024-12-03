@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, StyleSheet, ScrollView, Pressable, FlatList, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ServicoService from '../../service/ServicoService';
+import { useUser } from '@/components/contextoApi';
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
 
@@ -23,6 +24,7 @@ type Servico = {
 export default function ListagemDeServicos() {
   const [servicos, setServicos] = useState<Servico[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const { nomeUsuario } = useUser();
 
   useEffect(() => {
     const fetchServicos = async () => {
@@ -42,6 +44,15 @@ export default function ListagemDeServicos() {
     router.navigate('/(tabs)/perfil');
   };
 
+  const excluirServico = async (id: number) => {
+    try {
+      await ServicoService.deleteServico(id); // Exclui o serviço através do serviço API
+      setServicos(servicos.filter((servico) => servico.id !== id)); // Remove da lista local
+    } catch (error) {
+      console.error('Erro ao excluir o serviço:', error);
+    }
+  };
+
   const renderItem = ({ item }: { item: Servico }) => (
     <View style={styles.servicoItem}>
       <Text style={styles.servicoTitulo}>{item.servico}</Text>
@@ -53,14 +64,15 @@ export default function ListagemDeServicos() {
       <View style={styles.actionButtons}>
         <Pressable
           style={styles.button}
-          onPress={() => console.log('Editar serviço', item.id)}
+          onPress={() => router.push(`/(servico)/editaservico`)}
         >
           <Ionicons name="create" size={20} color="white" />
           <Text style={styles.buttonText}>Editar</Text>
         </Pressable>
+
         <Pressable
           style={[styles.button, styles.buttonExcluir]}
-          onPress={() => console.log('Excluir serviço', item.id)}
+          onPress={() => excluirServico(item.id)}  // Exclui o serviço ao clicar
         >
           <Ionicons name="trash" size={20} color="white" />
           <Text style={styles.buttonText}>Excluir</Text>
@@ -80,7 +92,7 @@ export default function ListagemDeServicos() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>Usuário</Text>
+          <Text style={styles.userName}>{nomeUsuario}</Text>
         </View>
       </View>
 
@@ -127,8 +139,8 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 15,
-    marginLeft: 20,
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   scrollViewContainer: {
     paddingBottom: 100,

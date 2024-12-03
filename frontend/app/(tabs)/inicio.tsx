@@ -14,7 +14,6 @@ const Inicio = () => {
     { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
     { id: '2', titulo: 'Reparo de celulares', desconto: '15% de desconto' },
   ];
-  
 
   const servicosFrequentes = [
     { id: '1', descricao: 'Encanador', icon: 'construct-outline' },
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
   },
   profissionalItem: {
     alignItems: 'center',
-    marginRight: 35,
+    marginRight: 20,
   },
   profissionalNome: {
     fontSize: 16,
