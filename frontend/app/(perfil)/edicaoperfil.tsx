@@ -3,50 +3,31 @@ import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import UsuarioService from '../../service/UsuarioService'
-import ContatoService from '../../service/ContatoService'
-import EnderecoService from '../../service/EnderecoService'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/components/contextoApi';
 
 
 
 export default function EdicaoPerfil() {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [endereco, setEndereco] = useState('');
   const { user } = useAuth();
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const userId = await AsyncStorage.getItem('userId');
-        if (!userId) {
-          console.warn('ID do usuário não encontrado');
-          return;
-        }
-
-        const usuarioData = await UsuarioService.getUsuarioById();
-        const contatoData = await ContatoService.getContatoById();
-        const enderecoData = await EnderecoService.getEnderecoById();
-
-        setNome(usuarioData.nome);
-        setEmail(contatoData.email);
-        setTelefone(contatoData.telefone);
-        setEndereco(enderecoData.endereco);
-      } catch (error) {
-        console.error('Erro ao carregar dados:', error);
-      }
-    };
-    fetchData();
-  }, []);
+  const [nome, setNome] = useState(user?.nome);
+  const [email, setEmail] = useState(user?.contato.email || '');
+  const [telefone, setTelefone] = useState(user?.contato.telefone|| '');
+  const [endereco, setEndereco] = useState(user?.endereco || '');
 
   const perfilClick = () => {
     router.navigate('/(tabs)/perfil');
   };
+
+  useEffect(() => {
+    if (user) {
+      console.log(user)
+      setNome(user.nome || '');
+      setEmail(user.contato.email|| '');
+      setTelefone(user.contato.telefone || '');
+      setEndereco(user.endereco || '');
+    }
+  }, [user]);
 
   return (
     <SafeAreaView style={styles.container}>
