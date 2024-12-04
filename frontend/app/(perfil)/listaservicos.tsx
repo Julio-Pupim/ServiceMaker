@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, StyleSheet, ScrollView, Pressable, FlatList, StatusBar } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ServicoService from '../../service/ServicoService';
-import { useUser } from '@/components/contextoApi';
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
+import { useAuth } from '@/components/contextoApi';
 
 const usuarioLogado = { id: 1, nome: 'p' };
 
@@ -24,7 +24,7 @@ type Servico = {
 export default function ListagemDeServicos() {
   const [servicos, setServicos] = useState<Servico[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchServicos = async () => {
@@ -92,7 +92,7 @@ export default function ListagemDeServicos() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 
