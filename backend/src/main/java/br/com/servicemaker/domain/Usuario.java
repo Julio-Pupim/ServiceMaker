@@ -53,7 +53,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @NotBlank
   private String senha;
 
-  @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<Endereco> endereco;
 

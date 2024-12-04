@@ -5,15 +5,19 @@ import { Text, SafeAreaView, StyleSheet, View, TextInput, Image, ScrollView, Sta
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAuth } from '@/components/contextoApi';
 
-
-
 export default function EdicaoPerfil() {
   const { user } = useAuth();
 
-  const [nome, setNome] = useState(user?.nome);
-  const [email, setEmail] = useState(user?.contato.email || '');
-  const [telefone, setTelefone] = useState(user?.contato.telefone|| '');
-  const [endereco, setEndereco] = useState(user?.endereco || '');
+  const [nome, setNome] = useState(user?.nome || '');
+  const [email, setEmail] = useState(user?.contato?.email || '');
+  const [telefone, setTelefone] = useState(user?.contato?.telefone || '');
+
+  // Endereço como array
+  const [rua, setRua] = useState(user?.endereco?.[0]?.rua || '');
+  const [cep, setCep] = useState(user?.endereco?.[0]?.cep || '');
+  const [numero, setNumero] = useState(user?.endereco?.[0]?.numero || '');
+  const [complemento, setComplemento] = useState(user?.endereco?.[0]?.complemento || '');
+  const [tipo, setTipo] = useState(user?.endereco?.[0]?.tipo || '');
 
   const perfilClick = () => {
     router.navigate('/(tabs)/perfil');
@@ -21,11 +25,19 @@ export default function EdicaoPerfil() {
 
   useEffect(() => {
     if (user) {
-      console.log(user)
-      setNome(user.nome || '');
-      setEmail(user.contato.email|| '');
-      setTelefone(user.contato.telefone || '');
-      setEndereco(user.endereco || '');
+      console.log(user);
+
+      setNome(user?.nome || '');
+      setEmail(user?.contato?.email || '');
+      setTelefone(user?.contato?.telefone || '');
+
+      // Atualizando os campos de endereço a partir do primeiro item
+      const primeiroEndereco = user?.endereco?.[0] || {};
+      setRua(primeiroEndereco.rua || '');
+      setCep(primeiroEndereco.cep || '');
+      setNumero(primeiroEndereco.numero || '');
+      setComplemento(primeiroEndereco.complemento || '');
+      setTipo(primeiroEndereco.tipo || '');
     }
   }, [user]);
 
@@ -79,9 +91,41 @@ export default function EdicaoPerfil() {
           </View>
 
           <View>
-            <Text style={styles.label}>Endereço</Text>
+            <Text style={styles.label}>Rua</Text>
             <View style={styles.wrapperInput}>
-              <TextInput value={endereco} onChangeText={setEndereco} style={styles.input} />
+              <TextInput value={rua} onChangeText={setRua} style={styles.input} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.label}>CEP</Text>
+            <View style={styles.wrapperInput}>
+              <TextInput value={cep} onChangeText={setCep} style={styles.input} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.label}>Número</Text>
+            <View style={styles.wrapperInput}>
+              <TextInput value={numero} onChangeText={setNumero} style={styles.input} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.label}>Complemento</Text>
+            <View style={styles.wrapperInput}>
+              <TextInput value={complemento} onChangeText={setComplemento} style={styles.input} />
+              <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
+            </View>
+          </View>
+
+          <View>
+            <Text style={styles.label}>Tipo</Text>
+            <View style={styles.wrapperInput}>
+              <TextInput value={tipo} onChangeText={setTipo} style={styles.input} />
               <Icon name="edit" size={20} color="gray" style={styles.iconEditar} />
             </View>
           </View>
@@ -89,12 +133,11 @@ export default function EdicaoPerfil() {
           <Pressable style={styles.saveButton}>
             <Text style={styles.saveText}>Salvar</Text>
           </Pressable>
-
         </View>
       </ScrollView>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
