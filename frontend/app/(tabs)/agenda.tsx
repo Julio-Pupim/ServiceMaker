@@ -5,8 +5,8 @@ import { Calendar } from 'react-native-calendars';
 import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
 import { obterNomeUsuario } from '@/utils/storageUtils';
+import { useAuth } from '@/components/contextoApi';
 
 type AgendamentoForm = {
   servico: string;
@@ -21,7 +21,7 @@ const inicioClick = () => {
 }
 
 const AgendaScreen = () => {
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
 
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
@@ -63,7 +63,7 @@ const AgendaScreen = () => {
       <View style={styles.header}>
         <View style={styles.userText}>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 
