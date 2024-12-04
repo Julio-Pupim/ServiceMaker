@@ -1,4 +1,4 @@
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -13,7 +13,7 @@ const perfilClick = ()=>{
 export default function Avaliacao() {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const handleSubmit = () => {
     if (rating === 0) {
@@ -40,7 +40,7 @@ export default function Avaliacao() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

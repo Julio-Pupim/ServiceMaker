@@ -1,4 +1,4 @@
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
@@ -8,7 +8,7 @@ export default function SobreNos() {
   const perfilClick =()=>{
     router.navigate('/(tabs)/perfil');
   };
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   return (
     
@@ -22,7 +22,7 @@ export default function SobreNos() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

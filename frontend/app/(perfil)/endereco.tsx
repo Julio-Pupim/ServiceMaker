@@ -4,13 +4,13 @@ import { SafeAreaView, StyleSheet, View, Text, TextInput, Pressable, FlatList, S
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useForm, Controller } from 'react-hook-form';
 import { router } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 
 export default function GerenciarEndereco() {
   const { control, handleSubmit, reset } = useForm();
   const [enderecos, setEnderecos] = useState<string[]>([]);
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
 
   const onSubmit = (data: { novoEndereco: string; }) => {
@@ -39,7 +39,7 @@ export default function GerenciarEndereco() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

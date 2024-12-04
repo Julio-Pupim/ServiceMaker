@@ -3,17 +3,16 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-nati
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from 'expo-router';
 import ServicoService from "@/service/ServicoService";
-import { useUser } from "@/components/contextoApi";
+import { useAuth } from "@/components/contextoApi";
 
 
 const ServicoPrestador = () => {
   const [servicos, setServicos] = useState([]);
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const idPrestador: any = useLocalSearchParams();
 
   useEffect(() => {
-    console.log(nomeUsuario)
 
     if (!idPrestador.id) {
       console.warn('Nenhum idPrestador fornecido.');
@@ -50,7 +49,7 @@ const ServicoPrestador = () => {
             />
           </TouchableOpacity>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

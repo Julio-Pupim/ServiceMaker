@@ -1,7 +1,8 @@
 package br.com.servicemaker.DTO;
 
-public record LoginResponseDTO(String token, String nome) {
+import br.com.servicemaker.domain.Usuario;
 
+public record LoginResponseDTO(String token, Usuario usuario) {
 
 
 }

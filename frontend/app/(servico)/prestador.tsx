@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import UsuarioService from '../../service/UsuarioService'
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   useEffect(() => {
 
@@ -42,7 +42,7 @@ const Prestadores = () => {
             />
           </TouchableOpacity>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 

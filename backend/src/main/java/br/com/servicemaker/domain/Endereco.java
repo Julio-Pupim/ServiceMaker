@@ -4,6 +4,7 @@ import br.com.servicemaker.DTO.EnderecoDTO;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -30,7 +31,7 @@ public class Endereco extends AbstractEntity {
 
   private String tipo;
 
-  @ManyToOne()
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_USUARIO", nullable = false)
   @JsonBackReference
   private Usuario usuario;

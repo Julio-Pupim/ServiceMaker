@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
-import { useUser } from '@/components/contextoApi';
+import { useAuth } from '@/components/contextoApi';
 
 
 const usuarioLogado = { id: 1, nome: 'Usuário' };
@@ -24,7 +24,7 @@ type criarServicoForm = {
 }
 
 export default function CriaServico() {
-  const { nomeUsuario } = useUser();
+  const { user } = useAuth();
 
   const { control, handleSubmit, formState: { errors } } = useForm<criarServicoForm>({
     defaultValues: {
@@ -113,7 +113,7 @@ export default function CriaServico() {
             />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
-          <Text style={styles.userName}>{nomeUsuario}</Text>
+          <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
 
