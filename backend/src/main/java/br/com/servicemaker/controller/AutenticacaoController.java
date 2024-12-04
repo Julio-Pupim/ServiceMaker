@@ -57,12 +57,13 @@ public class AutenticacaoController {
     if (data.prestador()) {
       Prestador novoPrestador = new Prestador(data.nome(), data.cpf(), encryptedPassword, contato,
           endereco, Roles.ROLE_PRESTADOR, new Agenda());
+      endereco.setUsuario(novoPrestador);
       Prestador saved = this.repository.save(novoPrestador);
       return ResponseEntity.ok(saved);
     }
     Usuario novoUsuario = new Usuario(data.nome(), data.cpf(), encryptedPassword, contato,
         endereco, Roles.ROLE_CLIENTE);
-
+    endereco.setUsuario(novoUsuario);
     Usuario saved = this.repository.save(novoUsuario);
 
     return ResponseEntity.ok(saved);
