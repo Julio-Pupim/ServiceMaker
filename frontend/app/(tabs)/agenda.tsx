@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { obterNomeUsuario } from '@/utils/storageUtils';
 import { useAuth } from '@/components/contextoApi';
+import axios from 'axios';
 
 type AgendamentoForm = {
   servico: string;
@@ -20,9 +21,32 @@ const inicioClick = () => {
 
 }
 
-const AgendaScreen = () => {
+const Agenda = () => {
   const { user } = useAuth();
+  const { idPrestador, idServico } = useLocalSearchParams();
+  const [selectedDate, setSelectedDate] = useState<string>(''); // Estado para armazenar a data selecionada
+  const [reservas, setReservas] = useState<any[]>([]); // Estado para armazenar as reservas
+  
+  // Carregar dados ao inicializar o componente ou quando a data mudar
+  useEffect(() => {
+    if (!selectedDate) {
+      console.warn('Nenhuma data selecionada.');
+      return;
+    }
 
+    const fetchData = async () => {
+      try {
+        // Substitua pelo endpoint correto para obter as reservas por data
+        const response = await axios.get(`http://seu-backend-url/api/reservas/data/${selectedDate}`);
+        setReservas(response.data);  // Armazena as reservas no estado
+      } catch (error) {
+        console.error('Erro ao buscar dados de reservas:', error);
+        Alert.alert('Erro', 'Não foi possível carregar as reservas.');
+      }
+    };
+
+    fetchData();
+  }, [selectedDate]);
 
   const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
     defaultValues: {
@@ -34,14 +58,9 @@ const AgendaScreen = () => {
     mode: 'onChange',
   });
 
-  const { idPrestador, idServico } = useLocalSearchParams();
-
-
   const agandamentoClick = (dataAgendamento: string) => {
     router.push({ pathname: "/(agenda)/agendamento", params: { idPrestador: idPrestador, idServico: idServico, dataAgendamento: dataAgendamento } })
   }
-
-  const [selectedDate, setSelectedDate] = useState<string>('');
 
   const handleDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
@@ -88,12 +107,6 @@ const AgendaScreen = () => {
             monthTextColor: 'black',
           }}
         />
-
-        <View style={styles.tasks}>
-          <Text style={[styles.task, { color: 'red' }]}>Aparar a grama - José - 7:00</Text>
-          <Text style={[styles.task, { color: 'green' }]}>Consertar a pia - Rafael - 15:00</Text>
-          <Text style={[styles.task, { color: 'purple' }]}>Cortar o cabelo - Juliana - 14:00</Text>
-        </View>
 
         <Pressable style={styles.addButton} onPress={() => agandamentoClick(selectedDate)}>
           <Ionicons name="add" size={30} color="white" />
@@ -147,7 +160,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: -30,
+    bottom: -150,
     right: 20,
     width: 60,
     height: 60,
@@ -159,7 +172,7 @@ const styles = StyleSheet.create({
   },
   cronogramaButton: {
     position: 'absolute',
-    bottom: 50,
+    bottom: -70,
     right: 20,
     width: 60,
     height: 60,
@@ -174,4 +187,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AgendaScreen;
+export default Agenda;

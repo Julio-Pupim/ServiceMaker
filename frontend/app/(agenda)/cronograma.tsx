@@ -212,6 +212,8 @@ const styles = StyleSheet.create({
   },
   form: {
     marginBottom: 20,
+    marginLeft: 30,
+    marginRight: 30
   },
   containerInput: {
     marginBottom: 20,
