@@ -8,6 +8,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { obterNomeUsuario } from '@/utils/storageUtils';
 import { useAuth } from '@/components/contextoApi';
 import axios from 'axios';
+import ReservaService from '@/service/ReservaService';
 
 type AgendamentoForm = {
   servico: string;
@@ -24,10 +25,24 @@ const inicioClick = () => {
 const Agenda = () => {
   const { user } = useAuth();
   const { idPrestador, idServico } = useLocalSearchParams();
-  const [selectedDate, setSelectedDate] = useState<string>(''); // Estado para armazenar a data selecionada
-  const [reservas, setReservas] = useState<any[]>([]); // Estado para armazenar as reservas
-  
-  // Carregar dados ao inicializar o componente ou quando a data mudar
+  const today = new Date().toISOString().split('T')[0];
+
+  const [selectedDate, setSelectedDate] = useState<string>(today);
+  const [reservas, setReservas] = useState<any[]>([]);
+  const [datasComReservas, setDatasComReservas] = useState<string[]>([]);
+  const [markedDates, setMarkedDates] = useState({});
+
+
+  const fetchReservasPorMes = async (dataMes: string) => {
+    try {
+      const response = await ReservaService.getReservaByMesAndUsuario(dataMes, user?.id);
+      // Supondo que o response retorne um array de strings no formato YYYY-MM-DD
+      setDatasComReservas(response);
+    } catch (error) {
+      console.error('Erro ao buscar dados de reservas:', error);
+      Alert.alert('Erro', 'Não foi possível carregar as reservas.');
+    }
+  };
   useEffect(() => {
     if (!selectedDate) {
       console.warn('Nenhuma data selecionada.');
@@ -36,9 +51,8 @@ const Agenda = () => {
 
     const fetchData = async () => {
       try {
-        // Substitua pelo endpoint correto para obter as reservas por data
-        const response = await axios.get(`http://seu-backend-url/api/reservas/data/${selectedDate}`);
-        setReservas(response.data);  // Armazena as reservas no estado
+        const response = await ReservaService.getReservaByDataAndUsuario(selectedDate, user?.id);
+        setReservas(response);
       } catch (error) {
         console.error('Erro ao buscar dados de reservas:', error);
         Alert.alert('Erro', 'Não foi possível carregar as reservas.');
@@ -47,16 +61,39 @@ const Agenda = () => {
 
     fetchData();
   }, [selectedDate]);
+  
+  useEffect(() => {
+    fetchReservasPorMes(today);
+  }, []);
 
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<AgendamentoForm>({
-    defaultValues: {
-      servico: '',
-      prestador: '',
-      localizacao: '',
-      anotacao: '',
-    },
-    mode: 'onChange',
-  });
+  
+  useEffect(() => {
+    const marcarDatas = () => {
+      const newMarkedDates: any = {};
+
+      // Marca todas as datas que possuem reservas
+      datasComReservas.forEach((date) => {
+        newMarkedDates[date] = {
+          marked: true,
+          dots: [{ key: 'reserva', color: 'blue', selectedDotColor: 'blue' }]
+        };
+      });
+
+      // Destaca a data selecionada
+      if (selectedDate) {
+        newMarkedDates[selectedDate] = {
+          ...newMarkedDates[selectedDate],
+          selected: true,
+          selectedColor: '#00ADF5'
+        };
+      }
+
+      setMarkedDates(newMarkedDates);
+    };
+
+    marcarDatas();
+  }, [datasComReservas, selectedDate]);
+
 
   const agandamentoClick = (dataAgendamento: string) => {
     router.push({ pathname: "/(agenda)/agendamento", params: { idPrestador: idPrestador, idServico: idServico, dataAgendamento: dataAgendamento } })
@@ -66,15 +103,6 @@ const Agenda = () => {
     setSelectedDate(day.dateString);
   };
 
-  const addTask = async (data: AgendamentoForm) => {
-    if (!selectedDate || !data.servico || !data.prestador || !data.localizacao || !data.anotacao) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos e selecione uma data.');
-      return;
-    }
-    console.log('Agendamento adicionado:', { ...data, date: selectedDate });
-    Alert.alert('Agendamento adicionado com sucesso!');
-    router.push('/(tabs)/inicio');
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,10 +119,15 @@ const Agenda = () => {
         <Calendar
           style={styles.calendar}
           onDayPress={handleDayPress}
-          current={'2024-10-22'}
-          markedDates={{
-            [selectedDate]: { selected: true, selectedColor: '#00ADF5' },
+          current={today}
+          markedDates={markedDates}
+          onMonthChange={(month: any) => {
+            const mesAtual = month.month;
+            const anoAtual = month.year;
+            const dataConsulta = `${anoAtual}-${mesAtual < 10 ? '0' + mesAtual : mesAtual}-01`;
+            fetchReservasPorMes(dataConsulta);
           }}
+
           markingType={'multi-dot'}
           theme={{
             calendarBackground: '#ffffff',
@@ -108,13 +141,26 @@ const Agenda = () => {
           }}
         />
 
-        <Pressable style={styles.addButton} onPress={() => agandamentoClick(selectedDate)}>
-          <Ionicons name="add" size={30} color="white" />
-        </Pressable>
+        <View style={styles.reservasContainer}>
+          {reservas.length === 0 ? (
+            <Text style={styles.noReservasText}>Nenhuma reserva para este dia.</Text>
+          ) : (
+            reservas.map((reserva, index) => {
+              const textColor = reserva.status === 'PENDENTE' ? 'red' : reserva.status === 'CONFIRMADA' ? 'green' : '#000';
+              return (
+                <Text key={index} style={[styles.reservaItem, { color: textColor }]}>
+                  {reserva.descricao || `Reserva ${index + 1} - Prestador: ${reserva?.nomePrestador} Serviço: ${reserva?.servico?.descricao} Preco: ${reserva?.servico?.preco} Horário: ${reserva?.horarioInicio} Status: ${reserva?.status}`}
+                </Text>
+              );
+            })
+          )}
 
-        <Pressable style={styles.cronogramaButton} onPress={() => router.navigate('/(agenda)/cronograma')}>
-          <Ionicons name="timer-outline" size={30} color="white" />
-        </Pressable>
+          {/* Botão de agendar no final da lista */}
+          <Pressable style={styles.agendarButton} onPress={() => agandamentoClick(selectedDate)}>
+            <Ionicons name="add" size={20} color="white" />
+            <Text style={styles.agendarButtonText}>Agendar</Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -184,6 +230,34 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     paddingRight: 15,
+  },
+  reservasContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  noReservasText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginVertical: 10,
+  },
+  reservaItem: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  agendarButton: {
+    marginTop: 20,
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  agendarButtonText: {
+    color: 'white',
+    marginLeft: 5,
+    fontSize: 16,
   },
 });
 

@@ -16,10 +16,11 @@ type AgendamentoForm = {
   servico: any;
   prestador: any;
   data: Date | null;
-  horaInicio: string;
-  horaFim: string;
+  horarioInicio: string;
+  horarioFim: string;
   status: any,
-  usuario: any
+  cliente: any
+  agenda: any
 };
 
 const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
@@ -94,29 +95,31 @@ export default function Agendamento() {
       prestador: '',
       servico: '',
       data: parsedDataAgendamento,
-      horaInicio: '',
-      horaFim: '',
+      horarioInicio: '',
+      horarioFim: '',
     },
     mode: 'onChange',
   });
 
   const handleHoraFimUpdate = (horaInicio: any, servicoSelecionado: any) => {
-    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado);
+    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado?.descricao);
+    console.log(servicos, servicoSelecionado);
     const tempoServico = servicoEncontrado?.tempoServico ?? '';
 
     const newHoraFim = calculateHoraFim(horaInicio, tempoServico);
     console.log("Calculando horaFim: ", newHoraFim);
 
-    setValue('horaFim', newHoraFim, { shouldDirty: true, shouldTouch: true });
+    setValue('horarioFim', newHoraFim, { shouldDirty: true, shouldTouch: true });
   };
 
   const saveReserva = async (reserva: AgendamentoForm) => {
-    reserva.usuario = { id: 2 };
+    reserva.cliente = user ;
+    reserva.agenda = reserva.prestador?.agenda
     reserva.status = "PENDENTE";
     console.log(reserva);
 
     try {
-   //   await ReservaService.createReserva(reserva);
+      await ReservaService.createReserva(reserva);
       router.navigate("/agenda");
       
     } catch (error) {
@@ -179,11 +182,12 @@ export default function Agendamento() {
                 value={value}
                 onChange={(value) => {
                   onChange(value);
-                  handleHoraFimUpdate(watch('horaInicio'), value);
+                  console.log("Dentro do OnChange do Serviço: ", value)
+                  handleHoraFimUpdate(watch('horarioInicio'), value);
                 }}
                 onSelect={item => {
-                  onChange(item.descricao);
-                  handleHoraFimUpdate(watch('horaInicio'), value);
+                  onChange(item);
+                  handleHoraFimUpdate(watch('horarioInicio'), value);
                 }}
                 filterKey="descricao"
               />
@@ -204,17 +208,18 @@ export default function Agendamento() {
 
           <TimeInput
             placeholder="Escolha uma hora de início"
-            value={watch('horaInicio')} // Garanta que o valor observado é usado
+            value={watch('horarioInicio')} // Garanta que o valor observado é usado
             onChange={(value) => {
-              setValue('horaInicio', value, { shouldDirty: true, shouldTouch: true });
+              setValue('horarioInicio', value, { shouldDirty: true, shouldTouch: true });
+              console.log("Dentro do OnChange do HoraInicio: ", watch('servico'))
               handleHoraFimUpdate(value, watch('servico')); // Atualiza também horaFim
             }}
           />
 
-          {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
+          {errors.horarioInicio && <Text style={styles.errorText}>{errors.horarioInicio.message}</Text>}
           <TimeInput
             placeholder="Previsão de Conclusão"
-            value={watch('horaFim')} // Use o valor diretamente do estado
+            value={watch('horarioFim')} // Use o valor diretamente do estado
             disabled={true}
           />
           
