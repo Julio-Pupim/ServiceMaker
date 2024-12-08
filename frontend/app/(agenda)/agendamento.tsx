@@ -16,7 +16,7 @@ import { Picker } from '@react-native-picker/picker';
 type AgendamentoForm = {
   servico: any;
   prestador: any;
-  data: Date | null;
+  dataReserva: Date | null;
   horarioInicio: string;
   horarioFim: string;
   status: any,
@@ -95,7 +95,7 @@ export default function Agendamento() {
     defaultValues: {
       prestador: '',
       servico: '',
-      data: parsedDataAgendamento,
+      dataReserva: parsedDataAgendamento,
       horarioInicio: '',
       horarioFim: '',
     },
@@ -205,7 +205,7 @@ export default function Agendamento() {
           />
 
 
-          {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
+          {errors.dataReserva && <Text style={styles.errorText}>{errors.dataReserva.message}</Text>}
 
           <TimeInput
             placeholder="Escolha uma hora de início"
@@ -227,7 +227,7 @@ export default function Agendamento() {
           <Pressable
             style={[styles.button]}
             onPress={handleSubmit(saveReserva)}
-            disabled={!isValid || watch('data') == null}
+            disabled={!isValid || watch('dataReserva') == null}
           >
             <Text style={styles.buttonText}>Adicionar Agendamento</Text>
           </Pressable>

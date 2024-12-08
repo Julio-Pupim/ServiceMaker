@@ -6,8 +6,6 @@ import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 
-const usuarioLogado = { id: 1, nome: 'p' };
-
 type Servico = {
   id: number;
   servico: string;
@@ -29,7 +27,7 @@ export default function ListagemDeServicos() {
   useEffect(() => {
     const fetchServicos = async () => {
       try {
-        const response = await ServicoService.getAllServicos();
+        const response = await ServicoService.getServicosByPrestador(user?.id);
         setServicos(response);
       } catch (error) {
         console.error('Erro ao buscar serviços:', error);
