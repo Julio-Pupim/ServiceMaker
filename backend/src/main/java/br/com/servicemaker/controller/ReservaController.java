@@ -1,12 +1,9 @@
 package br.com.servicemaker.controller;
 
-import br.com.servicemaker.DTO.ReservaDTO;
 import br.com.servicemaker.abstractcrud.AbstractController;
 import br.com.servicemaker.domain.Reserva;
-import br.com.servicemaker.domain.Servico;
 import br.com.servicemaker.repository.ReservaRepository;
 import br.com.servicemaker.service.ReservaService;
-import br.com.servicemaker.service.ServicoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
