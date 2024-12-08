@@ -1,6 +1,8 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.domain.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
@@ -34,6 +36,7 @@ public class Prestador extends Usuario {
 
   @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
   @JsonManagedReference("prestador-servico")
+  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
   private List<Servico> servicos;
 
   @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE,
@@ -53,6 +56,7 @@ public class Prestador extends Usuario {
   }
 
   @Override
+  @JsonIgnore
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(Roles.ROLE_PRESTADOR.getRole()),
         new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));

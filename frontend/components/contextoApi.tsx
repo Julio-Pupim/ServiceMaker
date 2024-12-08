@@ -10,6 +10,8 @@ interface User {
   reserva: any;
   avaliacao: any;
   role:any;
+  agenda:any,
+  id: number
 }
 
 interface AuthContextProps {

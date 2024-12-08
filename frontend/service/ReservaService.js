@@ -1,7 +1,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://localhost:8080/api/reserva';
+const API_URL = 'http://localhost:8080/api/reservas';
 
 // Função para recuperar o token do AsyncStorage
 const getAuthToken = async () => {
@@ -60,9 +60,29 @@ const getReservaById = async (id) => {
   }
 };
 
+const getReservaByDataAndUsuario = async (data,usuario) => {
+  try {
+    const response = await axiosInstance.get(`/${usuario}/${data}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao buscar reservas com data e usuario: ${data} ${usuario}`);
+    throw error;
+  }
+};
+
+const getReservaByMesAndUsuario = async (data,usuario) => {
+  try {
+    const response = await axiosInstance.get(`/mes/${usuario}/${data}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao buscar reservas com data e usuario: ${data} ${usuario}`);
+    throw error;
+  }
+};
+
 const createReserva = async (reserva) => {
   try {
-    const response = await axiosInstance.post('/', reserva);
+    const response = await axiosInstance.post('', reserva);
     return response.data;
   } catch (error) {
     console.error('Erro ao criar reserva:', error);
@@ -96,4 +116,6 @@ export default {
   createReserva,
   updateReserva,
   deleteReserva,
+  getReservaByDataAndUsuario,
+  getReservaByMesAndUsuario
 };
