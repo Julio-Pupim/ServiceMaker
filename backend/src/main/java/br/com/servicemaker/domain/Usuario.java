@@ -2,6 +2,7 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
@@ -83,6 +84,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
   }
 
   @Override
+  @JsonIgnore
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(Roles.ROLE_CLIENTE.getRole()));
   }

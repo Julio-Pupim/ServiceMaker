@@ -14,8 +14,8 @@ type editaServicoProps = {
   custo: string;
 }
 
-const agendaClick = ()=>{
-  router.navigate('/(tabs)/agenda')
+const perfilClick = ()=>{
+  router.navigate('/(perfil)/listaservicos')
 }
 
 export default function editaServico({
@@ -44,7 +44,7 @@ export default function editaServico({
       <StatusBar hidden />
       <View style={styles.header}>
         <View style={styles.userText}>
-          <Pressable onPress={agendaClick}>
+          <Pressable onPress={perfilClick}>
             <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
               color="white"
             />
@@ -54,6 +54,7 @@ export default function editaServico({
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+      <Text style={styles.title}>Serviços Cadastrados</Text>
         <View style={styles.formulario}>
           
           <View>
@@ -165,6 +166,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginLeft: 15,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 20,
   },
   scrollViewContainer: {
     paddingBottom: 100,

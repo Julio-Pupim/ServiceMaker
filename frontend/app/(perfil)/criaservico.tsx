@@ -9,7 +9,6 @@ import { router } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 
 
-const usuarioLogado = { id: 1, nome: 'Usuário' };
 const perfilClick =()=>{
   router.navigate('/(tabs)/perfil');
 };
@@ -62,7 +61,7 @@ export default function CriaServico() {
     try {
 
       const servicoData = {
-        prestador: { id: usuarioLogado.id },
+        prestador: { id: user?.id },
         descricao: data.descricao,
         tempoServico: toDateTime(data.tempoServico),
         preco: toNumber(data.preco),
@@ -70,7 +69,7 @@ export default function CriaServico() {
       }
       console.log(servicoData)
       await ServicoService.createServico(servicoData);
-      router.navigate("/(servico)/editaservico");
+      router.back();
 
     } catch (error) {
       console.error('Erro ao cadastrar serviço:', error);
