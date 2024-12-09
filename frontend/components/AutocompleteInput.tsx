@@ -11,8 +11,8 @@ import {
 type AutocompleteInputProps = {
     placeholder: string;
     data: any[];
-    value: string;
-    onChange: (text: string) => void;
+    value: any;
+    onChange: (text: any) => void;
     onSelect: (item: any) => void;
     filterKey: string;
 };
@@ -28,15 +28,15 @@ export const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
     const [showSuggestions, setShowSuggestions] = useState(false);
 
     const filteredData = data.filter((item) =>
-        item[filterKey]?.toLowerCase().includes(value?.toLowerCase())
+        item[filterKey]?.toString().toLowerCase().includes(value.toString().toLowerCase())
     );
-
+    
     return (
         <View style={styles.posicao}>
             <TextInput
                 style={styles.input}
                 placeholder={placeholder}
-                value={value}
+                value={typeof value === 'string' ? value : value?.[filterKey] || ''}
                 onChangeText={(text) => {
                     onChange(text);
                     setShowSuggestions(true);

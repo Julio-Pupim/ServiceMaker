@@ -11,15 +11,17 @@ import ServicoService from '../../service/ServicoService'
 import ReservaService from '../../service/ReservaService'
 import { AutocompleteInput } from '@/components/AutocompleteInput';
 import { useAuth } from '@/components/contextoApi';
+import { Picker } from '@react-native-picker/picker';
 
 type AgendamentoForm = {
   servico: any;
   prestador: any;
-  data: Date | null;
-  horaInicio: string;
-  horaFim: string;
+  dataReserva: Date | null;
+  horarioInicio: string;
+  horarioFim: string;
   status: any,
-  usuario: any
+  cliente: any
+  agenda: any
 };
 
 const calculateHoraFim = (horaInicio: string, tempoServico: string) => {
@@ -93,31 +95,32 @@ export default function Agendamento() {
     defaultValues: {
       prestador: '',
       servico: '',
-      data: parsedDataAgendamento,
-      horaInicio: '',
-      horaFim: '',
+      dataReserva: parsedDataAgendamento,
+      horarioInicio: '',
+      horarioFim: '',
     },
     mode: 'onChange',
   });
 
-
   const handleHoraFimUpdate = (horaInicio: any, servicoSelecionado: any) => {
-    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado);
+    const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado?.descricao);
+    console.log(servicos, servicoSelecionado);
     const tempoServico = servicoEncontrado?.tempoServico ?? '';
 
     const newHoraFim = calculateHoraFim(horaInicio, tempoServico);
     console.log("Calculando horaFim: ", newHoraFim);
 
-    setValue('horaFim', newHoraFim, { shouldDirty: true, shouldTouch: true });
+    setValue('horarioFim', newHoraFim, { shouldDirty: true, shouldTouch: true });
   };
 
   const saveReserva = async (reserva: AgendamentoForm) => {
-    reserva.usuario = { id: 2 };
+    reserva.cliente = user ;
+    reserva.agenda = reserva.prestador?.agenda
     reserva.status = "PENDENTE";
     console.log(reserva);
 
     try {
-   //   await ReservaService.createReserva(reserva);
+      await ReservaService.createReserva(reserva);
       router.navigate("/agenda");
       
     } catch (error) {
@@ -142,88 +145,93 @@ export default function Agendamento() {
         </View>
       </View>
       <Text style={styles.title}>Agendamento</Text>
-      <Controller
-        control={control}
-        name="prestador"
-        rules={{ required: 'Prestador é um campo obrigatório' }}
-        render={({ field: { onChange, value } }) => (
-          <AutocompleteInput
-            placeholder="Digite para buscar prestador"
-            data={prestadores || []}
-            value={value}
-            onChange={onChange}
-            onSelect={(item) => {
-              onChange(item);
-              setServicos(item.servicos || []);
-            }}
-            filterKey="nome"
-          />
-        )}
-      />
-      {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message?.toString()}</Text>}
-
-      <Controller
-        control={control}
-        name="servico"
-        rules={{ required: 'Serviço é um campo obrigatório' }}
-        render={({ field: { onChange, value }, formState }) => (
-          <AutocompleteInput
-            placeholder="Digite para buscar serviço"
-            data={servicos || []}
-            value={value}
-            onChange={(value) => {
-              console.log('onChange:', value);
-              onChange(value)
-              handleHoraFimUpdate(watch('horaInicio'), value);
-              console.log(formState.dirtyFields)
-            }}
-            onSelect={item => {
-              console.log('onSelect:', item.descricao);
-              onChange(item.descricao);
-              handleHoraFimUpdate(watch('horaInicio'), value);
-            }}
-            filterKey="descricao"
-          />
-        )}
-      />
-      {errors.servico && <Text style={styles.errorText}>{errors.servico.message?.toString()}</Text>}
-
-      <View style={styles.dataTempo}>
-        <DateInput
+      <View style={styles.fields}>        
+        <Controller
           control={control}
-          name="data"
-          label="Data de Agendamento"
+          name="prestador"
+          rules={{ required: 'Prestador é um campo obrigatório' }}
+          render={({ field: { onChange, value } }) => (
+            <View>
+              <Text>Prestador</Text>
+              <AutocompleteInput
+                placeholder="Digite para buscar prestador"
+                data={prestadores || []}
+                value={value}
+                onChange={onChange}
+                onSelect={(item) => {
+                  onChange(item);
+                  setServicos(item.servicos || []);
+                }}
+                filterKey="nome"
+              />
+            </View>
+          )}
         />
+        {errors.prestador && <Text style={styles.errorText}>{errors.prestador.message?.toString()}</Text>}
+        
 
-
-        {errors.data && <Text style={styles.errorText}>{errors.data.message}</Text>}
-
-        <TimeInput
-          placeholder="Escolha uma hora de início"
-          value={watch('horaInicio')} // Garanta que o valor observado é usado
-          onChange={(value) => {
-            setValue('horaInicio', value, { shouldDirty: true, shouldTouch: true });
-            handleHoraFimUpdate(value, watch('servico')); // Atualiza também horaFim
-          }}
+        <Controller
+          control={control}
+          name="servico"
+          rules={{ required: 'Serviço é um campo obrigatório' }}
+          render={({ field: { onChange, value }, formState }) => (
+            <View>
+              <Text>Serviço</Text>
+              <AutocompleteInput
+                placeholder="Digite para buscar serviço"
+                data={servicos || []}
+                value={value}
+                onChange={(value) => {
+                  onChange(value);
+                  console.log("Dentro do OnChange do Serviço: ", value)
+                  handleHoraFimUpdate(watch('horarioInicio'), value);
+                }}
+                onSelect={item => {
+                  onChange(item);
+                  handleHoraFimUpdate(watch('horarioInicio'), value);
+                }}
+                filterKey="descricao"
+              />
+            </View>
+          )}
         />
+        {errors.servico && <Text style={styles.errorText}>{errors.servico.message?.toString()}</Text>}
 
-        {errors.horaInicio && <Text style={styles.errorText}>{errors.horaInicio.message}</Text>}
-        <TimeInput
-          placeholder="Previsão de Conclusão"
-          value={watch('horaFim')} // Use o valor diretamente do estado
-          disabled={true}
-        />
+        <View style={styles.dataTempo}>
+          <DateInput
+            control={control}
+            name="data"
+            label="Data de Agendamento"
+          />
 
 
+          {errors.dataReserva && <Text style={styles.errorText}>{errors.dataReserva.message}</Text>}
 
-        <Pressable
-          style={[styles.button]}
-          onPress={handleSubmit(saveReserva)}
-          disabled={!isValid || watch('data') == null}
-        >
-          <Text style={styles.buttonText} >Adicionar Agendamento</Text>
-        </Pressable>
+          <TimeInput
+            placeholder="Escolha uma hora de início"
+            value={watch('horarioInicio')} // Garanta que o valor observado é usado
+            onChange={(value) => {
+              setValue('horarioInicio', value, { shouldDirty: true, shouldTouch: true });
+              console.log("Dentro do OnChange do HoraInicio: ", watch('servico'))
+              handleHoraFimUpdate(value, watch('servico')); // Atualiza também horaFim
+            }}
+          />
 
+          {errors.horarioInicio && <Text style={styles.errorText}>{errors.horarioInicio.message}</Text>}
+          <TimeInput
+            placeholder="Previsão de Conclusão"
+            value={watch('horarioFim')} // Use o valor diretamente do estado
+            disabled={true}
+          />
+          
+          <Pressable
+            style={[styles.button]}
+            onPress={handleSubmit(saveReserva)}
+            disabled={!isValid || watch('dataReserva') == null}
+          >
+            <Text style={styles.buttonText}>Adicionar Agendamento</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -275,6 +283,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonText: {
+    justifyContent: 'center',
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
@@ -296,5 +305,9 @@ const styles = StyleSheet.create({
   dataTempo: {
     paddingRight: 25,
     paddingLeft: 3
+  },
+  fields: {
+    marginLeft: 30,
+    marginRight: 30
   }
 });

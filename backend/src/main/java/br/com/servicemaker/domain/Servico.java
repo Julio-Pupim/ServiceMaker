@@ -23,7 +23,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "prestador")
+@ToString(exclude = {"prestador", "reservas"})
 public class Servico extends AbstractEntity {
 
   private String descricao;
