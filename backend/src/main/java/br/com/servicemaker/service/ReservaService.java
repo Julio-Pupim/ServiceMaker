@@ -18,8 +18,7 @@ public class ReservaService extends AbstractService<Reserva, ReservaRepository> 
   private final EmailService emailService;
 
   @Autowired
-  public ReservaService(ReservaRepository repository, EntityManager em, EmailService emailService,
-      EmailService emailService1) {
+  public ReservaService(ReservaRepository repository, EntityManager em, EmailService emailService1) {
     super(repository, em);
     this.reservaRepository = repository;
     this.emailService = emailService1;
