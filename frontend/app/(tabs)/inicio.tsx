@@ -30,6 +30,33 @@ const Inicio = () => {
     fetchData();
   }, []);
 
+  const renderSetorIcon = (setor: any) => {
+    // Aqui você pode adicionar diferentes ícones com base nas características do setor
+    switch (setor.id) {
+      case 1:
+        return <Ionicons name="water-outline" size={35} color="black" />;
+      case 2:
+        return <Ionicons name="flash-outline" size={35} color="black" />;
+      case 3:
+        return <Ionicons name="school-outline" size={35} color="black" />;
+      case 4:
+        return <Ionicons name="construct-outline" size={35} color="black" />;
+      case 5:
+        return <Ionicons name="car-outline" size={35} color="black" />;
+      case 6:
+        return <Ionicons name="flower-outline" size={35} color="black" />;
+      case 7:
+        return <Ionicons name="image-outline" size={35} color="black" />;
+      case 8:
+        return <Ionicons name="home-outline" size={35} color="black" />;
+      case 9:
+        return <Ionicons name="school-outline" size={35} color="black" />;
+      
+      default:
+        return <Ionicons name="construct-outline" size={35} color="black" />;
+    }
+  };
+
   const profissionalClick = () => {
     router.navigate('/(servico)/prestador');
   };
@@ -66,7 +93,7 @@ const Inicio = () => {
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {setores.map((setor) => (
           <Pressable key={setor.id} style={styles.servicoItem} onPress={prestadorClick}>
-            <Ionicons name="business-outline" size={35} color="black" />
+            {renderSetorIcon(setor)}
             <Text style={styles.servicoText}>{setor.descricao}</Text>
           </Pressable>
         ))}
