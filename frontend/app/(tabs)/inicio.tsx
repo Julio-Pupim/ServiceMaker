@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 import SetorService from '../../service/SetorService';
-import UsuarioService from '../../service/UsuarioService' ;
+import PrestadorService from '../../service/PrestadorService' ;
 
 const Inicio = () => {
   const { user } = useAuth();
@@ -19,7 +19,7 @@ const Inicio = () => {
       try {
         const [setoresData, usuariosData] = await Promise.all([
           SetorService.getAllSetores(),
-          UsuarioService.getAllUsuarios(),
+          PrestadorService.getAllPrestadores(),
         ]);
         setSetores(setoresData);
         setProfissionais(usuariosData);
