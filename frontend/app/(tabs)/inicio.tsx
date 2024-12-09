@@ -85,7 +85,7 @@ const Inicio = () => {
         ))}
       </View>
 
-      <Text style={styles.sectionTitle}>Serviços frequentes</Text>
+      <Text style={styles.sectionTitle}>Setores</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
         {servicosFrequentes.map(servico => (
           <Pressable key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>
