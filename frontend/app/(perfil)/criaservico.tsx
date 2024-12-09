@@ -1,4 +1,4 @@
-import React, {  } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import ServicoService from '../../service/ServicoService'
 import { Setor } from '@/constants/SetorEnum';
 import { router } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
+import SetorService from '../../service/SetorService'
 
 
 const perfilClick =()=>{
@@ -35,6 +36,23 @@ export default function CriaServico() {
     },
     mode: "onChange"
   });
+  
+  const [setores, setSetores] = useState([]);
+
+  useEffect(() => {
+
+    const fetchSetores = async () => {
+      try {
+        const response: any = await SetorService.getAllSetores(); 
+        setSetores(response);
+        console.log(setores);
+      } catch (error) {
+        console.error("Erro ao carregar setores:", error);
+      }
+
+    };
+    fetchSetores();
+  }, []);
 
   const toNumber = (preco: string): number => {
     preco = preco.replace(',', '.');
@@ -207,12 +225,12 @@ export default function CriaServico() {
                 <Picker
                   selectedValue={value}
                   style={styles.input}
-                  onValueChange={(itemValue: Setor) => onChange(itemValue)}
+                  onValueChange={(itemValue: number) => onChange(itemValue)}
                 >
                   <Picker.Item label="Escolha um setor" value={null} />
-                  <Picker.Item label="Setor 1" value={Setor.SETOR1} />
-                  <Picker.Item label="Setor 2" value={Setor.SETOR2} />
-                  <Picker.Item label="Setor 3" value={Setor.SETOR3} />
+                                  {setores.map((setor, index) => (
+                    <Picker.Item key={index} label={setor.descricao} value={setor.id} />
+                  ))}
                 </Picker>
               )}
             />
