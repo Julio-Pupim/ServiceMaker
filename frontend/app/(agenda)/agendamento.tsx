@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { DateInput } from '@/components/DateInput';
 import { TimeInput } from '@/components/HoraInput';
-import PrestadorService from '../../service/prestadorservice'
+import PrestadorService from '../../service/PrestadorService'
 import ServicoService from '../../service/ServicoService'
 import ReservaService from '../../service/ReservaService'
 import { AutocompleteInput } from '@/components/AutocompleteInput';

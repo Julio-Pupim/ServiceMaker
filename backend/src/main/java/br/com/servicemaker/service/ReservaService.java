@@ -15,10 +15,20 @@ public class ReservaService extends AbstractService<Reserva, ReservaRepository> 
 
   private final ReservaRepository reservaRepository;
 
+  private final EmailService emailService;
+
   @Autowired
-  public ReservaService(ReservaRepository repository, EntityManager em) {
+  public ReservaService(ReservaRepository repository, EntityManager em, EmailService emailService1) {
     super(repository, em);
     this.reservaRepository = repository;
+    this.emailService = emailService1;
+  }
+
+  @Override
+  public Reserva save(Reserva entity) {
+    emailService.enviaEmailTexto(entity.getPrestador().getContato().getEmail(), "Nova Reserva", "Você recebeu uma nova solicitação de serviço");
+
+    return super.save(entity);
   }
 
   public List<ReservaDTO> findAllReservasPorData(LocalDate data, Long usuarioId) {

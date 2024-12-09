@@ -1,56 +1,69 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
+import SetorService from '../../service/SetorService';
+import PrestadorService from '../../service/PrestadorService' ;
 
 const Inicio = () => {
-
   const { user } = useAuth();
   const [searchText, setSearchText] = useState('');
+  const [setores, setSetores] = useState([]);
+  const [profissionais, setProfissionais] = useState([]);
 
-  const promocoes = [
-    { id: '1', titulo: 'Serviços de jardinagem', desconto: '20% de desconto' },
-    { id: '2', titulo: 'Reparo de celulares', desconto: '15% de desconto' },
-  ];
+  // Unificando os dois useEffect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [setoresData, usuariosData] = await Promise.all([
+          SetorService.getAllSetores(),
+          PrestadorService.getAllPrestadores(),
+        ]);
+        setSetores(setoresData);
+        setProfissionais(usuariosData);
+      } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const servicosFrequentes = [
-    { id: '1', descricao: 'Encanador', icon: 'construct-outline' },
-    { id: '2', descricao: 'Eletricista', icon: 'flash-outline' },
-    { id: '3', descricao: 'Técnico', icon: 'cog-outline' },
-    { id: '4', descricao: 'Carpinteiro', icon: 'hammer-outline' },
-    { id: '5', descricao: 'Mecânico', icon: 'car-outline' },
-    { id: '6', descricao: 'Jardineiro', icon: 'leaf-outline' },
-    { id: '7', descricao: 'Pintor', icon: 'color-palette-outline' },
-    { id: '8', descricao: 'Designer de interiores', icon: 'home-outline' },
-    { id: '9', descricao: 'Nutricionista', icon: 'restaurant-outline' },
-    { id: '10', descricao: 'Personal Trainer', icon: 'fitness-outline' },
-  ];
-
-  const profissionais = [
-    { id: '1', nome: 'Rafael', icon: 'person-outline' },
-    { id: '2', nome: 'Michelle', icon: 'person-outline' },
-    { id: '3', nome: 'Rodrigo', icon: 'person-outline' },
-    { id: '4', nome: 'Manuel', icon: 'person-outline' },
-    { id: '5', nome: 'Emanuelle', icon: 'person-outline' },
-    { id: '6', nome: 'Fernanda', icon: 'person-outline' },
-    { id: '7', nome: 'Carlos', icon: 'person-outline' },
-    { id: '8', nome: 'Ana', icon: 'person-outline' },
-    { id: '9', nome: 'Juliano', icon: 'person-outline' },
-    { id: '10', nome: 'Patrícia', icon: 'person-outline' },
-    { id: '11', nome: 'Cláudio', icon: 'person-outline' },
-    { id: '12', nome: 'Sofia', icon: 'person-outline' },
-  ];
+  const renderSetorIcon = (setor: any) => {
+    // Aqui você pode adicionar diferentes ícones com base nas características do setor
+    switch (setor.id) {
+      case 1:
+        return <Ionicons name="water-outline" size={35} color="black" />;
+      case 2:
+        return <Ionicons name="flash-outline" size={35} color="black" />;
+      case 3:
+        return <Ionicons name="school-outline" size={35} color="black" />;
+      case 4:
+        return <Ionicons name="construct-outline" size={35} color="black" />;
+      case 5:
+        return <Ionicons name="car-outline" size={35} color="black" />;
+      case 6:
+        return <Ionicons name="flower-outline" size={35} color="black" />;
+      case 7:
+        return <Ionicons name="image-outline" size={35} color="black" />;
+      case 8:
+        return <Ionicons name="home-outline" size={35} color="black" />;
+      case 9:
+        return <Ionicons name="school-outline" size={35} color="black" />;
+      
+      default:
+        return <Ionicons name="construct-outline" size={35} color="black" />;
+    }
+  };
 
   const profissionalClick = () => {
     router.navigate('/(servico)/prestador');
   };
 
-  const prestadorClick =() =>{
+  const prestadorClick = () => {
     router.navigate('/(servico)/prestador');
-  }
-  
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -67,40 +80,31 @@ const Inicio = () => {
       </View>
 
       <View style={styles.pesquisa}>
-        <Ionicons name = "search" size = {20} color = "black" style={styles.iconPesquisa} />
+        <Ionicons name="search" size={20} color="black" style={styles.iconPesquisa} />
         <TextInput
-          style={styles.textoPesquisa}  
-          placeholder="O que você procura hoje?" 
+          style={styles.textoPesquisa}
+          placeholder="O que você procura hoje?"
           value={searchText}
-          onChangeText={setSearchText}  
+          onChangeText={setSearchText}
         />
-        </View>
-
-      <View style={styles.promocoesContainer}>
-        {promocoes.map(promo => (
-          <Pressable key={promo.id} style={styles.promoCard} onPress={prestadorClick}>
-            <Text style={styles.promoTitle}>{promo.titulo}</Text>
-            <Text style={styles.promoDesc}>{promo.desconto}</Text>
-          </Pressable>
-        ))}
       </View>
 
-      <Text style={styles.sectionTitle}>Serviços frequentes</Text>
+      <Text style={styles.sectionTitle}>Setores</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
-        {servicosFrequentes.map(servico => (
-          <Pressable key={servico.id} style={styles.servicoItem} onPress={prestadorClick}>
-            <Ionicons name={servico.icon} size={35} color="black"/>
-            <Text style={styles.servicoText}>{servico.descricao}</Text>
+        {setores.map((setor) => (
+          <Pressable key={setor.id} style={styles.servicoItem} onPress={prestadorClick}>
+            {renderSetorIcon(setor)}
+            <Text style={styles.servicoText}>{setor.descricao}</Text>
           </Pressable>
         ))}
       </ScrollView>
 
       <Text style={styles.sectionTitle}>Encontre profissionais</Text>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.profissionaisScroll}>
-        {profissionais.map(profissional => (
+        {profissionais.map((profissional) => (
           <Pressable key={profissional.id} style={styles.servicoItem} onPress={profissionalClick}>
             <View key={profissional.id} style={styles.profissionalItem}>
-              <Ionicons name={profissional.icon} size={35} color="black"/>
+              <Ionicons name="person-outline" size={35} color="black" />
               <Text style={styles.profissionalNome}>{profissional.nome}</Text>
             </View>
           </Pressable>
@@ -138,31 +142,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 20,
   },
-  subText: {
-    color: 'gray',
-    fontSize: 16,
-    marginLeft: 20,
-    marginBottom: 25,
-  },
-  promocoesContainer: {
+  pesquisa: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginHorizontal: 10,
-  },
-  promoCard: {
-    backgroundColor: '#E0F7FA',
-    padding: 20,
+    alignItems: 'center',
+    marginVertical: 10,
+    backgroundColor: '#f0f0f0',
     borderRadius: 10,
-    width: '45%',
+    paddingHorizontal: 10,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    height: 40,
   },
-  promoTitle: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 5,
+  iconPesquisa: {
+    marginRight: 10,
   },
-  promoDesc: {
-    color: '#00ACC1',
-    fontSize: 15,
+  textoPesquisa: {
+    flex: 1,
+    fontSize: 16,
   },
   sectionTitle: {
     fontSize: 20,
@@ -192,24 +188,6 @@ const styles = StyleSheet.create({
   profissionalNome: {
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  pesquisa:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10, 
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginHorizontal: 20,
-    marginBottom: 20,
-    height: 40,
-  },
-  iconPesquisa: {
-    marginRight: 10
-  },
-  textoPesquisa:{
-    flex: 1,
-    fontSize: 16,
   },
 });
 
