@@ -7,10 +7,12 @@ import br.com.servicemaker.domain.Agenda;
 import br.com.servicemaker.domain.Contato;
 import br.com.servicemaker.domain.Endereco;
 import br.com.servicemaker.domain.Prestador;
+import br.com.servicemaker.domain.Setor;
 import br.com.servicemaker.domain.Usuario;
 import br.com.servicemaker.domain.enums.Roles;
 import br.com.servicemaker.infra.seguranca.TokenService;
 import br.com.servicemaker.repository.UsuarioRepository;
+import br.com.servicemaker.service.SetorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -32,6 +34,7 @@ public class AutenticacaoController {
   private final UsuarioRepository repository;
   private final TokenService tokenService;
   private final BCryptPasswordEncoder passwordEncoder;
+  private final SetorService setorService;
 
   @PostMapping("/login")
   public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthenticationDTO data) {
@@ -54,9 +57,12 @@ public class AutenticacaoController {
     String encryptedPassword = passwordEncoder.encode(data.senha());
     Contato contato = new Contato(data.contato());
     Endereco endereco = new Endereco(data.endereco());
+    Setor setor = setorService.findById(data.setorId());
+
     if (data.prestador()) {
+
       Prestador novoPrestador = new Prestador(data.nome(), data.cpf(), encryptedPassword, contato,
-          endereco, Roles.ROLE_PRESTADOR, new Agenda());
+          endereco, Roles.ROLE_PRESTADOR, new Agenda(), setor);
       endereco.setUsuario(novoPrestador);
       Prestador saved = this.repository.save(novoPrestador);
       return ResponseEntity.ok(saved);

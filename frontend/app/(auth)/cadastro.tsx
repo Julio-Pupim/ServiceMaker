@@ -23,6 +23,7 @@ type CadastroForm = {
   }
   cpf?: string
   prestador: boolean
+  setorId: number
 }
 
 async function handleCadastro(data: CadastroForm) {
@@ -60,7 +61,8 @@ const Cadastro = () => {
         tipo: undefined,
       },
       prestador: false,
-      nome: ''
+      nome: '',
+      setorId: 1,
     },
     mode: "onChange"
   });

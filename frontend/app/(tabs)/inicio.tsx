@@ -47,9 +47,10 @@ const Inicio = () => {
   };
 
   // Navegar para a tela de serviços de um setor
-  const navigateToListaPrestadores = (idSetor: number) => {
-    router.push({ pathname: '/prestador', params: { id: idSetor } });
+  const navigateToListaPrestadores = (setorId: number) => {
+    router.push({ pathname: '/prestador', params: { setorId: setorId } });
   };
+
 
   // Renderizar ícone baseado no ID do setor
   const renderSetorIcon = setor => {

@@ -50,9 +50,11 @@ public class Prestador extends Usuario {
 
   public Prestador(String nome, String cpf, String senha, Contato contato, Endereco endereco,
       Roles role,
-      Agenda agenda) {
+      Agenda agenda,
+       Setor setor){
     super(nome, cpf, senha, contato, endereco, role);
     this.agenda = agenda;
+    this.setor = setor;
   }
 
   @Override

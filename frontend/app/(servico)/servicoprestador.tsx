@@ -21,6 +21,7 @@ const ServicoPrestador = () => {
   
     const fetchData = async () => {
       try {
+        console.log(idPrestador)
         const usuariosData = await ServicoService.getServicosByPrestador(idPrestador.id);
         setServicos(usuariosData);
       } catch (error) {
