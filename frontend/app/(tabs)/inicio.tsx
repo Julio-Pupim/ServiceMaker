@@ -42,13 +42,13 @@ const Inicio = () => {
   );
 
   // Navegar para a tela de serviços de um prestador
-  const navigateToPrestador = (idPrestador: number) => {
+  const navigateToListaServicos = (idPrestador: number) => {
     router.push(`/servicoprestador?id=${idPrestador}`);
   };
 
   // Navegar para a tela de serviços de um setor
-  const navigateToServico = (idSetor: number) => {
-    router.push({ pathname: '/servicosetor', params: { id: idSetor } });
+  const navigateToListaPrestadores = (idSetor: number) => {
+    router.push({ pathname: '/prestador', params: { id: idSetor } });
   };
 
   // Renderizar ícone baseado no ID do setor
@@ -66,7 +66,7 @@ const Inicio = () => {
     };
     return (
       <Ionicons
-        name={icons[setor.id] || 'construct-outline'} // Ícone padrão se o ID não for encontrado
+        name={icons[setor.id] || 'construct-outline'} 
         size={35}
         color="black"
       />
@@ -108,7 +108,7 @@ const Inicio = () => {
             <Pressable
               key={setor.id}
               style={styles.servicoItem}
-              onPress={() => navigateToServico(setor.id)}
+              onPress={() => navigateToListaPrestadores(setor.id)}
             >
               {renderSetorIcon(setor)}
               <Text style={styles.servicoText}>{setor.descricao}</Text>
@@ -130,7 +130,7 @@ const Inicio = () => {
             <Pressable
               key={prestador.id}
               style={styles.servicoItem}
-              onPress={() => navigateToPrestador(prestador.id)}
+              onPress={() => navigateToListaServicos(prestador.id)}
             >
               <Ionicons name="person-outline" size={35} color="black" />
               <Text style={styles.prestadorNome}>{prestador.nome}</Text>
