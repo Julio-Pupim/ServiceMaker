@@ -9,8 +9,7 @@ const Perfil = () => {
   const { user } = useAuth();
 
   const isPrestador = user?.role === 'ROLE_PRESTADOR';
-  console.log(isPrestador)
-  console.log(user?.role)
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -34,13 +33,6 @@ const Perfil = () => {
             <Icon name="edit" size={24} color="white" />
           </Pressable>
         </View>
-
-        {/* Menu comum a todos os usuários */}
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/endereco') }}>
-          <Icon name="location-on" size={24} color="black" />
-          <Text style={styles.menuText}>Gerenciar endereço</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
-        </Pressable>
 
         {/* Menus exclusivos para prestadores */}
         {isPrestador && (

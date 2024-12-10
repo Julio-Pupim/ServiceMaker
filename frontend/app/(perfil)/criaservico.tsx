@@ -37,22 +37,6 @@ export default function CriaServico() {
     mode: "onChange"
   });
   
-  const [setores, setSetores] = useState([]);
-
-  useEffect(() => {
-
-    const fetchSetores = async () => {
-      try {
-        const response: any = await SetorService.getAllSetores(); 
-        setSetores(response);
-        console.log(setores);
-      } catch (error) {
-        console.error("Erro ao carregar setores:", error);
-      }
-
-    };
-    fetchSetores();
-  }, []);
 
   const toNumber = (preco: string): number => {
     preco = preco.replace(',', '.');
@@ -217,24 +201,6 @@ export default function CriaServico() {
             {errors.preco && <Text style={styles.erro}>{errors.preco?.message}</Text>}
           </View>
 
-          <View style={styles.containerInput}>
-            <Controller
-              control={control}
-              name="setor"
-              render={({ field: { onChange, value } }) => (
-                <Picker
-                  selectedValue={value}
-                  style={styles.input}
-                  onValueChange={(itemValue: number) => onChange(itemValue)}
-                >
-                  <Picker.Item label="Escolha um setor" value={null} />
-                                  {setores.map((setor, index) => (
-                    <Picker.Item key={index} label={setor.descricao} value={setor.id} />
-                  ))}
-                </Picker>
-              )}
-            />
-          </View>
           <Pressable style={styles.botaoSalvar} onPress={handleSubmit(onSubmit)}>
             <Text style={styles.textoBotaoSalvar}>Salvar</Text>
           </Pressable>
