@@ -2,28 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { useRouter } from 'expo-router'; // Correção: Alterado para useRouter
+import { useRouter } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 import SetorService from '../../service/SetorService';
 import PrestadorService from '../../service/PrestadorService';
 
 const Inicio = () => {
   const { user } = useAuth();
-  const router = useRouter(); // Correção: Declarado router aqui
+  const router = useRouter();
   const [searchText, setSearchText] = useState('');
   const [setores, setSetores] = useState([]);
-  const [profissionais, setProfissionais] = useState([]);
+  const [prestadores, setPrestadores] = useState([]);
 
-  // Unificando o carregamento de dados
+  // Carregar dados de setores e prestadores
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [setoresData, usuariosData] = await Promise.all([
+        const [setoresData, prestadoresData] = await Promise.all([
           SetorService.getAllSetores(),
           PrestadorService.getAllPrestadores(),
         ]);
-        setSetores(setoresData || []); // Verificando se os dados não são null/undefined
-        setProfissionais(usuariosData || []);
+        setSetores(setoresData || []);
+        setPrestadores(prestadoresData || []);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       }
@@ -36,10 +36,20 @@ const Inicio = () => {
     setor.descricao?.toLowerCase().includes(searchText.toLowerCase())
   );
 
-  // Filtrar profissionais
-  const filteredProfissionais = profissionais.filter(profissional =>
-    profissional.nome?.toLowerCase().includes(searchText.toLowerCase())
+  // Filtrar prestadores
+  const filteredPrestadores = prestadores.filter(prestador =>
+    prestador.nome?.toLowerCase().includes(searchText.toLowerCase())
   );
+
+  // Navegar para a tela de serviços de um prestador
+  const navigateToPrestador = (idPrestador: number) => {
+    router.push(`/servicoprestador?id=${idPrestador}`);
+  };
+
+  // Navegar para a tela de serviços de um setor
+  const navigateToServico = (idSetor: number) => {
+    router.push({ pathname: '/servicosetor', params: { id: idSetor } });
+  };
 
   // Renderizar ícone baseado no ID do setor
   const renderSetorIcon = setor => {
@@ -61,10 +71,6 @@ const Inicio = () => {
         color="black"
       />
     );
-  };
-
-  const navigateToPrestador = () => {
-    router.push('/(servico)/prestador'); // Correção: Utilizado push ao invés de navigate
   };
 
   return (
@@ -102,7 +108,7 @@ const Inicio = () => {
             <Pressable
               key={setor.id}
               style={styles.servicoItem}
-              onPress={navigateToPrestador}
+              onPress={() => navigateToServico(setor.id)}
             >
               {renderSetorIcon(setor)}
               <Text style={styles.servicoText}>{setor.descricao}</Text>
@@ -113,25 +119,25 @@ const Inicio = () => {
         )}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>Encontre profissionais</Text>
+      <Text style={styles.sectionTitle}>Encontre prestadores</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={styles.profissionaisScroll}
+        style={styles.prestadoresScroll}
       >
-        {filteredProfissionais.length > 0 ? (
-          filteredProfissionais.map(profissional => (
+        {filteredPrestadores.length > 0 ? (
+          filteredPrestadores.map(prestador => (
             <Pressable
-              key={profissional.id}
+              key={prestador.id}
               style={styles.servicoItem}
-              onPress={navigateToPrestador}
+              onPress={() => navigateToPrestador(prestador.id)}
             >
               <Ionicons name="person-outline" size={35} color="black" />
-              <Text style={styles.profissionalNome}>{profissional.nome}</Text>
+              <Text style={styles.prestadorNome}>{prestador.nome}</Text>
             </Pressable>
           ))
         ) : (
-          <Text style={styles.noResults}>Nenhum profissional encontrado</Text>
+          <Text style={styles.noResults}>Nenhum prestador encontrado</Text>
         )}
       </ScrollView>
     </ScrollView>
@@ -202,10 +208,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  profissionaisScroll: {
+  prestadoresScroll: {
     marginHorizontal: 20,
   },
-  profissionalNome: {
+  prestadorNome: {
     fontSize: 16,
     fontWeight: 'bold',
   },
