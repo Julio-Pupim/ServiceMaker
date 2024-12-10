@@ -2,8 +2,8 @@ import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Pressable 
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import UsuarioService from '../../service/UsuarioService'
 import { useAuth } from '@/components/contextoApi';
+import PrestadorService from '../../service/PrestadorService' ;
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
@@ -13,7 +13,7 @@ const Prestadores = () => {
 
     const fetchData = async () => {
       try {
-        const usuariosData = await UsuarioService.getAllUsuarios();
+        const usuariosData = await PrestadorService.getAllPrestadores();
         console.log('Dados de usuários:', usuariosData);
         setPrestadores(usuariosData);
       } catch (error) {
