@@ -71,12 +71,12 @@ export default function Agendamento() {
     try {
       if (parsedIdPrestador) {
         const prestador = await PrestadorService.getPrestadorById(parsedIdPrestador);
-        setValue('prestador', prestador?.nome || '');
+        setValue('prestador', prestador || '');
         setServicos(prestador?.servicos || []);
       }
       if (parsedIdServico) {
         const servico = await ServicoService.getServicoById(parsedIdServico);
-        setValue('servico', servico?.descricao || '');
+        setValue('servico', servico || '');
       }
     } catch (error) {
       console.error('Erro ao buscar dados da URL:', error);
@@ -91,7 +91,7 @@ export default function Agendamento() {
     }
   }, []);
 
-  const { control, handleSubmit, formState: { errors, isValid }, watch, setValue, getValues } = useForm<AgendamentoForm>({
+  const { control, handleSubmit,  formState: { errors, isValid }, watch, setValue, getFieldState, getValues } = useForm<AgendamentoForm>({
     defaultValues: {
       prestador: '',
       servico: '',
@@ -104,7 +104,6 @@ export default function Agendamento() {
 
   const handleHoraFimUpdate = (horaInicio: any, servicoSelecionado: any) => {
     const servicoEncontrado = servicos.find(s => s.descricao === servicoSelecionado?.descricao);
-    console.log(servicos, servicoSelecionado);
     const tempoServico = servicoEncontrado?.tempoServico ?? '';
 
     const newHoraFim = calculateHoraFim(horaInicio, tempoServico);
@@ -129,7 +128,6 @@ export default function Agendamento() {
     }
 
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden />
@@ -183,7 +181,6 @@ export default function Agendamento() {
                 value={value}
                 onChange={(value) => {
                   onChange(value);
-                  console.log("Dentro do OnChange do Serviço: ", value)
                   handleHoraFimUpdate(watch('horarioInicio'), value);
                 }}
                 onSelect={item => {
@@ -200,11 +197,9 @@ export default function Agendamento() {
         <View style={styles.dataTempo}>
           <DateInput
             control={control}
-            name="data"
+            name="dataReserva"
             label="Data de Agendamento"
           />
-
-
           {errors.dataReserva && <Text style={styles.errorText}>{errors.dataReserva.message}</Text>}
 
           <TimeInput

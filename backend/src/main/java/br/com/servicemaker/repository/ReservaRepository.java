@@ -15,6 +15,7 @@ public interface ReservaRepository extends AbstractRepository<Reserva> {
   @Query("""
           SELECT new br.com.servicemaker.DTO.ReservaDTO(
               r.prestador.nome,
+              r.cliente.nome,
               r.servico,
               r.status,
               r.horarioInicio,
@@ -23,13 +24,13 @@ public interface ReservaRepository extends AbstractRepository<Reserva> {
           )
           FROM Reserva r
           JOIN r.prestador p
-          JOIN r.servico s
-          WHERE r.dataReserva = :data AND r.cliente.id = :usuarioId
+          WHERE r.dataReserva = :data
+          AND (r.cliente.id = :usuarioId OR p.id = :usuarioId)
       """)
   List<ReservaDTO> findAllReservasPorData(@Param("data") LocalDate data,
       @Param("usuarioId") Long usuarioId);
 
-  @Query("SELECT r.dataReserva FROM Reserva r WHERE r.dataReserva BETWEEN :dataInicio AND :dataFim AND r.cliente.id = :usuarioId")
+  @Query("SELECT r.dataReserva FROM Reserva r WHERE r.dataReserva BETWEEN :dataInicio AND :dataFim AND(r.cliente.id = :usuarioId OR r.prestador.id = :usuarioId)")
   List<LocalDate> findAllByDataReservaBetween(@Param("dataInicio") LocalDate dataInicio,
       @Param("dataFim") LocalDate dataFim, @Param("usuarioId") Long usuarioId);
 

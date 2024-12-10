@@ -2,7 +2,7 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -39,7 +39,7 @@ public class Servico extends AbstractEntity {
   private Prestador prestador;
 
   @OneToMany(mappedBy = "servico")
-  @JsonManagedReference("reservas-servicos")
+  @JsonIgnore
   private List<Reserva> reservas;
 
 }

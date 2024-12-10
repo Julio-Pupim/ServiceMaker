@@ -3,6 +3,7 @@ package br.com.servicemaker.domain;
 import br.com.servicemaker.abstractcrud.AbstractEntity;
 import br.com.servicemaker.domain.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.logging.log4j.util.Strings;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +42,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("CLIENTE")
+@ToString(exclude = {"endereco", "avaliacoes", "reservas"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Usuario extends AbstractEntity implements UserDetails {
 
 
@@ -54,7 +58,7 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @NotBlank
   private String senha;
 
-  @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
   @JsonManagedReference
   private List<Endereco> endereco;
 
@@ -65,12 +69,11 @@ public class Usuario extends AbstractEntity implements UserDetails {
   @JoinColumn(name = "id_contato")
   private Contato contato;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JsonManagedReference("clientes-reservas")
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JsonIgnore
   private List<Reserva> reservas;
 
-  @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-  @JsonManagedReference
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
   private List<Avaliacao> avaliacoes;
 
   public Usuario(String nome, String cpf, String senha, Contato contato, Endereco endereco,

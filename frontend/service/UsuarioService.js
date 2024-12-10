@@ -8,7 +8,6 @@ const getAuthToken = async () => {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       // Ambiente navegador
-      console.log('pegou token', window.localStorage.getItem('jwt_token'))
       return window.localStorage.getItem('jwt_token');
     } else {
       // Ambiente móvel

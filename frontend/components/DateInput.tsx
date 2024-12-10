@@ -12,13 +12,13 @@ export const DateInput = ({ control, name, label }: any) => {
       <Controller
         control={control}
         name={name}
-        rules={{ required: true }}
+        rules={{ required: 'data da reserva é obrigatório' }}
         render={({ field: { onChange, value } }) => (
           <>
             {Platform.OS === 'web' ? (
               <input
                 type="date"
-                value={value ? new Date(value).toISOString().split('T')[0] : ''}
+                value={value ? new Date(value).toISOString().split('T')[0]: ''}
                 onChange={(e) => onChange(e.target.value)}
                 style={{
                   borderWidth: 1,
