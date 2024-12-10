@@ -28,7 +28,7 @@ export default function ListagemDeServicos() {
     const fetchServicos = async () => {
       try {
         const response = await ServicoService.getServicosByPrestador(user?.id);
-        setServicos(response);
+        setServicos(response); // Definir os serviços para o estado
       } catch (error) {
         console.error('Erro ao buscar serviços:', error);
       } finally {
@@ -36,7 +36,7 @@ export default function ListagemDeServicos() {
       }
     };
     fetchServicos();
-  }, []);
+  }, []);  
 
   const perfilClick =()=>{
     router.navigate('/(tabs)/perfil');
@@ -44,12 +44,14 @@ export default function ListagemDeServicos() {
 
   const excluirServico = async (id: number) => {
     try {
-      await ServicoService.deleteServico(id); // Exclui o serviço através do serviço API
-      setServicos(servicos.filter((servico) => servico.id !== id)); // Remove da lista local
+      await ServicoService.deleteServico(id);
+      setServicos(servicos.filter((servico) => servico.id !== id)); 
+      alert('Serviço excluído com sucesso!');
     } catch (error) {
       console.error('Erro ao excluir o serviço:', error);
+      alert('Erro ao excluir o serviço. Tente novamente.');
     }
-  };
+  };  
 
   const renderItem = ({ item }: { item: Servico }) => (
     <View style={styles.servicoItem}>
@@ -60,13 +62,12 @@ export default function ListagemDeServicos() {
       </Text>
 
       <View style={styles.actionButtons}>
-        <Pressable
-          style={styles.button}
-          onPress={() => router.push(`/(servico)/editaservico`)}
-        >
-          <Ionicons name="create" size={20} color="white" />
-          <Text style={styles.buttonText}>Editar</Text>
-        </Pressable>
+      <Pressable
+        style={styles.button}
+        onPress={() =>  router.push({ pathname: "/(tabs)/agenda", params: { idServico: item.id }  }) } >
+        <Ionicons name="create" size={20} color="white" />
+        <Text style={styles.buttonText}>Editar</Text>
+      </Pressable>
 
         <Pressable
           style={[styles.button, styles.buttonExcluir]}
