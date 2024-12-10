@@ -5,6 +5,6 @@ import br.com.servicemaker.domain.Setor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SetorRepository extends AbstractRepository<Setor> {
+public interface SetorRepository extends AbstractRepository<Setor>{
 
 }

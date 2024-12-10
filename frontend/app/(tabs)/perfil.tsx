@@ -5,9 +5,10 @@ import React from 'react';
 import { Text, SafeAreaView, StyleSheet, View, Image, ScrollView, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-
 const Perfil = () => {
   const { user } = useAuth();
+
+  const isPrestador = user?.role === 'ROLE_PRESTADOR';
 
   return (
     <SafeAreaView style={styles.container}>
@@ -26,31 +27,31 @@ const Perfil = () => {
           />
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>Usuário</Text>
-            <Text style={styles.profilePhone}>55 44 1234-5678</Text>
+            <Text style={styles.profilePhone}>{user?.contato.telefone}</Text>
           </View>
           <Pressable style={styles.editButton} onPress={() => { router.navigate('/(perfil)/edicaoperfil') }}>
             <Icon name="edit" size={24} color="white" />
           </Pressable>
         </View>
 
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/endereco') }}>
-          <Icon name="location-on" size={24} color="black" />
-          <Text style={styles.menuText}>Gerenciar endereço</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
-        </Pressable>
+        {/* Menus exclusivos para prestadores */}
+        {isPrestador && (
+          <>
+            <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/criaservico') }}>
+              <Icon name="add" size={24} color="black" />
+              <Text style={styles.menuText}>Cadastrar Serviço</Text>
+              <Ionicons name="chevron-forward" size={20} color="black" />
+            </Pressable>
+            
+            <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/listaservicos') }}>
+              <Icon name="work" size={24} color="black" />
+              <Text style={styles.menuText}>Listar Serviços</Text>
+              <Ionicons name="chevron-forward" size={20} color="black" />
+            </Pressable>
+          </>
+        )}
 
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/criaservico') }}>
-          <Icon name="add" size={24} color="black" />
-          <Text style={styles.menuText}>Cadastrar Serviço</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
-        </Pressable>
-        
-        <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/listaservicos') }}>
-          <Icon name="work" size={24} color="black" />
-          <Text style={styles.menuText}>Listar Serviços</Text>
-          <Ionicons name="chevron-forward" size={20} color="black" />
-        </Pressable>
-        
+        {/* Menu comum a todos os usuários */}
         <Pressable style={styles.menuItem} onPress={() => { router.navigate('/(perfil)/historico') }}>
           <Icon name="history" size={24} color="black" />
           <Text style={styles.menuText}>Histórico de Serviços</Text>

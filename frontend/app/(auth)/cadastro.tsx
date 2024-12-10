@@ -1,10 +1,12 @@
 import axios from 'axios';
 import Checkbox from 'expo-checkbox';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, TextInput, Image, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
+import SetorService from '@/service/SetorService';
+import { Picker } from '@react-native-picker/picker';
 
 type CadastroForm = {
   nome: string,
@@ -23,6 +25,7 @@ type CadastroForm = {
   }
   cpf?: string
   prestador: boolean
+  setorId: number
 }
 
 async function handleCadastro(data: CadastroForm) {
@@ -60,10 +63,29 @@ const Cadastro = () => {
         tipo: undefined,
       },
       prestador: false,
-      nome: ''
+      nome: '',
+      setorId: null,
     },
     mode: "onChange"
   });
+
+  const [setores, setSetores] = useState([]);
+
+  useEffect(() => {
+  
+    const fetchSetores = async () => {
+      try {
+        const response: any = await SetorService.getAllSetores(); 
+        setSetores(response);
+        console.log(setores);
+      } catch (error) {
+        console.error("Erro ao carregar setores:", error);
+      }
+  
+    };
+    fetchSetores();
+  }, []);
+
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={styles.container}>
@@ -254,6 +276,28 @@ const Cadastro = () => {
             />
           )}
         />
+
+        
+
+        <View style={styles.containerInput}>
+            <Controller
+              control={control}
+              name="setorId"
+              render={({ field: { onChange, value } }) => (
+                <Picker
+                  selectedValue={value}
+                  style={styles.input}
+                  onValueChange={(itemValue: number) => onChange(itemValue)}
+                >
+                  <Picker.Item label="Escolha um setor" value={null} />
+                    {setores.map((setor, index) => (
+                    <Picker.Item key={index} label={setor.descricao} value={setor.id} />
+                  ))}
+                </Picker>
+              )}
+            />
+          </View>
+
         <View style={styles.checkboxContainer}>
           <Controller
             control={control}
@@ -346,6 +390,9 @@ const styles = StyleSheet.create({
   redirectText: {
     color: '#000',
     textAlign: 'center',
+  },
+  containerInput: {
+    marginBottom: 20,
   },
 })
 

@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 import SetorService from '../../service/SetorService';
-import PrestadorService from '../../service/PrestadorService' ;
+import PrestadorService from '../../service/PrestadorService';
 
 const Inicio = () => {
   const { user } = useAuth();
+  const router = useRouter();
   const [searchText, setSearchText] = useState('');
   const [setores, setSetores] = useState([]);
-  const [profissionais, setProfissionais] = useState([]);
+  const [prestadores, setPrestadores] = useState([]);
 
-  // Unificando os dois useEffect
+  // Carregar dados de setores e prestadores
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [setoresData, usuariosData] = await Promise.all([
+        const [setoresData, prestadoresData] = await Promise.all([
           SetorService.getAllSetores(),
           PrestadorService.getAllPrestadores(),
         ]);
-        setSetores(setoresData);
-        setProfissionais(usuariosData);
+        setSetores(setoresData || []);
+        setPrestadores(prestadoresData || []);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
       }
@@ -30,39 +31,47 @@ const Inicio = () => {
     fetchData();
   }, []);
 
-  const renderSetorIcon = (setor: any) => {
-    // Aqui você pode adicionar diferentes ícones com base nas características do setor
-    switch (setor.id) {
-      case 1:
-        return <Ionicons name="water-outline" size={35} color="black" />;
-      case 2:
-        return <Ionicons name="flash-outline" size={35} color="black" />;
-      case 3:
-        return <Ionicons name="school-outline" size={35} color="black" />;
-      case 4:
-        return <Ionicons name="construct-outline" size={35} color="black" />;
-      case 5:
-        return <Ionicons name="car-outline" size={35} color="black" />;
-      case 6:
-        return <Ionicons name="flower-outline" size={35} color="black" />;
-      case 7:
-        return <Ionicons name="image-outline" size={35} color="black" />;
-      case 8:
-        return <Ionicons name="home-outline" size={35} color="black" />;
-      case 9:
-        return <Ionicons name="school-outline" size={35} color="black" />;
-      
-      default:
-        return <Ionicons name="construct-outline" size={35} color="black" />;
-    }
+  // Filtrar setores
+  const filteredSetores = setores.filter(setor =>
+    setor.descricao?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  // Filtrar prestadores
+  const filteredPrestadores = prestadores.filter(prestador =>
+    prestador.nome?.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  // Navegar para a tela de serviços de um prestador
+  const navigateToListaServicos = (idPrestador: number) => {
+    router.push(`/servicoprestador?id=${idPrestador}`);
   };
 
-  const profissionalClick = () => {
-    router.navigate('/(servico)/prestador');
+  // Navegar para a tela de serviços de um setor
+  const navigateToListaPrestadores = (setorId: number) => {
+    router.push({ pathname: '/prestador', params: { setorId: setorId } });
   };
 
-  const prestadorClick = () => {
-    router.navigate('/(servico)/prestador');
+
+  // Renderizar ícone baseado no ID do setor
+  const renderSetorIcon = setor => {
+    const icons = {
+      1: 'water-outline',
+      2: 'flash-outline',
+      3: 'school-outline',
+      4: 'construct-outline',
+      5: 'car-outline',
+      6: 'flower-outline',
+      7: 'image-outline',
+      8: 'home-outline',
+      9: 'school-outline',
+    };
+    return (
+      <Ionicons
+        name={icons[setor.id] || 'construct-outline'} 
+        size={35}
+        color="black"
+      />
+    );
   };
 
   return (
@@ -76,7 +85,7 @@ const Inicio = () => {
       </View>
 
       <View>
-        <Text style={styles.greetings}>Olá, {user?.nome}</Text>
+        <Text style={styles.greetings}>Olá, {user?.nome || 'Usuário'}</Text>
       </View>
 
       <View style={styles.pesquisa}>
@@ -90,25 +99,47 @@ const Inicio = () => {
       </View>
 
       <Text style={styles.sectionTitle}>Setores</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.servicosScroll}>
-        {setores.map((setor) => (
-          <Pressable key={setor.id} style={styles.servicoItem} onPress={prestadorClick}>
-            {renderSetorIcon(setor)}
-            <Text style={styles.servicoText}>{setor.descricao}</Text>
-          </Pressable>
-        ))}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.servicosScroll}
+      >
+        {filteredSetores.length > 0 ? (
+          filteredSetores.map(setor => (
+            <Pressable
+              key={setor.id}
+              style={styles.servicoItem}
+              onPress={() => navigateToListaPrestadores(setor.id)}
+            >
+              {renderSetorIcon(setor)}
+              <Text style={styles.servicoText}>{setor.descricao}</Text>
+            </Pressable>
+          ))
+        ) : (
+          <Text style={styles.noResults}>Nenhum setor encontrado</Text>
+        )}
       </ScrollView>
 
-      <Text style={styles.sectionTitle}>Encontre profissionais</Text>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.profissionaisScroll}>
-        {profissionais.map((profissional) => (
-          <Pressable key={profissional.id} style={styles.servicoItem} onPress={profissionalClick}>
-            <View key={profissional.id} style={styles.profissionalItem}>
+      <Text style={styles.sectionTitle}>Encontre prestadores</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.prestadoresScroll}
+      >
+        {filteredPrestadores.length > 0 ? (
+          filteredPrestadores.map(prestador => (
+            <Pressable
+              key={prestador.id}
+              style={styles.servicoItem}
+              onPress={() => navigateToListaServicos(prestador.id)}
+            >
               <Ionicons name="person-outline" size={35} color="black" />
-              <Text style={styles.profissionalNome}>{profissional.nome}</Text>
-            </View>
-          </Pressable>
-        ))}
+              <Text style={styles.prestadorNome}>{prestador.nome}</Text>
+            </Pressable>
+          ))
+        ) : (
+          <Text style={styles.noResults}>Nenhum prestador encontrado</Text>
+        )}
       </ScrollView>
     </ScrollView>
   );
@@ -178,16 +209,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  profissionaisScroll: {
+  prestadoresScroll: {
     marginHorizontal: 20,
   },
-  profissionalItem: {
-    alignItems: 'center',
-    marginRight: 20,
-  },
-  profissionalNome: {
+  prestadorNome: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  noResults: {
+    fontSize: 16,
+    color: 'gray',
+    marginLeft: 20,
   },
 });
 

@@ -18,4 +18,5 @@ public class Setor extends AbstractEntity {
 
   private String descricao;
 
+
 }

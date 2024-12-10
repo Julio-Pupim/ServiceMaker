@@ -91,6 +91,16 @@ const deletePrestador = async (id) => {
   }
 };
 
+const getPrestadoresBySetoresById = async (setorId) => {
+  try {
+    const response = await axiosInstance.get(`/setores/${setorId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Erro ao buscar Prestador pelo Id ${setorId}:`, error);
+    throw error;
+  }
+};
+
 // Exportar todas as funções como um objeto
 export default {
   getAllPrestadores,
@@ -98,4 +108,5 @@ export default {
   createPrestador,
   updatePrestador,
   deletePrestador,
+  getPrestadoresBySetoresById
 };

@@ -1,19 +1,22 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import UsuarioService from '../../service/UsuarioService'
+import { router, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
+import PrestadorService from '../../service/PrestadorService' ;
 
 const Prestadores = () => {
   const [prestadores, setPrestadores] = useState([]);
   const { user } = useAuth();
 
+  const setorId = useLocalSearchParams();
+
   useEffect(() => {
 
     const fetchData = async () => {
       try {
-        const usuariosData = await UsuarioService.getAllUsuarios();
+        console.log(setorId)
+        const usuariosData = await PrestadorService.getPrestadoresBySetoresById(setorId.setorId);
         console.log('Dados de usuários:', usuariosData);
         setPrestadores(usuariosData);
       } catch (error) {
