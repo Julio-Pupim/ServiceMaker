@@ -3,7 +3,6 @@ package br.com.servicemaker.service;
 import br.com.servicemaker.abstractcrud.AbstractService;
 import br.com.servicemaker.domain.Certificado;
 import br.com.servicemaker.repository.CertificadoRepository;
-import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class CertificadoService extends AbstractService<Certificado, CertificadoRepository> {
 
   @Autowired
-  public CertificadoService(CertificadoRepository repository, EntityManager em) {
-    super(repository, em);
+  public CertificadoService(CertificadoRepository repository) {
+    super(repository);
   }
 
 }

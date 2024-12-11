@@ -1,6 +1,5 @@
 package br.com.servicemaker.abstractcrud;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.BeanUtils;
@@ -11,12 +10,10 @@ public abstract class AbstractService<Entity extends AbstractEntity,
     Repository extends AbstractRepository<Entity>> {
 
   private final Repository repository;
-  private final EntityManager em;
 
   @Autowired
-  public AbstractService(Repository repository, EntityManager em) {
+  public AbstractService(Repository repository) {
     this.repository = repository;
-    this.em = em;
   }
 
   public Entity save(Entity entity) {
