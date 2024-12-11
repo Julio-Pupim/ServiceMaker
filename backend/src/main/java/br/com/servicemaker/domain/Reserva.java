@@ -30,22 +30,22 @@ import lombok.ToString;
 public class Reserva extends AbstractEntity {
 
   @NotNull
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
   private Usuario cliente;
 
   @NotNull
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "id_prestador", nullable = false)
   private Prestador prestador;
 
   @NotNull
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "ID_AGENDA", nullable = false)
   private Agenda agenda;
 
   @NotNull
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "ID_SERVICO", nullable = false)
   private Servico servico;
 

@@ -20,7 +20,7 @@ public interface ReservaRepository extends AbstractRepository<Reserva> {
               r.status,
               r.horarioInicio,
               r.horarioFim,
-              r.reservadoEm
+              r.id
           )
           FROM Reserva r
           JOIN r.prestador p

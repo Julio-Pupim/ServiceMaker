@@ -57,10 +57,9 @@ public class AutenticacaoController {
     String encryptedPassword = passwordEncoder.encode(data.senha());
     Contato contato = new Contato(data.contato());
     Endereco endereco = new Endereco(data.endereco());
-    Setor setor = setorService.findById(data.setorId());
 
     if (data.prestador()) {
-
+      Setor setor = setorService.findById(data.setorId());
       Prestador novoPrestador = new Prestador(data.nome(), data.cpf(), encryptedPassword, contato,
           endereco, Roles.ROLE_PRESTADOR, new Agenda(), setor);
       endereco.setUsuario(novoPrestador);
