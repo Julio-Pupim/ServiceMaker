@@ -2,25 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, StatusBar, Alert, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
-import { useForm } from 'react-hook-form';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { obterNomeUsuario } from '@/utils/storageUtils';
 import { useAuth } from '@/components/contextoApi';
-import axios from 'axios';
 import ReservaService from '@/service/ReservaService';
 
-type AgendamentoForm = {
-  servico: string;
-  prestador: string;
-  localizacao: string;
-  anotacao: string;
-};
-
-const inicioClick = () => {
-  router.navigate('/(tabs)/inicio')
-
-}
 
 const Agenda = () => {
   const { user } = useAuth();
@@ -37,6 +23,7 @@ const Agenda = () => {
     try {
       const response = await ReservaService.getReservaByMesAndUsuario(dataMes, user?.id);
       // Supondo que o response retorne um array de strings no formato YYYY-MM-DD
+      console.log(response)
       setDatasComReservas(response);
     } catch (error) {
       console.error('Erro ao buscar dados de reservas:', error);
@@ -73,6 +60,7 @@ const Agenda = () => {
 
       // Marca todas as datas que possuem reservas
       datasComReservas.forEach((date) => {
+        console.log(date);
         newMarkedDates[date] = {
           marked: true,
           dots: [{ key: 'reserva', color: 'blue', selectedDotColor: 'blue' }]
@@ -149,7 +137,7 @@ const Agenda = () => {
               const textColor = reserva.status === 'PENDENTE' ? 'red' : reserva.status === 'CONFIRMADA' ? 'green' : '#000';
               return (
                 <Text key={index} style={[styles.reservaItem, { color: textColor }]}>
-                  {reserva.descricao || `Reserva ${index + 1} - Prestador: ${reserva?.nomePrestador} Serviço: ${reserva?.servico?.descricao} Preco: ${reserva?.servico?.preco} Horário: ${reserva?.horarioInicio} Status: ${reserva?.status}`}
+                  {reserva.descricao || `Reserva ${index + 1} - Prestador: ${reserva?.nomePrestador} - Cliente:${reserva?.nomeCliente} Serviço: ${reserva?.servico?.descricao} Preco: ${reserva?.servico?.preco} Horário: ${reserva?.horarioInicio} Status: ${reserva?.status}`}
                 </Text>
               );
             })

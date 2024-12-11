@@ -1,7 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -26,7 +26,7 @@ public class Agenda extends AbstractEntity {
   private List<CronogramaTrabalho> cronogramas;
 
   @OneToMany(mappedBy = "agenda")
-  @JsonManagedReference("agenda-reservas")
+  @JsonIgnore
   private List<Reserva> reservas;
 
 }

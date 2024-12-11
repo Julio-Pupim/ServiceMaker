@@ -2,7 +2,6 @@ package br.com.servicemaker.controller;
 
 import br.com.servicemaker.abstractcrud.AbstractController;
 import br.com.servicemaker.domain.Prestador;
-import br.com.servicemaker.domain.Servico;
 import br.com.servicemaker.repository.PrestadorRepository;
 import br.com.servicemaker.service.PrestadorService;
 import java.util.List;
@@ -27,7 +26,8 @@ public class PrestadorController extends
   }
 
   @GetMapping("setores/{setorId}")
-  public ResponseEntity<List<Prestador>> findAllPrestadoresBySetores(@PathVariable("setorId") Long idSetor) {
+  public ResponseEntity<List<Prestador>> findAllPrestadoresBySetores(
+      @PathVariable("setorId") Long idSetor) {
     List<Prestador> prestadores = prestadorService.findAllPrestadorBySetores(idSetor);
     return ResponseEntity.ok(prestadores);
   }

@@ -1,7 +1,7 @@
 package br.com.servicemaker.domain;
 
 import br.com.servicemaker.abstractcrud.AbstractEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @EqualsAndHashCode(callSuper = false)
@@ -36,8 +37,15 @@ public class Avaliacao extends AbstractEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_CLIENTE", nullable = false)
-  @JsonBackReference
+  @JsonIgnore
+  @ToString.Exclude
   private Usuario cliente;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_prestador", nullable = false)
+  @ToString.Exclude
+  @JsonIgnore
+  private Prestador prestador;
 
 }
 

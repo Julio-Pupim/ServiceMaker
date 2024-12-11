@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = false)
 @Entity
@@ -34,6 +35,7 @@ public class Endereco extends AbstractEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "ID_USUARIO", nullable = false)
   @JsonBackReference
+  @ToString.Exclude
   private Usuario usuario;
 
   public Endereco(EnderecoDTO enderecoDTO) {

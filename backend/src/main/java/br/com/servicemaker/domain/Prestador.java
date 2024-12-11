@@ -2,11 +2,11 @@ package br.com.servicemaker.domain;
 
 import br.com.servicemaker.domain.enums.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -34,9 +34,9 @@ public class Prestador extends Usuario {
   @JoinColumn(name = "id_agenda", nullable = false, referencedColumnName = "id")
   private Agenda agenda;
 
-  @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+  @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE,
+      CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JsonManagedReference("prestador-servico")
-  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
   private List<Servico> servicos;
 
   @OneToMany(mappedBy = "prestador", cascade = {CascadeType.REMOVE,
@@ -51,7 +51,7 @@ public class Prestador extends Usuario {
   public Prestador(String nome, String cpf, String senha, Contato contato, Endereco endereco,
       Roles role,
       Agenda agenda,
-       Setor setor){
+      Setor setor) {
     super(nome, cpf, senha, contato, endereco, role);
     this.agenda = agenda;
     this.setor = setor;
