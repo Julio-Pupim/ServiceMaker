@@ -27,7 +27,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
           <input
             type="time"
             value={value || ''}
-            onChange={(e) => onChange?(e.target.value) : ''}
+            onChange={(e) => onChange(e.target.value)}
             disabled={disabled}
             style={{
               borderWidth: 1,
@@ -76,7 +76,7 @@ export const TimeInput: React.FC<TimeInputProps> = ({
                     const minutes = selectedTime.getMinutes()
                       .toString()
                       .padStart(2, '0');
-                    onChange?(`${hours}:${minutes}`): '';
+                    onChange(`${hours}:${minutes}`);
                   }
                 }}
               />
