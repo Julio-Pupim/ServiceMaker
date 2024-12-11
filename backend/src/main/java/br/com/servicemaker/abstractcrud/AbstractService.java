@@ -37,14 +37,13 @@ public abstract class AbstractService<Entity extends AbstractEntity,
 
   public List<Entity> getAll(Specification<Entity> specification) {
     return repository.findAll(specification);
-  } //TODO: criar specificationBuilder e criar endpoint passando a entidade;
+  }
 
   public Entity update(Long id, Entity entity) {
     Optional<Entity> entityOptional = repository.findById(id);
     if (entityOptional.isPresent()) {
       Entity entityPresent = entityOptional.get();
-      em.detach(entityPresent);
-      BeanUtils.copyProperties(entity, entityPresent);
+      BeanUtils.copyProperties(entity, entityPresent, "id"); // Ignorar ID ao copiar
       return repository.save(entityPresent);
     }
     return null;

@@ -52,7 +52,7 @@ const Agenda = () => {
 
   useEffect(() => {
     fetchReservasPorMes(today);
-  }, [reservas]);
+  }, []);
 
 
   useEffect(() => {
@@ -92,14 +92,31 @@ const Agenda = () => {
     setSelectedDate(day.dateString);
   };
 
-  const handleEdit = (reservaId: any) => {
-    router.push({ pathname: "/(agenda)/agendamento", params: { reservaId: reservaId } })
+  const aceitaReserva = async (reservaId: any) => {
+    try {
+      const entity = await ReservaService.getReservaById(reservaId);
+      entity.status = "CONFIRMADA";
+      await ReservaService.updateReserva(entity.id, entity);
+
+      // Atualiza o estado local
+      setReservas((prevReservas) =>
+        prevReservas.map((reserva) =>
+          reserva.id === reservaId ? { ...reserva, status: "CONFIRMADA" } : reserva
+        )
+      );
+    } catch (error) {
+      console.error('Erro ao aceitar a reserva:', error);
+      Alert.alert('Erro', 'Não foi possível confirmar a reserva.');
+    }
   };
 
-  const handleDelete = (reservaId: any) => {
+  const recusaReserva = async (reservaId: any) => {
     Alert.alert('Excluir', `Excluir reserva: ${reservaId}`);
-    ReservaService.deleteReserva(reservaId)
-    
+    await ReservaService.deleteReserva(reservaId)
+
+    setReservas((prevReservas) =>
+      prevReservas.filter((reserva) => reserva.id !== reservaId)
+    );
   };
 
   const renderItem = ({ item, index }: any) => {
@@ -107,7 +124,7 @@ const Agenda = () => {
     return (
       <View style={styles.rowFront}>
         <Text style={[styles.reservaText, { color: textColor }]}>
-          {`Reserva: ${index + 1} - Prestador: ${item.nomePrestador} - Cliente: ${item.nomeCliente} - HorárioInicio: ${item.horarioInicio.split(':').slice(0, 2).join(':')} - Preço: ${item.servico.preco}`}
+          {`Reserva: ${index + 1} - Prestador: ${item.nomePrestador} - Cliente: ${item.nomeCliente} - Horário: ${item.horarioInicio.split(':').slice(0, 2).join(':')} - Preço: ${item.servico.preco}`}
         </Text>
       </View>
     );
@@ -115,11 +132,11 @@ const Agenda = () => {
 
   const renderHiddenItem = ({ item }: any) => (
     <View style={styles.rowBack}>
-      <Pressable style={[styles.backButton, styles.editButton]} onPress={() => handleEdit(item.id)}>
-        <Text style={styles.backText}>Editar</Text>
+      <Pressable style={[styles.backButton, styles.editButton]} onPress={() => aceitaReserva(item.id)}>
+        <Text style={styles.backText}>Aceitar</Text>
       </Pressable>
-      <Pressable style={[styles.backButton, styles.deleteButton]} onPress={() => handleDelete(item.id)}>
-        <Text style={styles.backText}>Excluir</Text>
+      <Pressable style={[styles.backButton, styles.deleteButton]} onPress={() => recusaReserva(item.id)}>
+        <Text style={styles.backText}>Recusar</Text>
       </Pressable>
     </View>
   );
@@ -165,10 +182,12 @@ const Agenda = () => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         rightOpenValue={-150}
+        disableLeftSwipe={user?.role === "ROLE_CLIENTE"}
         disableRightSwipe
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={styles.reservasContainer}
       />
+
       {/* Botão de agendar no final da lista */}
       <Pressable style={styles.agendarButton} onPress={() => agandamentoClick(selectedDate)}>
         <Ionicons name="add" size={20} color="white" />
