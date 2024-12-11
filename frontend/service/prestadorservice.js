@@ -16,7 +16,7 @@ const getAuthToken = async () => {
   } catch (error) {
     console.error('Erro ao recuperar token:', error);
     return null;
-  }
+  } 
 };
 
 // Configurar o Axios para adicionar o token no cabeçalho Authorization de cada requisição

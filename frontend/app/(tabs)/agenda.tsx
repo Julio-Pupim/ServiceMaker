@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useAuth } from '@/components/contextoApi';
 import ReservaService from '@/service/ReservaService';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 
 const Agenda = () => {
@@ -48,12 +49,12 @@ const Agenda = () => {
 
     fetchData();
   }, [selectedDate]);
-  
+
   useEffect(() => {
     fetchReservasPorMes(today);
-  }, []);
+  }, [reservas]);
 
-  
+
   useEffect(() => {
     const marcarDatas = () => {
       const newMarkedDates: any = {};
@@ -91,6 +92,37 @@ const Agenda = () => {
     setSelectedDate(day.dateString);
   };
 
+  const handleEdit = (reservaId: any) => {
+    router.push({ pathname: "/(agenda)/agendamento", params: { reservaId: reservaId } })
+  };
+
+  const handleDelete = (reservaId: any) => {
+    Alert.alert('Excluir', `Excluir reserva: ${reservaId}`);
+    ReservaService.deleteReserva(reservaId)
+    
+  };
+
+  const renderItem = ({ item, index }: any) => {
+    const textColor = item.status === 'PENDENTE' ? 'red' : item.status === 'CONFIRMADA' ? 'green' : '#000';
+    return (
+      <View style={styles.rowFront}>
+        <Text style={[styles.reservaText, { color: textColor }]}>
+          {`Reserva: ${index + 1} - Prestador: ${item.nomePrestador} - Cliente: ${item.nomeCliente} - HorárioInicio: ${item.horarioInicio.split(':').slice(0, 2).join(':')} - Preço: ${item.servico.preco}`}
+        </Text>
+      </View>
+    );
+  };
+
+  const renderHiddenItem = ({ item }: any) => (
+    <View style={styles.rowBack}>
+      <Pressable style={[styles.backButton, styles.editButton]} onPress={() => handleEdit(item.id)}>
+        <Text style={styles.backText}>Editar</Text>
+      </Pressable>
+      <Pressable style={[styles.backButton, styles.deleteButton]} onPress={() => handleDelete(item.id)}>
+        <Text style={styles.backText}>Excluir</Text>
+      </Pressable>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -102,54 +134,46 @@ const Agenda = () => {
         </View>
       </View>
 
-      <ScrollView>
-        <Text style={styles.title}>Agenda</Text>
-        <Calendar
-          style={styles.calendar}
-          onDayPress={handleDayPress}
-          current={today}
-          markedDates={markedDates}
-          onMonthChange={(month: any) => {
-            const mesAtual = month.month;
-            const anoAtual = month.year;
-            const dataConsulta = `${anoAtual}-${mesAtual < 10 ? '0' + mesAtual : mesAtual}-01`;
-            fetchReservasPorMes(dataConsulta);
-          }}
+      <Text style={styles.title}>Agenda</Text>
+      <Calendar
+        style={styles.calendar}
+        onDayPress={handleDayPress}
+        current={today}
+        markedDates={markedDates}
+        onMonthChange={(month: any) => {
+          const mesAtual = month.month;
+          const anoAtual = month.year;
+          const dataConsulta = `${anoAtual}-${mesAtual < 10 ? '0' + mesAtual : mesAtual}-01`;
+          fetchReservasPorMes(dataConsulta);
+        }}
 
-          markingType={'multi-dot'}
-          theme={{
-            calendarBackground: '#ffffff',
-            textSectionTitleColor: '#b6c1cd',
-            selectedDayBackgroundColor: '#00ADF5',
-            todayTextColor: '#00ADF5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
-            arrowColor: 'black',
-            monthTextColor: 'black',
-          }}
-        />
+        markingType={'multi-dot'}
+        theme={{
+          calendarBackground: '#ffffff',
+          textSectionTitleColor: '#b6c1cd',
+          selectedDayBackgroundColor: '#00ADF5',
+          todayTextColor: '#00ADF5',
+          dayTextColor: '#2d4150',
+          textDisabledColor: '#d9e1e8',
+          arrowColor: 'black',
+          monthTextColor: 'black',
+        }}
+      />
 
-        <View style={styles.reservasContainer}>
-          {reservas.length === 0 ? (
-            <Text style={styles.noReservasText}>Nenhuma reserva para este dia.</Text>
-          ) : (
-            reservas.map((reserva, index) => {
-              const textColor = reserva.status === 'PENDENTE' ? 'red' : reserva.status === 'CONFIRMADA' ? 'green' : '#000';
-              return (
-                <Text key={index} style={[styles.reservaItem, { color: textColor }]}>
-                  {reserva.descricao || `Reserva ${index + 1} - Prestador: ${reserva?.nomePrestador} - Cliente:${reserva?.nomeCliente} Serviço: ${reserva?.servico?.descricao} Preco: ${reserva?.servico?.preco} Horário: ${reserva?.horarioInicio} Status: ${reserva?.status}`}
-                </Text>
-              );
-            })
-          )}
-
-          {/* Botão de agendar no final da lista */}
-          <Pressable style={styles.agendarButton} onPress={() => agandamentoClick(selectedDate)}>
-            <Ionicons name="add" size={20} color="white" />
-            <Text style={styles.agendarButtonText}>Agendar</Text>
-          </Pressable>
-        </View>
-      </ScrollView>
+      <SwipeListView
+        data={reservas}
+        renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        rightOpenValue={-150}
+        disableRightSwipe
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.reservasContainer}
+      />
+      {/* Botão de agendar no final da lista */}
+      <Pressable style={styles.agendarButton} onPress={() => agandamentoClick(selectedDate)}>
+        <Ionicons name="add" size={20} color="white" />
+        <Text style={styles.agendarButtonText}>Agendar</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -221,7 +245,8 @@ const styles = StyleSheet.create({
   },
   reservasContainer: {
     paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 30,
+    flexGrow: 1
   },
   noReservasText: {
     fontSize: 16,
@@ -246,6 +271,49 @@ const styles = StyleSheet.create({
     color: 'white',
     marginLeft: 5,
     fontSize: 16,
+  },
+  rowFront: {
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#DDD',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+
+  reservaText: {
+    fontSize: 16,
+    flexShrink: 1
+  },
+  backButton: {
+    width: 75,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
+  editButton: {
+    backgroundColor: '#5cb85c',
+  },
+  deleteButton: {
+    backgroundColor: '#d9534f',
+  },
+  backText: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 
