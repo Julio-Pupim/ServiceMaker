@@ -1,43 +1,66 @@
 import { useAuth } from '@/components/contextoApi';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useState, useEffect } from 'react';
 import { Text, SafeAreaView, StyleSheet, View, TextInput, ScrollView, Pressable, StatusBar } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
+import { Picker } from '@react-native-picker/picker';
+import { Setor } from '@/constants/SetorEnum';
+import ServicoService from '../../service/ServicoService';
 
 type editaServicoProps = {
   nome: string;
-  data: string;
+  tempo: string;
   nomePrestador: string;
-  local: string;
   descricaoServico: string;
-  custo: string;
+  preco: string;
+  setor: Setor;
 }
 
-const perfilClick = ()=>{
-  router.navigate('/(perfil)/listaservicos')
-}
+const perfilClick = () => {
+  router.navigate('/(perfil)/listaservicos');
+};
 
-export default function editaServico({
-  nome,
-  data: initialData,
-  custo: initialCusto,
-  nomePrestador,
-  local,
-  descricaoServico,
-}: editaServicoProps) {
-  const [data, setData] = useState<string>(initialData); 
-  const [custo, setCusto] = useState<string>(initialCusto);
+export default function EdicaoServico() {
   const { user } = useAuth();
+  const { idServico } = useLocalSearchParams(); // Pega o parâmetro 'id' da URL
+  const [servico, setServico] = useState<editaServicoProps | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  useEffect(() => {
+    const fetchServico = async () => {
+        try {
+          const response = await ServicoService.getServicoById(idServico);
+          setServico({
+            nome: response.servico,
+            tempo: response.tempoServico,
+            nomePrestador: response.prestador.nome,
+            descricaoServico: response.descricao,
+            preco: response.preco.toFixed(2).replace('.', ','),
+            setor: response.setor,
+          });
+        } catch (error) {
+          console.error('Erro ao buscar o serviço:', error);
+        } finally {
+          setLoading(false);
+        }
+      
+    };
+    
+    fetchServico();
+  }, []);
 
-  const handleChange = (text: string) => {
-    setData(text);
-  };
+  const handleTempoChange = (text: string) => setServico(prev => prev ? { ...prev, tempo: text } : prev);
+  const handlePrecoChange = (text: string) => setServico(prev => prev ? { ...prev, preco: text } : prev);
+  const handleSetorChange = (value: Setor) => setServico(prev => prev ? { ...prev, setor: value } : prev);
 
-  const handleCustoChange = (text: string) => {
-    setCusto(text);
-  };
+  if (loading) {
+    return <Text>Carregando...</Text>;
+  }
+
+  if (!servico) {
+    return <Text>Serviço não encontrado.</Text>;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,70 +68,46 @@ export default function editaServico({
       <View style={styles.header}>
         <View style={styles.userText}>
           <Pressable onPress={perfilClick}>
-            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon}
-              color="white"
-            />
+            <Ionicons name="arrow-back-outline" size={30} style={styles.backIcon} color="white" />
           </Pressable>
           <Ionicons name="person-circle-outline" size={35} color="white" />
           <Text style={styles.userName}>{user?.nome}</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
-      <Text style={styles.title}>Serviços Cadastrados</Text>
+        <Text style={styles.title}>Edição do Serviço</Text>
         <View style={styles.formulario}>
-          
+
           <View>
-            <Text style={styles.label}>Serviço</Text>
+            <Text style={styles.label}>Título do Serviço</Text>
             <View style={styles.wrapperInput}>
               <TextInput
-                value={nome}
+                value={servico.nome}
                 style={styles.input}
-                editable={true}
+                editable={false}
               />
             </View>
           </View>
 
           <View>
-            <Text style={styles.label}>Data</Text>
+            <Text style={styles.label}>Tempo</Text>
             <View style={styles.wrapperInput}>
               <TextInputMask
                 type={'datetime'}
                 options={{
-                  format: 'DD/MM/YYYY',
+                  format: 'HH:mm',
                 }}
-                value={data}
-                onChangeText={handleChange}
+                value={servico.tempo}
+                onChangeText={handleTempoChange}
                 style={styles.input}
                 keyboardType="numeric"
-                maxLength={10}
+                maxLength={5}
               />
             </View>
           </View>
 
           <View>
-            <Text style={styles.label}>Prestador</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={nomePrestador}
-                style={styles.input}
-                editable={true}
-              />
-            </View>
-          </View>
-
-          <View>
-            <Text style={styles.label}>Local</Text>
-            <View style={styles.wrapperInput}>
-              <TextInput
-                value={local}
-                style={styles.input}
-                editable={true} 
-              />
-            </View>
-          </View>
-
-          <View>
-            <Text style={styles.label}>Custo</Text>
+            <Text style={styles.label}>Preço</Text>
             <View style={styles.wrapperInput}>
               <TextInputMask
                 type={'money'}
@@ -117,21 +116,35 @@ export default function editaServico({
                   separator: ',',
                   precision: 2,
                 }}
-                value={custo}
-                onChangeText={handleCustoChange}
+                value={servico.preco}
+                onChangeText={handlePrecoChange}
                 style={styles.input}
                 keyboardType="numeric"
               />
             </View>
           </View>
 
-          <View style={styles.separator} />
+          <View>
+            <Text style={styles.label}>Setor</Text>
+            <View style={styles.wrapperInput}>
+              <Picker
+                selectedValue={servico.setor}
+                style={styles.input}
+                onValueChange={handleSetorChange}
+              >
+                <Picker.Item label="Escolha um setor" value={undefined} />
+                <Picker.Item label="Setor 1" value={Setor.SETOR1} />
+                <Picker.Item label="Setor 2" value={Setor.SETOR2} />
+                <Picker.Item label="Setor 3" value={Setor.SETOR3} />
+              </Picker>
+            </View>
+          </View>
 
           <View>
             <Text style={styles.label}>Descrição</Text>
             <View style={styles.wrapperInput}>
               <TextInput
-                value={descricaoServico}
+                value={servico.descricaoServico}
                 multiline
                 style={[styles.input, styles.inputDescricao]}
                 editable={true}
@@ -206,42 +219,6 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: 'top',
     backgroundColor: '#fff', 
-  },
-  iconEditar: {
-    marginLeft: 10,
-    position: 'absolute',
-    right: 10,
-  },
-  separator: {
-    borderBottomColor: '#000',
-    borderBottomWidth: 1,
-    marginVertical: 10,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  avaliacao: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    marginLeft: 10,
-  },
-  custo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  custoInput: {
-    width: 80,
-    height: 40,
-    textAlign: 'right',
-    backgroundColor: '#fff',
-    borderRadius: 5,
   },
   backIcon: {
     paddingRight: 15,
