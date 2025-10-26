@@ -1,0 +1,44 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: servicemaker-api:dev
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/servicemaker
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_SECRET: ${JWT_SECRET:-local_dev_secret}
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/workspace
+    command: ["./mvnw", "spring-boot:run"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: servicemaker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
