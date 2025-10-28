@@ -1,6 +1,7 @@
 package br.com.servicemaker.auth.adapter.out.persistence;
 
 import br.com.servicemaker.auth.domain.model.RefreshToken;
+import br.com.servicemaker.auth.domain.port_out.RefreshTokenRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 

@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface UsuarioFacade {
     Optional<UsuarioAuthDto> findAuthInfoByEmail(String email);
     Optional<UsuarioAuthDto> findAuthInfoById(UUID id);
+    void registrarUsuario();
 }

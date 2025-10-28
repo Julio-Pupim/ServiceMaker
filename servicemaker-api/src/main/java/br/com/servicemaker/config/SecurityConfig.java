@@ -1,5 +1,8 @@
 package br.com.servicemaker.config;
 
+import br.com.servicemaker.auth.adapter.out.JwtAuthenticationFilter;
+import br.com.servicemaker.auth.infra.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,10 +14,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtTokenProvider tokenProvider;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenProvider tokenProvider) {
+        return new JwtAuthenticationFilter(tokenProvider);
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws  Exception{
        http.authorizeHttpRequests(autorize ->
                autorize.requestMatchers("/auth/**", "/actuator/health").permitAll()
                        .anyRequest().authenticated())

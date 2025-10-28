@@ -1,5 +1,6 @@
 package br.com.servicemaker.auth.infra;
 
+import br.com.servicemaker.auth.domain.port_out.TokenPort;
 import br.com.servicemaker.usuarios.api.dto.UsuarioAuthDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Base64;
 
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider implements TokenPort {
 
     private final String jwtSecret = "CHANGE_ME_PUT_REAL_SECRET";
     private final long accessTokenValiditySeconds = 60 * 15;
@@ -27,23 +28,25 @@ public class JwtTokenProvider {
         return new SecretKeySpec(bytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
-    public String createAccessToken(UsuarioAuthDto user) {
+    public AccessToken createAccessToken(UsuarioAuthDto user) {
         Instant now = Instant.now();
         Date issued = Date.from(now);
         Date exp = Date.from(now.plusSeconds(accessTokenValiditySeconds));
 
         Claims claims = Jwts.claims()
-                .add("email",user.email())
-                .add("roles",user.roles())
+                .add("email", user.email())
+                .add("roles", user.roles())
                 .subject(user.id().toString())
                 .build();
 
-        return Jwts.builder()
+        String tokenValue = Jwts.builder()
                 .claims(claims)
                 .issuedAt(issued)
                 .expiration(exp)
                 .signWith(key())
                 .compact();
+
+        return new AccessToken(tokenValue, this.accessTokenValiditySeconds);
     }
 
     public boolean validate(String token) {
@@ -59,12 +62,12 @@ public class JwtTokenProvider {
         return Jwts.parser().verifyWith(key()).build().parseSignedClaims(token).getPayload();
     }
 
-    // Retorna validade em segundos do access token
+
     public long accessTokenValiditySeconds() {
         return accessTokenValiditySeconds;
     }
 
-    // Hash simples para refresh token — NÃO use this in production sem SALT/pepper
+   @Override
     public String hash(String plain) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

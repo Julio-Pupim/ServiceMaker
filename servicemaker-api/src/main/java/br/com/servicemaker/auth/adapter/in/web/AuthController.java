@@ -1,5 +1,6 @@
 package br.com.servicemaker.auth.adapter.in.web;
 
+import br.com.servicemaker.auth.api.AuthFacade;
 import br.com.servicemaker.auth.api.dto.LoginRequest;
 import br.com.servicemaker.auth.api.dto.RefreshRequest;
 import br.com.servicemaker.auth.api.dto.TokenResponse;
@@ -15,23 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @Data
 @RequestMapping("/auth")
 public class AuthController {
-        private final AuthService svc;
+        private final AuthFacade authFacade;
 
         @PostMapping("/login")
         public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
-                TokenResponse tokens = svc.authenticate(request);
+                TokenResponse tokens = authFacade.authenticate(request);
                 return ResponseEntity.ok(tokens);
         }
 
         @PostMapping("/refresh")
         public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshRequest request) {
-                TokenResponse tokens = svc.refresh(request);
+                TokenResponse tokens = authFacade.refresh(request);
                 return ResponseEntity.ok(tokens);
         }
 
         @PostMapping("/logout")
         public ResponseEntity<Void> logout(@RequestBody RefreshRequest request) {
-                svc.logout(request.refreshToken());
+                authFacade.logout(request.refreshToken());
                 return ResponseEntity.noContent().build();
         }
         @PostMapping("/esqueci-senha")

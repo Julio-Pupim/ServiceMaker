@@ -1,4 +1,4 @@
-package br.com.servicemaker.auth.adapter.out.persistence;
+package br.com.servicemaker.auth.domain.port_out;
 
 import br.com.servicemaker.auth.domain.model.RefreshToken;
 
