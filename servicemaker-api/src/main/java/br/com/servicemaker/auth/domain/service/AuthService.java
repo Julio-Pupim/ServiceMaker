@@ -1,6 +1,7 @@
 package br.com.servicemaker.auth.domain.service;
 
 import br.com.servicemaker.auth.api.AuthFacade;
+import br.com.servicemaker.auth.domain.port_out.PasswordPort;
 import br.com.servicemaker.auth.domain.port_out.RefreshTokenRepository;
 import br.com.servicemaker.auth.api.dto.LoginRequest;
 import br.com.servicemaker.auth.api.dto.RefreshRequest;
@@ -10,9 +11,9 @@ import br.com.servicemaker.auth.domain.port_out.TokenPort;
 import br.com.servicemaker.auth.domain.port_out.UsuarioPort;
 import br.com.servicemaker.auth.infra.JwtTokenProvider;
 import br.com.servicemaker.usuarios.api.dto.UsuarioAuthDto;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
+import br.com.servicemaker.auth.domain.model.AccessToken;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -22,16 +23,16 @@ import java.util.UUID;
 public class AuthService implements AuthFacade {
 
     private final UsuarioPort usuarioPort;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordPort passwordPort;
     private final TokenPort tokenPort;
     private final RefreshTokenRepository refreshRepo;
 
     public AuthService(UsuarioPort usuarioPort,
-                       PasswordEncoder passwordEncoder,
+                       PasswordPort passwordPort,
                        JwtTokenProvider tokenProvider,
                        RefreshTokenRepository refreshRepo) {
         this.usuarioPort = usuarioPort;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordPort = passwordPort;
         this.tokenPort = tokenProvider;
         this.refreshRepo = refreshRepo;
     }
@@ -41,22 +42,18 @@ public class AuthService implements AuthFacade {
         UsuarioAuthDto user = usuarioPort.findByEmail(request.email())
                 .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
 
-        if (!passwordEncoder.matches(request.password(), user.passwordHash())) {
+        if (!passwordPort.matches(request.password(), user.passwordHash())) {
             throw new RuntimeException("Credenciais inválidas");
         }
 
-        TokenPort.AccessToken accessToken = tokenPort.createAccessToken(user);
+        AccessToken accessToken = tokenPort.createAccessToken(user);
         String refreshPlain = UUID.randomUUID().toString();
         String refreshHash = tokenPort.hash(refreshPlain);
-        RefreshToken rt = new RefreshToken(
-                UUID.randomUUID(),
+        RefreshToken rt = RefreshToken.createNew(
                 user.id(),
                 refreshHash,
                 Instant.now(),
-                Instant.now().plus(30, ChronoUnit.DAYS),
-                false,
-                "unknown-device"
-        );
+                "unknown-device");
         refreshRepo.save(rt);
 
         return new TokenResponse(
@@ -66,12 +63,14 @@ public class AuthService implements AuthFacade {
         );
     }
     @Override
+    @Transactional
     public TokenResponse refresh(RefreshRequest request) {
         String provided = request.refreshToken();
         Optional<RefreshToken> stored =
                 refreshRepo.findByTokenHash(tokenPort.hash(provided));
 
         RefreshToken rt = stored.orElseThrow(() -> new RuntimeException("Refresh token inválido"));
+
         if (rt.expiresAt().isBefore(Instant.now()) || rt.revoked()) {
             throw new RuntimeException("Refresh token expirado ou revogado");
         }
@@ -79,9 +78,15 @@ public class AuthService implements AuthFacade {
         UsuarioAuthDto user = usuarioPort.findById(rt.userId())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        TokenPort.AccessToken accessToken= tokenPort.createAccessToken(user);
+        AccessToken accessToken= tokenPort.createAccessToken(user);
 
-         // Opcional: rotação de refresh token — aqui só devolvemos o mesmo refresh
+        String newRefreshPlain = UUID.randomUUID().toString();
+        String newRefreshHash = tokenPort.hash(newRefreshPlain);
+        Instant newExpiry = Instant.now().plus(30, ChronoUnit.DAYS);
+
+        rt.rotate(newRefreshHash, newExpiry);
+        refreshRepo.save(rt);
+
         return new TokenResponse(accessToken.value(), provided, accessToken.expiresInSeconds());
     }
     @Override

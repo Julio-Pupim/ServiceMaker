@@ -1,5 +1,6 @@
 package br.com.servicemaker.auth.infra;
 
+import br.com.servicemaker.auth.domain.model.AccessToken;
 import br.com.servicemaker.auth.domain.port_out.TokenPort;
 import br.com.servicemaker.usuarios.api.dto.UsuarioAuthDto;
 import io.jsonwebtoken.Claims;
@@ -13,16 +14,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 import java.util.Base64;
 
 @Component
 public class JwtTokenProvider implements TokenPort {
 
-    private final String jwtSecret = "CHANGE_ME_PUT_REAL_SECRET";
     private final long accessTokenValiditySeconds = 60 * 15;
 
     private SecretKey key() {
+        String jwtSecret = "CHANGE_ME_PUT_REAL_SECRET";
         byte[] bytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         // usa HS256
         return new SecretKeySpec(bytes, SignatureAlgorithm.HS256.getJcaName());

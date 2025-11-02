@@ -43,13 +43,10 @@ public class JpaRefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
         private RefreshToken toDomain(RefreshTokenEntity e) {
-        return new RefreshToken(
-                e.getId(),
+        return RefreshToken. createNew(
                 e.getUserId(),
                 e.getTokenHash(),
-                e.getIssuedAt(),
                 e.getExpiresAt(),
-                e.isRevoked(),
                 e.getDeviceInfo()
         );
     }
