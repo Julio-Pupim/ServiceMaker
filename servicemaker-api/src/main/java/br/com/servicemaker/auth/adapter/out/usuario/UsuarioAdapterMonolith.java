@@ -12,6 +12,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class UsuarioAdapterMonolith implements UsuarioPort {
+
     private final UsuarioFacade usuarioFacade;
 
     @Override
