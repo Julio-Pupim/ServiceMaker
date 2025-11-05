@@ -23,7 +23,6 @@ import java.util.UUID;
 public class UsuarioEntity {
 
     @Id
-    @UuidGenerator
     private UUID ID;
 
 //    @OneToOne

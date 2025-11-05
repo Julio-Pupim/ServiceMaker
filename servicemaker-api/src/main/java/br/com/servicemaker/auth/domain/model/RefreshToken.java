@@ -1,5 +1,7 @@
 package br.com.servicemaker.auth.domain.model;
 
+import com.github.f4b6a3.uuid.UuidCreator;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,7 +29,7 @@ public final class RefreshToken {
 
 
     public static RefreshToken createNew(UUID userId, String tokenHash, Instant expiresAt, String deviceInfo) {
-        return new RefreshToken(UUID.randomUUID(), userId, tokenHash, Instant.now(), expiresAt, false, deviceInfo);
+        return new RefreshToken(UuidCreator.getTimeOrdered(), userId, tokenHash, Instant.now(), expiresAt, false, deviceInfo);
     }
 
     public static RefreshToken rehydrate(UUID id, UUID userId, String tokenHash, Instant issuedAt,

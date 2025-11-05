@@ -18,7 +18,6 @@ import java.util.UUID;
 public class RefreshTokenEntity {
 
     @Id
-    @UuidGenerator
     @Column(name = "id", nullable = false, updatable = false, columnDefinition = "uuid")
     private UUID id;
 
@@ -39,16 +38,6 @@ public class RefreshTokenEntity {
 
     @Column(name = "device_info", length = 255)
     private String deviceInfo;
-
-    @PrePersist
-    private void prePersist() {
-        if (this.id == null) {
-            this.id = UUID.randomUUID();
-        }
-        if (this.issuedAt == null) {
-            this.issuedAt = Instant.now();
-        }
-    }
 
     @Override
     public boolean equals(Object o) {

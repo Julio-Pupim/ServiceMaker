@@ -17,7 +17,7 @@ import static br.com.servicemaker.usuarios.adapter.out.mapper.UsuarioMapper.toEn
 @AllArgsConstructor
 public class UsuarioRepositoryImpl implements UsuarioRepository {
 
-    private final JpaUsuarioRepositoryImpl jpa;
+    private final JpaUsuarioRepository jpa;
 
     @Override
     public void save(Usuario usuario) {
@@ -26,8 +26,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
 
     @Override
     public Optional<Usuario> findByEmail(String email) {
-        jpa.findByEmail(email).map(UsuarioMapper::toDomain);
-        return Optional.empty();
+        return jpa.findByEmail(email).map(UsuarioMapper::toDomain);
     }
 
 }

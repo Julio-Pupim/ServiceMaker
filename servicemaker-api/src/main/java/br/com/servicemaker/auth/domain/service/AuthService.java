@@ -9,7 +9,6 @@ import br.com.servicemaker.auth.api.dto.TokenResponse;
 import br.com.servicemaker.auth.domain.model.RefreshToken;
 import br.com.servicemaker.auth.domain.port_out.TokenPort;
 import br.com.servicemaker.auth.domain.port_out.UsuarioPort;
-import br.com.servicemaker.auth.infra.JwtTokenProvider;
 import br.com.servicemaker.usuarios.api.dto.UsuarioAuthDto;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -29,11 +28,11 @@ public class AuthService implements AuthFacade {
 
     public AuthService(UsuarioPort usuarioPort,
                        PasswordPort passwordPort,
-                       JwtTokenProvider tokenProvider,
+                       TokenPort tokenPort,
                        RefreshTokenRepository refreshRepo) {
         this.usuarioPort = usuarioPort;
         this.passwordPort = passwordPort;
-        this.tokenPort = tokenProvider;
+        this.tokenPort = tokenPort;
         this.refreshRepo = refreshRepo;
     }
 

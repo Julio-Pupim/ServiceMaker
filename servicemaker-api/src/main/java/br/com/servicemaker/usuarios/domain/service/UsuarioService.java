@@ -2,7 +2,6 @@ package br.com.servicemaker.usuarios.domain.service;
 
 import br.com.servicemaker.usuarios.api.UsuarioFacade;
 import br.com.servicemaker.usuarios.api.dto.UsuarioAuthDto;
-import br.com.servicemaker.usuarios.domain.port_out.PasswordPort;
 import br.com.servicemaker.usuarios.domain.port_out.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class UsuarioService implements UsuarioFacade {
 
     @Override
     public Optional<UsuarioAuthDto> findAuthInfoByEmail(String email) {
-        return Optional.empty();
+        return usuarioRepository.findByEmail(email).map(usuario -> );
     }
 
     @Override

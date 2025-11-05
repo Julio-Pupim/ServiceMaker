@@ -27,12 +27,12 @@ public final class RefreshTokenMapper {
     public static RefreshTokenEntity toEntity(RefreshToken domain){
         if(isNull(domain)) return null;
         return new RefreshTokenEntity(
-                domain.userId(),
+                domain.id(),
                 domain.userId(),
                 domain.tokenHash(),
                 domain.issuedAt(),
                 domain.expiresAt(),
-                domain.isExpired(),
+                domain.revoked(),
                 domain.deviceInfo());
     }
 
