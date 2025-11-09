@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws  Exception{
        http.authorizeHttpRequests(autorize ->
-               autorize.requestMatchers("/auth/**", "/actuator/health").permitAll()
+                       autorize.requestMatchers("/auth/**", "/usuario/registro", "/actuator/health").permitAll()
                        .anyRequest().authenticated())
                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

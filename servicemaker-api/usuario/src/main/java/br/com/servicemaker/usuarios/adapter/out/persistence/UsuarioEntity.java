@@ -56,11 +56,11 @@ public class UsuarioEntity {
     private List<Role> roles;
 
     @CreationTimestamp
-    @Column(name = "creat_at")
+    @Column(name = "created_at")
     private Instant creatAt;
 
     @UpdateTimestamp
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private Instant updateAt;
 
     public UsuarioEntity(UUID ID, String nome, String email, String senhaHash, List<Role> roles) {

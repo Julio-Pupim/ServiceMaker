@@ -2,11 +2,28 @@ FROM maven:3.9-eclipse-temurin-21
 
 WORKDIR /workspace
 
-COPY .mvn/ .mvn/
-COPY mvnw .
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+
+COPY common-security/pom.xml common-security/pom.xml
+COPY auth-api/pom.xml auth-api/pom.xml
+COPY auth/pom.xml auth/pom.xml
+COPY usuarioApi/pom.xml usuarioApi/pom.xml
+COPY usuario/pom.xml usuario/pom.xml
+COPY application/pom.xml application/pom.xml
+
+RUN ./mvnw dependency:go-offline -DskipTests || true
 
 
 EXPOSE 8080
+EXPOSE 5005
 
-CMD ["./mvnw", "spring-boot:run", "-pl", "application", "-am"]
+CMD ["./mvnw", "spring-boot:run", "-pl", "application", \
+     "-Dspring-boot.run.jvmArguments=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms512m -Xmx1024m"]

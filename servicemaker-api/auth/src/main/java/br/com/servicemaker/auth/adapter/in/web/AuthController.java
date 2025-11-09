@@ -5,7 +5,7 @@ import br.com.servicemaker.authapi.api.AuthFacade;
 import br.com.servicemaker.authapi.api.dto.LoginRequest;
 import br.com.servicemaker.authapi.api.dto.RefreshRequest;
 import br.com.servicemaker.authapi.api.dto.TokenResponse;
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Data
+@RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthController {
         private final AuthFacade authFacade;

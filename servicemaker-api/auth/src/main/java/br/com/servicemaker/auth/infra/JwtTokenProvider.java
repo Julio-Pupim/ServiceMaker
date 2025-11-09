@@ -6,6 +6,7 @@ import br.com.servicemaker.usuarioapi.api.dto.UsuarioAuthDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -19,15 +20,22 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider implements TokenPort {
 
-    private final long accessTokenValiditySeconds = 60 * 15;
+    private final String jwtSecret;
+    private final long accessTokenValiditySeconds;
+
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String jwtSecret,
+            @Value("${jwt.expiration-ms:900000}") long expirationMs) {
+        this.jwtSecret = jwtSecret;
+        this.accessTokenValiditySeconds = expirationMs / 1000; // converte ms para segundos
+    }
 
     private SecretKey key() {
-        String jwtSecret = "CHANGE_ME_PUT_REAL_SECRET";
         byte[] bytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
-        // usa HS256
         return new SecretKeySpec(bytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
+    @Override
     public AccessToken createAccessToken(UsuarioAuthDto user) {
         Instant now = Instant.now();
         Date issued = Date.from(now);
@@ -59,22 +67,25 @@ public class JwtTokenProvider implements TokenPort {
     }
 
     public Claims parseClaims(String token) {
-        return Jwts.parser().verifyWith(key()).build().parseSignedClaims(token).getPayload();
+        return Jwts.parser()
+                .verifyWith(key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
-
 
     public long accessTokenValiditySeconds() {
         return accessTokenValiditySeconds;
     }
 
-   @Override
+    @Override
     public String hash(String plain) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] dig = md.digest(plain.getBytes(StandardCharsets.UTF_8));
             return Base64.getEncoder().encodeToString(dig);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao gerar hash", e);
         }
     }
 }

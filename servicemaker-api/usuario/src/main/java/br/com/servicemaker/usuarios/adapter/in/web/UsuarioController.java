@@ -4,6 +4,7 @@ import br.com.servicemaker.usuarioapi.api.UsuarioFacade;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class UsuarioController {
     @PostMapping("/registro")
     public ResponseEntity<Void> registrarUsuario(@RequestBody @Valid UsuarioRequest newUsuario) {
         usuarioFacade.registrarUsuario(newUsuario);
-        return null;
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

@@ -52,7 +52,7 @@ public class AuthService implements AuthFacade {
         RefreshToken rt = RefreshToken.createNew(
                 user.id(),
                 refreshHash,
-                Instant.now(),
+                Instant.now().plus(30, ChronoUnit.DAYS),
                 "unknown-device");
         refreshRepo.save(rt);
 
