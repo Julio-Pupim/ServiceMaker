@@ -17,7 +17,7 @@ services:
         condition: service_healthy
     volumes:
       - ./:/workspace
-    command: ["./mvnw", "spring-boot:run"]
+    command: [ "./mvnw", "spring-boot:run", "-pl", "application", "-am" ]
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health || exit 1"]
       interval: 10s

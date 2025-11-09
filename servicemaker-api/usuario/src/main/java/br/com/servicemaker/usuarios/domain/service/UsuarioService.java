@@ -1,0 +1,61 @@
+package br.com.servicemaker.usuarios.domain.service;
+
+import br.com.servicemaker.PasswordPort;
+import br.com.servicemaker.usuarioapi.api.UsuarioFacade;
+import br.com.servicemaker.usuarioapi.api.dto.UsuarioAuthDto;
+import br.com.servicemaker.usuarioapi.api.dto.UsuarioRequest;
+import br.com.servicemaker.usuarios.domain.model.Role;
+import br.com.servicemaker.usuarios.domain.model.Usuario;
+import br.com.servicemaker.usuarios.domain.port_out.UsuarioRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+@AllArgsConstructor
+public class UsuarioService implements UsuarioFacade {
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordPort passwordPort;
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UsuarioAuthDto> findAuthInfoByEmail(String email) {
+        return usuarioRepository.findByEmail(email).map(usuario ->
+                new UsuarioAuthDto(usuario.id(), usuario.email(), usuario.senhaHash(), usuario.roles().stream().map(Enum::name).toList()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UsuarioAuthDto> findAuthInfoById(UUID id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void registrarUsuario(UsuarioRequest request) {
+        if (usuarioRepository.findByEmail(request.email()).isPresent()) {
+            throw new RuntimeException("Email já cadastrado");
+        }
+        String senhaHash = passwordPort.encode(request.senha());
+        List<Role> domainRoles = request.roles().stream().map(
+                role -> {
+                    try {
+                        return Role.valueOf(role.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        throw new IllegalArgumentException("Role Inválida: " + role);
+                    }
+                }).toList();
+        Usuario novoUsuario = Usuario.createUsuario(
+                request.nome(),
+                request.email(),
+                senhaHash,
+                domainRoles
+        );
+        usuarioRepository.save(novoUsuario);
+    }
+}
