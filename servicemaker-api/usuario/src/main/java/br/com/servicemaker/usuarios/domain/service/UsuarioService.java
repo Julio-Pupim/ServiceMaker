@@ -1,6 +1,6 @@
 package br.com.servicemaker.usuarios.domain.service;
 
-import br.com.servicemaker.PasswordPort;
+import br.com.servicemaker.security.PasswordPort;
 import br.com.servicemaker.usuarioapi.api.UsuarioFacade;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioAuthDto;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioRequest;

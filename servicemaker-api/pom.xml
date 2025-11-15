@@ -22,7 +22,7 @@
 		<developer/>
 	</developers>
 	<modules>
-		<module>common-security</module>
+		<module>common</module>
 		<module>auth</module>
 		<module>usuario</module>
 		<module>auth-api</module>
@@ -52,7 +52,7 @@
 			</dependency>
 			<dependency>
 				<groupId>br.com.servicemaker</groupId>
-				<artifactId>common-security</artifactId>
+				<artifactId>common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

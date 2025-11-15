@@ -20,7 +20,7 @@ spring:
     locations: classpath:db/migration
 
 jwt:
-  secret: ${JWT_SECRET:change_me_local}
+  secret: ${JWT_SECRET:este-e-um-segredo-muito-longo-e-seguro-para-testes-de-jwt-32-bytes}
   expiration-ms: 86400000  # 1 dia
 
 management:

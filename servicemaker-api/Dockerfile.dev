@@ -19,8 +19,14 @@ COPY usuarioApi/pom.xml usuarioApi/pom.xml
 COPY usuario/pom.xml usuario/pom.xml
 COPY application/pom.xml application/pom.xml
 
-RUN ./mvnw dependency:go-offline -DskipTests || true
+COPY common-security/src common-security/src
+COPY auth-api/src auth-api/src
+COPY auth/src auth/src
+COPY usuarioApi/src usuarioApi/src
+COPY usuario/src usuario/src
+COPY application/src application/src
 
+RUN ./mvnw clean install -DskipTests
 
 EXPOSE 8080
 EXPOSE 5005

@@ -1,6 +1,5 @@
 package br.com.servicemaker.auth.domain.service;
 
-import br.com.servicemaker.PasswordPort;
 import br.com.servicemaker.auth.domain.model.AccessToken;
 import br.com.servicemaker.auth.domain.model.RefreshToken;
 import br.com.servicemaker.auth.domain.port_out.RefreshTokenRepository;
@@ -10,8 +9,18 @@ import br.com.servicemaker.authapi.api.AuthFacade;
 import br.com.servicemaker.authapi.api.dto.LoginRequest;
 import br.com.servicemaker.authapi.api.dto.RefreshRequest;
 import br.com.servicemaker.authapi.api.dto.TokenResponse;
+import br.com.servicemaker.security.PasswordPort;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioAuthDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,31 +29,37 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class AuthService implements AuthFacade {
+public class AuthService implements AuthFacade, UserDetailsService {
 
     private final UsuarioPort usuarioPort;
     private final PasswordPort passwordPort;
     private final TokenPort tokenPort;
     private final RefreshTokenRepository refreshRepo;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthService(UsuarioPort usuarioPort,
-                       PasswordPort passwordPort,
-                       TokenPort tokenPort,
-                       RefreshTokenRepository refreshRepo) {
+    public AuthService(UsuarioPort usuarioPort, PasswordPort passwordPort, TokenPort tokenPort,
+                       RefreshTokenRepository refreshRepo, @Lazy AuthenticationManager authenticationManager) {
         this.usuarioPort = usuarioPort;
         this.passwordPort = passwordPort;
         this.tokenPort = tokenPort;
         this.refreshRepo = refreshRepo;
+        this.authenticationManager = authenticationManager;
     }
+
 
     @Override
     public TokenResponse authenticate(LoginRequest request) {
-        UsuarioAuthDto user = usuarioPort.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Credenciais inválidas"));
 
-        if (!passwordPort.matches(request.password(), user.passwordHash())) {
-            throw new RuntimeException("Credenciais inválidas");
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.senha()));
+
+        var userDetails = (UserDetails) authentication.getPrincipal();
+
+        var user = usuarioPort.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado após autenticação"));
+
 
         AccessToken accessToken = tokenPort.createAccessToken(user);
         String refreshPlain = UUID.randomUUID().toString();
@@ -87,11 +102,35 @@ public class AuthService implements AuthFacade {
         rt.rotate(newRefreshHash, newExpiry);
         refreshRepo.save(rt);
 
-        return new TokenResponse(accessToken.value(), provided, accessToken.expiresInSeconds());
+        return new TokenResponse(accessToken.value(), newRefreshPlain, accessToken.expiresInSeconds());
     }
     @Override
     public void logout(String refreshTokenPlain) {
         String hash = tokenPort.hash(refreshTokenPlain);
         refreshRepo.revokeByHash(hash);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // "username" para nós é o email
+        return usuarioPort.findByEmail(username)
+                .map(this::mapToUserDetails)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Usuário não encontrado com o email: " + username)
+                );
+    }
+
+    private UserDetails mapToUserDetails(UsuarioAuthDto usuario) {
+        return User.builder()
+                .username(usuario.email())
+                .password(usuario.senhaHash())
+                .roles(usuario.roles().toArray(new String[0]))
+                .build();
+    }
+
+    private String extractDeviceInfo(HttpServletRequest request) {
+        String userAgent = request.getHeader("User-Agent");
+        String ip = request.getRemoteAddr();
+        return userAgent != null ? userAgent.substring(0, Math.min(100, userAgent.length())) : ip;
     }
 }

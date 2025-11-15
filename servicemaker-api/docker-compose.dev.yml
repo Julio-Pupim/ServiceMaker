@@ -6,30 +6,21 @@ services:
     image: servicemaker-api:dev
     ports:
       - "8080:8080"
+      - "5005:5005"
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: servicemaker
       DB_USER: postgres
       DB_PASS: postgres
-      JWT_SECRET: ${JWT_SECRET:-local_dev_secret_change_me_in_production}
+      JWT_SECRET: ${JWT_SECRET:-este-e-um-segredo-muito-longo-e-seguro-para-testes-de-jwt-32-bytes}
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DEVTOOLS_RESTART_ENABLED: "true"
       SPRING_DEVTOOLS_LIVERELOAD_ENABLED: "true"
-      SPRING_DEVTOOLS_RESTART_POLL_INTERVAL: "2s"
-      SPRING_DEVTOOLS_RESTART_QUIET_PERIOD: "1s"
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - ./:/workspace
-      - /workspace/target
-      - /workspace/application/target
-      - /workspace/auth/target
-      - /workspace/usuario/target
-      - /workspace/common-security/target
-      - /workspace/auth-api/target
-      - /workspace/usuarioApi/target
       - maven-repo:/root/.m2
     networks:
       - servicemaker-network
@@ -41,15 +32,16 @@ services:
       start_period: 60s
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     environment:
       POSTGRES_DB: servicemaker
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql
     networks:
       - servicemaker-network
     healthcheck:
@@ -74,8 +66,11 @@ services:
 
 volumes:
   db-data:
+    name: servicemaker_db_data_pg18
   maven-repo:
+    name: servicemaker_maven_repo
 
 networks:
   servicemaker-network:
+    name: servicemaker_network
     driver: bridge

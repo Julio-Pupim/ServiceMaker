@@ -6,6 +6,6 @@ import java.util.UUID;
 public record UsuarioAuthDto(
         UUID id,
         String email,
-        String passwordHash,
+        String senhaHash,
         List<String> roles) { }
 

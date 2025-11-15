@@ -1,4 +1,4 @@
-package br.com.servicemaker;
+package br.com.servicemaker.security;
 
 public interface PasswordPort {
 

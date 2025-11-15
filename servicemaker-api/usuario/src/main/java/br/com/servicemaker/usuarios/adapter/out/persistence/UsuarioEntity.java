@@ -56,18 +56,19 @@ public class UsuarioEntity {
     private List<Role> roles;
 
     @CreationTimestamp
-    @Column(name = "created_at")
-    private Instant creatAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private Instant updateAt;
 
-    public UsuarioEntity(UUID ID, String nome, String email, String senhaHash, List<Role> roles) {
+    public UsuarioEntity(UUID ID, String nome, String email, String senhaHash, Boolean ativo, List<Role> roles) {
         this.ID = ID;
         this.nome = nome;
         this.email = email;
         this.senhaHash = senhaHash;
+        this.ativo = ativo;
         this.roles = roles;
     }
 

@@ -9,7 +9,7 @@ public final class UsuarioMapper {
 
     public static UsuarioEntity toEntity(Usuario domain){
         return new UsuarioEntity(domain.id(),domain.nome(),
-                    domain.email(), domain.senhaHash(),domain.roles());
+                domain.email(), domain.senhaHash(), true, domain.roles());
     }
 
     public static Usuario toDomain(UsuarioEntity entity){

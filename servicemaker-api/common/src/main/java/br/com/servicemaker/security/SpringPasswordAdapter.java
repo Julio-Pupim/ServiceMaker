@@ -1,4 +1,4 @@
-package br.com.servicemaker;
+package br.com.servicemaker.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
