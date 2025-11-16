@@ -112,7 +112,6 @@ public class AuthService implements AuthFacade, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // "username" para nós é o email
         return usuarioPort.findByEmail(username)
                 .map(this::mapToUserDetails)
                 .orElseThrow(() ->

@@ -4,16 +4,23 @@ import br.com.servicemaker.security.PasswordPort;
 import br.com.servicemaker.usuarioapi.api.UsuarioFacade;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioAuthDto;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioRequest;
+import br.com.servicemaker.usuarioapi.api.dto.UsuarioResponseDto;
+import br.com.servicemaker.usuarioapi.api.dto.UsuarioUpdateDto;
+import br.com.servicemaker.usuarios.adapter.out.mapper.UsuarioMapper;
 import br.com.servicemaker.usuarios.domain.model.Role;
 import br.com.servicemaker.usuarios.domain.model.Usuario;
 import br.com.servicemaker.usuarios.domain.port_out.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static br.com.servicemaker.usuarios.adapter.out.mapper.UsuarioMapper.mapToResponseDto;
+import static br.com.servicemaker.usuarios.domain.model.Usuario.updateUser;
 
 @Service
 @AllArgsConstructor
@@ -58,4 +65,30 @@ public class UsuarioService implements UsuarioFacade {
         );
         usuarioRepository.save(novoUsuario);
     }
+
+    @Override
+    public UsuarioResponseDto findProfileByEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .map(UsuarioMapper::mapToResponseDto) // Converte o Domínio para DTO
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Usuário não encontrado com email: " + email)
+                );
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponseDto updateProfile(String email, UsuarioUpdateDto updateDto) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Usuário não encontrado com email: " + email)
+                );
+
+        Usuario usuarioAtualizado = updateUser(updateDto, usuario);
+
+        usuarioRepository.save(usuarioAtualizado);
+
+        return mapToResponseDto(usuarioAtualizado);
+    }
+
+
 }

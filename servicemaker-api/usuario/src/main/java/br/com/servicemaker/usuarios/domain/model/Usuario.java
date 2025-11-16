@@ -1,5 +1,6 @@
 package br.com.servicemaker.usuarios.domain.model;
 
+import br.com.servicemaker.usuarioapi.api.dto.UsuarioUpdateDto;
 import com.github.f4b6a3.uuid.UuidCreator;
 
 import java.util.List;
@@ -28,6 +29,18 @@ public final class Usuario {
 
     public static Usuario rehydrate(UUID id, String nome, String email, String senhahash, List<Role> roles){
         return new Usuario(id,nome,email,senhahash,roles);
+    }
+
+    public static Usuario updateUser(UsuarioUpdateDto usuarioUpdateDto, Usuario usuario) {
+        if (Objects.isNull(usuarioUpdateDto.nome()) && Objects.isNull(usuarioUpdateDto.email()))
+            throw new IllegalArgumentException("nome e email nulos");
+        if (Objects.isNull(usuarioUpdateDto.nome())) {
+            return new Usuario(usuario.id, usuario.nome, usuarioUpdateDto.email(), usuario.senhaHash, usuario.roles);
+        }
+        if (Objects.isNull(usuarioUpdateDto.email())) {
+            return new Usuario(usuario.id, usuarioUpdateDto.nome(), usuario.email, usuario.senhaHash, usuario.roles);
+        }
+        return new Usuario(usuario.id, usuarioUpdateDto.nome(), usuarioUpdateDto.email(), usuario.senhaHash, usuario.roles);
     }
 
     public UUID id() {
