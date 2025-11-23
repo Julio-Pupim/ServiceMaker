@@ -44,7 +44,7 @@ public class UsuarioService implements UsuarioFacade {
     }
 
     @Override
-    public void registrarUsuario(UsuarioRequest request) {
+    public UUID registrarUsuario(UsuarioRequest request) {
         if (usuarioRepository.findByEmail(request.email()).isPresent()) {
             throw new RuntimeException("Email já cadastrado");
         }
@@ -64,6 +64,7 @@ public class UsuarioService implements UsuarioFacade {
                 domainRoles
         );
         usuarioRepository.save(novoUsuario);
+        return novoUsuario.id();
     }
 
     @Override

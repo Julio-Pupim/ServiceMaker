@@ -12,7 +12,7 @@ public interface UsuarioFacade {
     Optional<UsuarioAuthDto> findAuthInfoByEmail(String email);
     Optional<UsuarioAuthDto> findAuthInfoById(UUID id);
 
-    void registrarUsuario(UsuarioRequest newUsuario);
+    UUID registrarUsuario(UsuarioRequest newUsuario);
 
     UsuarioResponseDto findProfileByEmail(String email);
 

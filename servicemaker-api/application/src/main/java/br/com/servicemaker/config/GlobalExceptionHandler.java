@@ -113,7 +113,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleGenericException(
             Exception ex, HttpServletRequest request
     ) {
-        // Loga o erro completo para depuração
         log.error("Erro inesperado (500) em {}: {}", request.getRequestURI(), ex.getMessage(), ex);
 
         ApiErrorResponse body = new ApiErrorResponse(

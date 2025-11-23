@@ -6,11 +6,14 @@ import br.com.servicemaker.usuarioapi.api.dto.UsuarioResponseDto;
 import br.com.servicemaker.usuarioapi.api.dto.UsuarioUpdateDto;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/usuario")
@@ -21,8 +24,13 @@ public class UsuarioController {
 
     @PostMapping("/registro")
     public ResponseEntity<Void> registrarUsuario(@RequestBody @Valid UsuarioRequest newUsuario) {
-        usuarioFacade.registrarUsuario(newUsuario);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        UUID uuid = usuarioFacade.registrarUsuario(newUsuario);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/usuario/{id}")
+                .buildAndExpand(uuid)
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/me")
