@@ -5,10 +5,10 @@ name: ServiceMaker CI
 on:
   # Em todo push para a branch 'main'
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   # Em todo Pull Request que tenha 'main' como alvo
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   # Nome do Job: "build"
