@@ -13,7 +13,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-// 3. Usa o profile de teste (opcional, mas recomendado)
 @ActiveProfiles("test")
 public abstract class AbstractIntegrationTest {
 
