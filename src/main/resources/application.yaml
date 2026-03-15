@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: serviceMaker
+  datasource:
+    url: jdbc:postgresql://localhost:5432/servicemaker
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
