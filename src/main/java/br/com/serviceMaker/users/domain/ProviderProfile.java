@@ -20,4 +20,12 @@ class ProviderProfile {
         createdAt = Instant.now();
     }
 
+    static ProviderProfile reconstitute(UserId userId, String description, BigDecimal rating, Long reviewCount, Instant createdAt) {
+        ProviderProfile p = new ProviderProfile(userId, description);
+        p.rating = rating;
+        p.reviewCount = reviewCount;
+        p.createdAt = createdAt;
+        return p;
+    }
+
 }

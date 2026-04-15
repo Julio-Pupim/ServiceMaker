@@ -12,4 +12,13 @@ class ClientProfile {
         this.userId = userId;
         createdAt = Instant.now();
     }
+
+    static ClientProfile reconstitute(UserId userId, Instant createdAt) {
+        return new ClientProfile(userId, createdAt);
+    }
+
+    private ClientProfile(UserId userId, Instant createdAt) {
+        this.userId = userId;
+        this.createdAt = createdAt;
+    }
 }
