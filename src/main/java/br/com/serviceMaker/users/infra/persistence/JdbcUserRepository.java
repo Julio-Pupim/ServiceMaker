@@ -5,9 +5,11 @@ import br.com.serviceMaker.shared.Email;
 import br.com.serviceMaker.shared.UserId;
 import br.com.serviceMaker.users.domain.User;
 import br.com.serviceMaker.users.domain.UserRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class JdbcUserRepository implements UserRepository {
 
     @Override

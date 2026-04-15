@@ -1,6 +1,6 @@
 package br.com.serviceMaker.users.domain;
 
-enum UserRole {
+public enum UserRole {
     CLIENT,
     PROVIDER,
     ADMIN

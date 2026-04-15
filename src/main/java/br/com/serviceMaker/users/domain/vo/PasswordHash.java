@@ -1,7 +1,10 @@
 package br.com.serviceMaker.users.domain.vo;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public class PasswordHash {
 
     private final String value;
@@ -16,10 +19,6 @@ public class PasswordHash {
 
     public static PasswordHash of(String value) {
         return new PasswordHash(value);
-    }
-
-    public String getValue() {
-        return value;
     }
 
     @Override
