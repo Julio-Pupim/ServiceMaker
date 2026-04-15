@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# AI tools / IDE state
+.claude/
+.cursor/
+.windsurf/
+.agents/
