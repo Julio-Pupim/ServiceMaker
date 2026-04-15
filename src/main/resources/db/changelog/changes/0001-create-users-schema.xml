@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0001-01" author="julio.pupim">
+        <sql>CREATE SCHEMA IF NOT EXISTS users</sql>
+    </changeSet>
+
+    <changeSet id="0001-02" author="julio.pupim">
+        <createTable schemaName="users" tableName="users">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="cpf" type="varchar(14)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password_hash" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="0001-03" author="julio.pupim">
+        <createTable schemaName="users" tableName="user_roles">
+            <column name="user_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey schemaName="users" tableName="user_roles" columnNames="user_id, role"
+                       constraintName="pk_user_roles"/>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="users"
+                baseTableName="user_roles"
+                baseColumnNames="user_id"
+                referencedTableSchemaName="users"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_user_roles_user_id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="0001-04" author="julio.pupim">
+        <createTable schemaName="users" tableName="client_profiles">
+            <column name="user_id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="users"
+                baseTableName="client_profiles"
+                baseColumnNames="user_id"
+                referencedTableSchemaName="users"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_client_profiles_user_id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="0001-05" author="julio.pupim">
+        <createTable schemaName="users" tableName="provider_profiles">
+            <column name="user_id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="numeric(3,2)"/>
+            <column name="review_count" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="users"
+                baseTableName="provider_profiles"
+                baseColumnNames="user_id"
+                referencedTableSchemaName="users"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_provider_profiles_user_id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>
