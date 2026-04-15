@@ -1,0 +1,81 @@
+# Codebase Concerns
+
+**Analysis Date:** 2026-04-06
+
+## Tech Debt
+Whenever you successfully finish a user task, quickly check if there is anything in the `Tech Debt` list of this file that you can resolve within the same file you just worked on. If there is, fix it and mark it as resolved here.
+**JdbcUserRepository is a stub:**
+
+- Issue: All methods return `Optional.empty()` or `null` — no actual JDBC implementation
+- Files: `src/main/java/br/com/serviceMaker/users/infra/persistence/JdbcUserRepository.java`
+- Why: Project is in early scaffold phase, domain model built first
+- Impact: Use cases compile but do nothing at runtime. `save()` returns `null` which will cause NPE in `RegisterUserUseCase.execute()` (calls `.getId()` on result)
+- Fix approach: Implement using Spring Data JDBC `JdbcTemplate` or `NamedParameterJdbcTemplate`. Must also create Liquibase migration for `users` table.
+
+**Liquibase has only a test table:**
+
+- Issue: Only migration is a `test_table` with no relation to the domain
+- Files: `src/main/resources/db/changelog/db.changelog-master.xml`
+- Why: Initial DB connectivity validation
+- Impact: No actual tables exist for domain entities. All persistence is non-functional.
+- Fix approach: Create proper migrations for `users`, `client_profiles`, `provider_profiles` tables before implementing repositories.
+
+**Empty placeholder classes:**
+
+- Issue: `UserController`, `UsersConfig`, `UserEntityMapper` are empty classes with no implementation
+- Files: `users/api/UserController.java`, `users/infra/config/UsersConfig.java`, `users/infra/persistence/UserEntityMapper.java`
+- Impact: Low — these are scaffolds. But they may confuse about project readiness.
+- Fix approach: Implement as each layer is built out, or remove until needed.
+
+## Security Considerations
+
+**Database credentials in plain text:**
+
+- Risk: PostgreSQL credentials (`postgres/postgres`) hardcoded in `application.yaml`
+- Files: `src/main/resources/application.yaml`
+- Current mitigation: None — acceptable for local dev only
+- Recommendations: Use environment variables or Spring profiles for non-dev environments. Add `application-prod.yaml` with externalized config. Consider Spring Cloud Config or Vault for production.
+
+**No Spring Security configuration:**
+
+- Risk: Spring Security starter is on classpath but no custom `SecurityFilterChain` is configured. Default config will secure all endpoints with a generated password.
+- Files: No security config class exists
+- Current mitigation: Default Spring Security auto-configuration
+- Recommendations: Create explicit `SecurityConfig` with endpoint-level authorization rules before exposing REST APIs.
+
+## Fragile Areas
+
+**Value object inconsistency:**
+
+- Files: `shared/UserId.java` (record), `shared/Email.java` (class), `shared/Cpf.java`, `shared/UserName.java`
+- Why fragile: Mixed approaches — `UserId` is a `record` with auto equals/hashCode, while `Email` is a traditional class with manual equals/hashCode. This inconsistency could lead to subtle bugs if new VOs don't follow the right pattern.
+- Safe modification: Pick one approach (recommend `record` for all simple VOs) and standardize.
+- Test coverage: VOs are tested indirectly through `UserTest`. No dedicated VO tests.
+
+## Test Coverage Gaps
+
+**No repository integration tests:**
+
+- What's not tested: `JdbcUserRepository` (stub, but even when implemented needs tests)
+- Risk: Persistence layer bugs will not be caught. This is the #1 priority gap since persistence is the next implementation step.
+- Priority: High
+- Difficulty to test: Low — Testcontainers infrastructure is already in place
+
+**No controller/API tests:**
+
+- What's not tested: REST endpoints (none exist yet, but `UserController` is scaffolded)
+- Risk: API contract, validation, and HTTP behavior untested
+- Priority: Medium (blocked until controllers are implemented)
+- Difficulty to test: Low — `spring-boot-starter-webmvc-test` with `MockMvc` is on classpath
+
+**No Spring Modulith boundary tests:**
+
+- What's not tested: Module boundary enforcement
+- Risk: Cross-module dependencies could silently form, violating the modular monolith architecture
+- Priority: Medium
+- Difficulty to test: Low — `spring-modulith-starter-test` provides `ApplicationModules.verify()` out of the box
+
+---
+
+_Concerns audit: 2026-04-06_
+_Update as issues are fixed or new ones discovered_
