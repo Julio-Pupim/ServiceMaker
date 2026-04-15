@@ -192,19 +192,19 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] `save(User)` faz INSERT ou UPDATE no users.users + DELETE/INSERT em user_roles + UPSERT em profiles
-- [ ] `findById(UserId)` retorna Optional<User> com agregado completo (roles + profiles) via JOIN
-- [ ] `findByEmail(Email)` retorna Optional<User> com agregado completo
-- [ ] `findByCpf(Cpf)` retorna Optional<User> com agregado completo
-- [ ] Retorna Optional.empty() quando nao encontra
-- [ ] Integration test: `should_save_and_find_user_by_id`
-- [ ] Integration test: `should_find_user_by_email`
-- [ ] Integration test: `should_find_user_by_cpf`
-- [ ] Integration test: `should_return_empty_when_not_found`
-- [ ] Integration test: `should_save_user_with_provider_profile`
-- [ ] Integration test: `should_update_existing_user` (ex: deactivate + save + find)
-- [ ] Gate check passes: `./mvnw test`
-- [ ] Test count: todos os testes existentes + 6 novos integration tests passam
+- [x] `save(User)` faz INSERT ou UPDATE no users.users + DELETE/INSERT em user_roles + UPSERT em profiles
+- [x] `findById(UserId)` retorna Optional<User> com agregado completo (roles + profiles) via JOIN
+- [x] `findByEmail(Email)` retorna Optional<User> com agregado completo
+- [x] `findByCpf(Cpf)` retorna Optional<User> com agregado completo
+- [x] Retorna Optional.empty() quando nao encontra
+- [x] Integration test: `should_save_and_find_user_by_id`
+- [x] Integration test: `should_find_user_by_email`
+- [x] Integration test: `should_find_user_by_cpf`
+- [x] Integration test: `should_return_empty_when_not_found`
+- [x] Integration test: `should_save_user_with_provider_profile`
+- [x] Integration test: `should_update_existing_user` (ex: deactivate + save + find)
+- [x] Gate check passes: `./mvnw test` (37 tests, 0 failures)
+- [x] Test count: todos os testes existentes + 6 novos integration tests passam
 
 **Tests**: integration (Testcontainers PostgreSQL)
 **Gate**: full

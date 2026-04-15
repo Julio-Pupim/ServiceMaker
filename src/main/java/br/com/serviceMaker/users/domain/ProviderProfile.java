@@ -28,4 +28,24 @@ public class ProviderProfile {
         return p;
     }
 
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public Long getReviewCount() {
+        return reviewCount;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
 }

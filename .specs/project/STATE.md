@@ -1,7 +1,7 @@
 # State
 
 **Last Updated:** 2026-04-14
-**Current Work:** M1 - Fundacao (Users module) - Phase 2 in progress. T4 DONE. Next: T5 (JdbcUserRepository + integration tests)
+**Current Work:** M1 - Fundacao (Users module) - Phase 2 DONE (T4, T5). Next: Phase 3 parallel — T6 (use cases + events), T7 (API DTOs), T8 (exception handler), T11 (JWT auth)
 
 ---
 **EXCLUSIVE CURRENT FOCUS:** We are working ONLY on the module listed as "IN PROGRESS" (Currently: `Users` - M1).
@@ -55,7 +55,7 @@ _None yet_
 
 - [ ] Finalizar testes do modulo Users (M1)
 - [ ] Definir gateway de pagamento de baixo custo para M5
-- [ ] Phase 2: T5 (JdbcUserRepository + integration tests)
+- [ ] Phase 3: T6, T7, T8, T11 (paralelos) → T9 → T10
 
 ---
 

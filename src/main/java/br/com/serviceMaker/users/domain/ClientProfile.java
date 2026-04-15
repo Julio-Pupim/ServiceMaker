@@ -21,4 +21,12 @@ public class ClientProfile {
         this.userId = userId;
         this.createdAt = createdAt;
     }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
 }
