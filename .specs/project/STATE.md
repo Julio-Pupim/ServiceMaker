@@ -1,7 +1,7 @@
 # State
 
 **Last Updated:** 2026-04-14
-**Current Work:** M1 - Fundacao (Users module) - Phase 1 DONE (T1, T2, T3 merged). Next: Phase 2 (T4 → T5)
+**Current Work:** M1 - Fundacao (Users module) - Phase 2 in progress. T4 DONE. Next: T5 (JdbcUserRepository + integration tests)
 
 ---
 **EXCLUSIVE CURRENT FOCUS:** We are working ONLY on the module listed as "IN PROGRESS" (Currently: `Users` - M1).
@@ -18,10 +18,14 @@
 
 ## Active Blockers
 
-### BLK-001: Ambiente local com Java 21, pom exige Java 25 (2026-04-14)
-**Impact:** `./mvnw compile` e `./mvnw test` falham sem `-Dmaven.compiler.release=21`.
-**Workaround:** executar com `-Dmaven.compiler.release=21` (agentes de Phase 1 usaram isso com sucesso).
-**Resolucao:** instalar JDK 25 localmente OU ajustar pom.xml para Java 21. Decidir antes de M2.
+_None_
+
+---
+
+## Resolved Blockers
+
+### BLK-001: Ambiente local com Java 21, pom exige Java 25 (resolvido 2026-04-14)
+**Resolucao:** usuario instalou JDK 25 local. `./mvnw compile` e `./mvnw test` rodam sem flags.
 
 ---
 
@@ -51,8 +55,7 @@ _None yet_
 
 - [ ] Finalizar testes do modulo Users (M1)
 - [ ] Definir gateway de pagamento de baixo custo para M5
-- [ ] Phase 2: T4 (UserEntityMapper) → T5 (JdbcUserRepository + integration tests)
-- [ ] Resolver BLK-001 (Java 21 vs Java 25) antes de M2
+- [ ] Phase 2: T5 (JdbcUserRepository + integration tests)
 
 ---
 

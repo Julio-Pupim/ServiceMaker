@@ -5,7 +5,7 @@ import br.com.serviceMaker.shared.UserId;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-class ProviderProfile {
+public class ProviderProfile {
     UserId userId;
     String description;
     BigDecimal rating;
@@ -20,7 +20,7 @@ class ProviderProfile {
         createdAt = Instant.now();
     }
 
-    static ProviderProfile reconstitute(UserId userId, String description, BigDecimal rating, Long reviewCount, Instant createdAt) {
+    public static ProviderProfile reconstitute(UserId userId, String description, BigDecimal rating, Long reviewCount, Instant createdAt) {
         ProviderProfile p = new ProviderProfile(userId, description);
         p.rating = rating;
         p.reviewCount = reviewCount;

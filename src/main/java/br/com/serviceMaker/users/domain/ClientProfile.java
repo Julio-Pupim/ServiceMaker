@@ -4,7 +4,7 @@ import br.com.serviceMaker.shared.UserId;
 
 import java.time.Instant;
 
-class ClientProfile {
+public class ClientProfile {
     private final UserId userId;
     private final Instant createdAt;
 
@@ -13,7 +13,7 @@ class ClientProfile {
         createdAt = Instant.now();
     }
 
-    static ClientProfile reconstitute(UserId userId, Instant createdAt) {
+    public static ClientProfile reconstitute(UserId userId, Instant createdAt) {
         return new ClientProfile(userId, createdAt);
     }
 

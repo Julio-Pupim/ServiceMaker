@@ -162,13 +162,13 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] Metodo `User mapAggregate(List<Map<String, Object>> rows)` implementado
-- [ ] Agrupa multiplas linhas de resultado (JOINs com roles) em um unico User
-- [ ] Extrai roles do campo `role` e monta Set<UserRole>
-- [ ] Extrai ProviderProfile dos campos `provider_*` (nullable — pode ser null)
-- [ ] Extrai ClientProfile dos campos `client_*`
-- [ ] Trata corretamente UUID ↔ UserId, String ↔ Email/Cpf/UserName/PasswordHash
-- [ ] Gate check passes: `./mvnw compile`
+- [x] Metodo `User mapAggregate(List<Map<String, Object>> rows)` implementado
+- [x] Agrupa multiplas linhas de resultado (JOINs com roles) em um unico User
+- [x] Extrai roles do campo `role` e monta Set<UserRole>
+- [x] Extrai ProviderProfile dos campos `provider_*` (nullable — pode ser null)
+- [x] Extrai ClientProfile dos campos `client_*`
+- [x] Trata corretamente UUID ↔ UserId, String ↔ Email/Cpf/UserName/PasswordHash
+- [x] Gate check passes: `./mvnw compile`
 
 **Tests**: none (testado indiretamente via integration test em T5 — mapper e repository sao testados juntos pois mapper sozinho nao tem como ser testado sem ResultSet real)
 **Gate**: build
