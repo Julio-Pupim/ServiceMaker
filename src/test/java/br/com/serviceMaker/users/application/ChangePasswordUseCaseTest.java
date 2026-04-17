@@ -3,9 +3,11 @@ package br.com.serviceMaker.users.application;
 
 import br.com.serviceMaker.shared.UserId;
 import br.com.serviceMaker.users.application.command.ChangePasswordCommand;
+import br.com.serviceMaker.users.domain.PasswordChangedEvent;
 import br.com.serviceMaker.users.domain.PasswordHasher;
 import br.com.serviceMaker.users.domain.User;
 import br.com.serviceMaker.users.domain.UserRepository;
+import br.com.serviceMaker.users.domain.exceptions.InactiveUserException;
 import br.com.serviceMaker.users.domain.exceptions.InvalidPasswordException;
 import br.com.serviceMaker.users.domain.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,12 +15,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+import org.mockito.ArgumentCaptor;
 
 @ExtendWith(MockitoExtension.class)
 class ChangePasswordUseCaseTest {
@@ -29,11 +35,14 @@ class ChangePasswordUseCaseTest {
     @Mock
     private PasswordHasher passwordHasher;
 
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private ChangePasswordUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new ChangePasswordUseCase(userRepository, passwordHasher);
+        useCase = new ChangePasswordUseCase(userRepository, passwordHasher, eventPublisher);
     }
 
     @Test
@@ -87,5 +96,38 @@ class ChangePasswordUseCaseTest {
         assertThrows(InvalidPasswordException.class, () -> useCase.execute(command));
         verify(passwordHasher, never()).hash(any());
         verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void should_publish_PasswordChangedEvent_after_password_change() {
+        User user = User.registerUser("user@email.com", "12345678900", "old_hash", "Julio");
+        var command = new ChangePasswordCommand(user.getId(), "oldRaw", "newRaw");
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(passwordHasher.matches("oldRaw", "old_hash")).thenReturn(true);
+        when(passwordHasher.hash("newRaw")).thenReturn("new_hash");
+        when(userRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        useCase.execute(command);
+
+        var captor = ArgumentCaptor.forClass(Object.class);
+        verify(eventPublisher).publishEvent(captor.capture());
+        assertThat(captor.getValue()).isInstanceOf(PasswordChangedEvent.class);
+        var event = (PasswordChangedEvent) captor.getValue();
+        assertThat(event.userId()).isEqualTo(user.getId().value());
+    }
+
+    @Test
+    void should_propagate_InactiveUserException_from_domain_when_changing_password_for_inactive_user() {
+        User user = User.registerUser("user@email.com", "12345678900", "old_hash", "Julio");
+        user.deactivate();
+        var command = new ChangePasswordCommand(user.getId(), "oldRaw", "newRaw");
+
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(passwordHasher.matches("oldRaw", "old_hash")).thenReturn(true);
+        when(passwordHasher.hash("newRaw")).thenReturn("new_hash");
+
+        assertThrows(InactiveUserException.class, () -> useCase.execute(command));
+        verify(eventPublisher, never()).publishEvent(any());
     }
 }

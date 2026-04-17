@@ -6,6 +6,7 @@ import br.com.serviceMaker.shared.UserId;
 import br.com.serviceMaker.users.application.command.RegisterUserCommand;
 import br.com.serviceMaker.users.domain.PasswordHasher;
 import br.com.serviceMaker.users.domain.User;
+import br.com.serviceMaker.users.domain.UserRegisteredEvent;
 import br.com.serviceMaker.users.domain.UserRepository;
 import br.com.serviceMaker.users.domain.exceptions.CpfAlreadyExistsException;
 import br.com.serviceMaker.users.domain.exceptions.EmailAlreadyExistsException;
@@ -14,13 +15,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
+
+import org.mockito.ArgumentCaptor;
 
 @ExtendWith(MockitoExtension.class)
 class RegisterUserUseCaseTest {
@@ -30,11 +35,14 @@ class RegisterUserUseCaseTest {
     @Mock
     private PasswordHasher passwordHasher;
 
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private RegisterUserUseCase useCase;
 
     @BeforeEach
     void setUp() {
-        useCase = new RegisterUserUseCase(userRepository, passwordHasher);
+        useCase = new RegisterUserUseCase(userRepository, passwordHasher, eventPublisher);
     }
     @Test
     void should_register_user_and_return_id() {
@@ -101,5 +109,23 @@ class RegisterUserUseCaseTest {
         verify(passwordHasher, never()).hash(any());
     }
 
+    @Test
+    void should_publish_UserRegisteredEvent_after_registration() {
+        var command = new RegisterUserCommand("user@email.com", "12345678900", "senha123", "Julio");
+
+        when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
+        when(userRepository.findByCpf(any())).thenReturn(Optional.empty());
+        when(passwordHasher.hash("senha123")).thenReturn("hashed");
+        when(userRepository.save(any(User.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        useCase.execute(command);
+
+        var captor = ArgumentCaptor.forClass(Object.class);
+        verify(eventPublisher).publishEvent(captor.capture());
+        assertThat(captor.getValue()).isInstanceOf(UserRegisteredEvent.class);
+        var event = (UserRegisteredEvent) captor.getValue();
+        assertThat(event.email()).isEqualTo("user@email.com");
+        assertThat(event.name()).isEqualTo("Julio");
+    }
 
 }

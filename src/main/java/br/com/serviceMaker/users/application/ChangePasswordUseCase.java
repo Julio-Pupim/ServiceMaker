@@ -1,19 +1,24 @@
 package br.com.serviceMaker.users.application;
 
 import br.com.serviceMaker.users.application.command.ChangePasswordCommand;
+import br.com.serviceMaker.users.domain.PasswordChangedEvent;
 import br.com.serviceMaker.users.domain.PasswordHasher;
 import br.com.serviceMaker.users.domain.User;
 import br.com.serviceMaker.users.domain.UserRepository;
 import br.com.serviceMaker.users.domain.exceptions.InvalidPasswordException;
 import br.com.serviceMaker.users.domain.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
 public class ChangePasswordUseCase {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
+    private final ApplicationEventPublisher eventPublisher;
 
     public void execute(ChangePasswordCommand command) {
 
@@ -27,5 +32,10 @@ public class ChangePasswordUseCase {
         user.changePassword(passwordHasher.hash(command.newPassword()));
 
         userRepository.save(user);
+
+        eventPublisher.publishEvent(new PasswordChangedEvent(
+                user.getId().value(),
+                Instant.now()
+        ));
     }
 }

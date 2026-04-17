@@ -6,17 +6,23 @@ import br.com.serviceMaker.shared.UserId;
 import br.com.serviceMaker.users.application.command.RegisterUserCommand;
 import br.com.serviceMaker.users.domain.PasswordHasher;
 import br.com.serviceMaker.users.domain.User;
+import br.com.serviceMaker.users.domain.UserRegisteredEvent;
 import br.com.serviceMaker.users.domain.UserRepository;
 import br.com.serviceMaker.users.domain.exceptions.CpfAlreadyExistsException;
 import br.com.serviceMaker.users.domain.exceptions.EmailAlreadyExistsException;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Service
 @AllArgsConstructor
 public class RegisterUserUseCase {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
+    private final ApplicationEventPublisher eventPublisher;
+
     public UserId execute(RegisterUserCommand command) {
         userRepository.findByEmail(Email.of(command.email()))
                 .ifPresent(u -> { throw new EmailAlreadyExistsException(command.email()); });
@@ -33,7 +39,16 @@ public class RegisterUserUseCase {
                 command.name()
         );
 
-        return userRepository.save(user).getId();
+        User saved = userRepository.save(user);
+
+        eventPublisher.publishEvent(new UserRegisteredEvent(
+                saved.getId().value(),
+                saved.getEmail().getValue(),
+                saved.getName().getValue(),
+                Instant.now()
+        ));
+
+        return saved.getId();
     }
 
 }
