@@ -10,3 +10,8 @@ spring:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
 
+app:
+  jwt:
+    secret: your-256-bit-secret-key-for-development-only-change-in-production-please
+    expiration-seconds: 3600
+
