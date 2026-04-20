@@ -1,16 +1,19 @@
 # Codebase Concerns
 
 **Analysis Date:** 2026-04-06
+**Last Updated:** 2026-04-18
 
 ## Tech Debt
+
 Whenever you successfully finish a user task, quickly check if there is anything in the `Tech Debt` list of this file that you can resolve within the same file you just worked on. If there is, fix it and mark it as resolved here.
+
 **JdbcUserRepository is a stub:**
 
 - Issue: All methods return `Optional.empty()` or `null` — no actual JDBC implementation
 - Files: `src/main/java/br/com/serviceMaker/users/infra/persistence/JdbcUserRepository.java`
 - Why: Project is in early scaffold phase, domain model built first
 - Impact: Use cases compile but do nothing at runtime. `save()` returns `null` which will cause NPE in `RegisterUserUseCase.execute()` (calls `.getId()` on result)
-- Fix approach: Implement using Spring Data JDBC `JdbcTemplate` or `NamedParameterJdbcTemplate`. Must also create Liquibase migration for `users` table.
+- Fix approach: Implement using `NamedParameterJdbcTemplate`. Must also create Liquibase migration for `users` schema tables.
 
 **Liquibase has only a test table:**
 
@@ -18,7 +21,7 @@ Whenever you successfully finish a user task, quickly check if there is anything
 - Files: `src/main/resources/db/changelog/db.changelog-master.xml`
 - Why: Initial DB connectivity validation
 - Impact: No actual tables exist for domain entities. All persistence is non-functional.
-- Fix approach: Create proper migrations for `users`, `client_profiles`, `provider_profiles` tables before implementing repositories.
+- Fix approach: Create proper migrations under `db/changelog/users/` directory following the per-module structure defined in INTEGRATIONS.md.
 
 **Empty placeholder classes:**
 
@@ -26,6 +29,13 @@ Whenever you successfully finish a user task, quickly check if there is anything
 - Files: `users/api/UserController.java`, `users/infra/config/UsersConfig.java`, `users/infra/persistence/UserEntityMapper.java`
 - Impact: Low — these are scaffolds. But they may confuse about project readiness.
 - Fix approach: Implement as each layer is built out, or remove until needed.
+
+**Domain naming not yet in Portuguese:**
+
+- Issue: All domain classes use English names (`User`, `ProviderProfile`, `EmailAlreadyExistsException`) but the project directive requires Portuguese domain language.
+- Files: All files under `users/domain/`, `shared/`
+- Impact: Medium — creates inconsistency between documentation (GLOSSARY.md, CONVENTIONS.md) and code. New code may follow conflicting patterns.
+- Fix approach: Rename incrementally during Phase 2 implementation. See GLOSSARY.md for canonical names. Prioritize renaming during tasks that already touch these files.
 
 ## Security Considerations
 
@@ -41,7 +51,7 @@ Whenever you successfully finish a user task, quickly check if there is anything
 - Risk: Spring Security starter is on classpath but no custom `SecurityFilterChain` is configured. Default config will secure all endpoints with a generated password.
 - Files: No security config class exists
 - Current mitigation: Default Spring Security auto-configuration
-- Recommendations: Create explicit `SecurityConfig` with endpoint-level authorization rules before exposing REST APIs.
+- Recommendations: Create explicit `SecurityConfig` with endpoint-level authorization rules before exposing REST APIs. Planned in T10/T11.
 
 ## Fragile Areas
 
@@ -66,16 +76,31 @@ Whenever you successfully finish a user task, quickly check if there is anything
 - What's not tested: REST endpoints (none exist yet, but `UserController` is scaffolded)
 - Risk: API contract, validation, and HTTP behavior untested
 - Priority: Medium (blocked until controllers are implemented)
-- Difficulty to test: Low — `spring-boot-starter-webmvc-test` with `MockMvc` is on classpath
+- Difficulty to test: Low — use `@SpringBootTest(webEnvironment = RANDOM_PORT)` + Testcontainers + TestRestTemplate (see TESTING.md)
 
 **No Spring Modulith boundary tests:**
 
 - What's not tested: Module boundary enforcement
 - Risk: Cross-module dependencies could silently form, violating the modular monolith architecture
-- Priority: Medium
+- Priority: High — should be created as part of ArchitectureTest.java (see TESTING.md)
 - Difficulty to test: Low — `spring-modulith-starter-test` provides `ApplicationModules.verify()` out of the box
+
+**No ArchUnit architectural tests:**
+
+- What's not tested: Domain independence from Spring, cross-module repository access
+- Risk: Agent or developer may accidentally add `@Service` to domain entities or access another module's repository
+- Priority: High — prevents architectural erosion
+- Difficulty to test: Low — ArchUnit is straightforward to configure (see TESTING.md)
+
+**No dedicated Value Object tests:**
+
+- What's not tested: Individual VO validation (Email format, CPF length, UserName minimum)
+- Risk: VOs are tested indirectly through `UserTest`, but edge cases in VO construction may be missed
+- Priority: Low (currently covered transitively)
+- Difficulty to test: Low — pure unit tests
 
 ---
 
 _Concerns audit: 2026-04-06_
+_Last review: 2026-04-18_
 _Update as issues are fixed or new ones discovered_

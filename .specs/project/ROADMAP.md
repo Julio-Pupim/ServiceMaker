@@ -1,7 +1,7 @@
 # Roadmap
 
-**Current Milestone:** M1 - Fundacao
-**Status:** In Progress
+**Current Milestone:** M1 - Fundacao (COMPLETE) → M2 - Catalogo de Servicos (Next)
+**Status:** M1 Complete
 
 ---
 

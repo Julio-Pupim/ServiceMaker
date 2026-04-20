@@ -1,62 +1,90 @@
-# CLAUDE.md
+# Agent Core Directives
 
-## Rules
- 
+You are an autonomous expert software engineer working on **serviceMaker**. Your primary goal is to write clean, modular, and test-driven code.
 
-## Project Overview
+**NEVER guess the system architecture or conventions. Use the Routing Logic below to fetch the exact context you need.**
 
-**serviceMaker** — a services marketplace (ecommerce de serviços) where clients request services, providers submit proposals, and appointments are scheduled. Written in Portuguese (Brazilian) domain language.
+## 1. Global Directives (Always Active)
 
-## Build & Test Commands
+- **Domain Language:** The system domain is exclusively in Portuguese (Brazilian). Domain models, variables, business rules, exceptions, and events MUST be in Portuguese (e.g., `Usuario`, `PerfilPrestador`, `Agendamento`). Structural code (Services, Repositories, Controllers) uses English suffixes (e.g., `UsuarioRepository`, `RegisterUsuarioUseCase`). See `.specs/codebase/GLOSSARY.md` for the canonical ubiquitous language.
+- **No Hallucinations:** If a requested task contradicts the `.specs/`, point out the discrepancy. Never invent architecture, patterns, or conventions not documented in the specs.
+- **Blocker Check:** Before starting any task, check `.specs/project/STATE.md` for active blockers. If a blocker affects your task, stop and report it.
 
-```bash
-./mvnw compile                          # compile
-./mvnw test                             # run all tests
-./mvnw test -Dtest=UserTest             # run a single test class
-./mvnw test -Dtest=UserTest#testMethod  # run a single test method
-./mvnw spring-boot:run                  # run the application
-```
+## 2. Context Routing Logic (Read what you need)
 
-**Prerequisites:** Java 25, PostgreSQL on `localhost:5432/servicemaker` (user/pass: postgres/postgres). Tests use Testcontainers (Docker required).
+Before executing any action, identify the type of task and READ the corresponding files:
 
-## Tech Stack
+**🟢 If you are IMPLEMENTING features or writing CODE:**
+- READ `.specs/codebase/TESTING.md` (You MUST follow the TDD workflow).
+- READ `.specs/codebase/CONVENTIONS.md` (For naming and code style).
+- READ `.specs/project/STATE.md` (To understand current focus and blockers).
 
-- **Spring Boot 4.0.3** with Spring Modulith for modular monolith architecture
+**🌐 If the feature involves EXTERNAL APIs, Third-Party Services, or Webhooks:**
+- READ `.specs/codebase/INTEGRATIONS.md` (To understand auth, limits, and mocking strategies for external services).
+- READ `.specs/codebase/TESTING.md` (To check how to stub/mock these integrations properly).
+
+**🔵 If you are PLANNING, DESIGNING, or creating new Modules:**
+- READ `.specs/codebase/ARCHITECTURE.md` (For module boundaries, DDD, and database schema isolation rules).
+- READ `.specs/project/ROADMAP.md` (To understand the sequence of deliverables).
+- READ `.specs/codebase/GLOSSARY.md` (For canonical domain terminology).
+
+**🟠 If you are modifying the DATABASE or creating MIGRATIONS:**
+- READ `.specs/codebase/ARCHITECTURE.md` (To check isolation rules like schema-per-module).
+- READ `.specs/codebase/CONVENTIONS.md` (To check SQL/table naming conventions like snake_case).
+- READ `.specs/codebase/INTEGRATIONS.md` (To check migration directory structure per module).
+- READ `.specs/codebase/STACK.md` (To verify the database and migration tool versions).
+
+**🟣 If you FINISHED a task:**
+- READ `.specs/codebase/CONCERNS.md` (Check for Tech Debt related to the files you just touched and fix them).
+- UPDATE `.specs/project/STATE.md` (Mark task progress, add lessons learned if relevant).
+
+## 3. Project Overview (Quick Reference)
+
+**serviceMaker** — a services marketplace (ecommerce de servicos) where clients request services, providers offer availability, and appointments are scheduled. v1 follows a simplified flow: search provider → check availability → schedule → pay (no proposals/matching system — see AD-001 in STATE.md).
+
+### Tech Stack
+
+- **Java 25** / **Spring Boot 4.0.3** / **Spring Modulith 2.0.3**
 - **Spring Data JDBC** (not JPA) for persistence
-- **Liquibase** for database migrations (`src/main/resources/db/changelog/`)
-- **Spring Security** + **BCrypt** for authentication
+- **Liquibase** (XML changelogs) for migrations
+- **Spring Security** + **BCrypt** + **JWT** for authentication
+- **PostgreSQL** with schema-per-module isolation
 - **Testcontainers** (PostgreSQL) for integration tests
 - **Lombok** for boilerplate reduction
-- **springdoc-openapi** for API docs
+- **springdoc-openapi 3.0.2** for API docs
 
-## Architecture
+### Architecture (Summary)
 
-The project follows a **modular monolith** using Spring Modulith. Each module is a top-level package under `br.com.serviceMaker`.
-
-### Module structure (using `users` as example)
+Modular monolith using Spring Modulith. Each module is a top-level package under `br.com.serviceMaker` following DDD internally:
 
 ```
-users/
+{modulo}/
   api/            — REST controllers (inbound adapters)
-  application/    — Use cases (application services), one class per use case
-    command/      — Command records (input DTOs for use cases)
-  domain/         — Aggregates, value objects, repository interfaces, domain exceptions
+  application/    — Use cases (one class per use case)
+    command/      — Command records (input DTOs)
+  domain/         — Aggregates, VOs, repository interfaces, domain exceptions, events
     vo/           — Value objects specific to this module
     exceptions/   — Domain-specific exceptions
   infra/
     persistence/  — Repository implementations (JDBC)
-    security/     — Security infrastructure (e.g., BCryptPasswordHasher)
-    config/       — Spring configuration for this module
+    security/     — Security infrastructure
+    config/       — Spring configuration
 ```
 
-### Key patterns
+Key rules: Domain MUST NOT depend on Spring. Modules communicate via events. Each module owns its own PostgreSQL schema. Business logic lives in domain entities (Rich Domain Model), use cases only orchestrate.
 
-- **Rich domain model:** Business logic lives in domain entities (e.g., `User.registerUser()`, `User.createProviderProfile()`). Use cases orchestrate but don't contain business rules.
-- **Command pattern:** Each use case receives a `*Command` record as input.
-- **Domain interfaces for infra:** `UserRepository` and `PasswordHasher` are domain interfaces implemented in `infra/`.
-- **Shared kernel:** `br.com.serviceMaker.shared` contains cross-module value objects (`UserId`, `Email`, `Cpf`, `UserName`).
-- **Event-driven flow:** Modules communicate via domain events (see `Eventos.md` for the full event catalog and flow).
+### Planned Modules
 
-### Planned modules (from domain docs)
+`users` (active) → `services` → `scheduling` → `payments` → `reviews`
 
-Users → Services → ServiceRequests → Proposals → Appointments → Payments → Reviews. The event flow: client creates request → matching finds providers → provider submits proposal → client accepts → appointment scheduled → service completed → review created.
+## 4. Environment & Commands
+
+```bash
+./mvnw compile                          # compile
+./mvnw test                             # run all tests
+./mvnw test -Dtest=UsuarioTest          # run a single test class
+./mvnw test -Dtest=UsuarioTest#testMethod  # run a single test method
+./mvnw spring-boot:run                  # boot app
+```
+
+**Prerequisites:** Java 25, PostgreSQL on `localhost:5432/servicemaker` (user/pass: postgres/postgres). Tests use Testcontainers (Docker required).

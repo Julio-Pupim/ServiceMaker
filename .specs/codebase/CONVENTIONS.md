@@ -2,24 +2,32 @@
 
 ## Naming Conventions
 
+**Referencia canonica:** Consulte `.specs/codebase/GLOSSARY.md` para a lista completa de termos do dominio.
+
 **Packages:** lowercase, singular nouns following DDD layers
 Examples: `users.domain`, `users.application.command`, `users.infra.persistence`
 
 **Classes:**
-- Domain entities: PascalCase nouns (`User`, `ProviderProfile`, `ClientProfile`)
-- Use cases: `{Verb}{Noun}UseCase` (`RegisterUserUseCase`, `ChangePasswordUseCase`)
-- Commands: `{Verb}{Noun}Command` (`RegisterUserCommand`, `DeactivateUserCommand`)
-- Repositories: `{Entity}Repository` (interface), `Jdbc{Entity}Repository` (impl)
-- Exceptions: `{Description}Exception` (`EmailAlreadyExistsException`)
-- Value objects: descriptive nouns (`PasswordHash`, `Email`, `UserId`)
-- Enums: PascalCase with UPPER_SNAKE values (`UserRole.CLIENT`)
+- Domain entities: PascalCase nouns em portugues (`Usuario`, `PerfilPrestador`, `PerfilCliente`)
+- Use cases: `{Verbo}{Substantivo}UseCase` (`RegistrarUsuarioUseCase`, `AlterarSenhaUseCase`)
+- Commands: `{Verbo}{Substantivo}Command` (`RegistrarUsuarioCommand`, `DesativarUsuarioCommand`)
+- Repositories: `{Entidade}Repository` (interface), `Jdbc{Entidade}Repository` (impl) — ex: `UsuarioRepository`, `JdbcUsuarioRepository`
+- Exceptions: nomes descritivos em portugues (`EmailJaCadastradoException`, `UsuarioNaoEncontradoException`). Excecoes de infraestrutura podem ser em ingles.
+- Value objects: substantivos descritivos (`HashSenha`, `Email`, `UsuarioId`)
+- Enums: PascalCase com valores UPPER_SNAKE (`PapelUsuario.CLIENTE`, `PapelUsuario.PRESTADOR`)
+- Domain events: `{Substantivo}{Participio}Event` em portugues (`UsuarioRegistradoEvent`, `SenhaAlteradaEvent`)
 
 **Methods:**
-- Factory methods: `of()` for VOs, `{verb}{Noun}()` for aggregates (`User.registerUser()`)
+- Factory methods: `of()` para VOs, `{verbo}()` ou `{verbo}{Substantivo}()` para agregados (`Usuario.registrar()`, `Usuario.criarPerfilPrestador()`)
 - Use case entry point: `execute(Command)`
-- Boolean queries: `has{Thing}()`, `is{State}()` (`hasProviderProfile()`, `isActive()`)
+- Boolean queries: `tem{Coisa}()`, `esta{Estado}()` (`temPerfilPrestador()`, `estaAtivo()`)
 
-**Test methods:** `should_{describe_behavior}` with underscores (`should_register_user_with_client_role`)
+**Test methods:** `should_{describe_behavior}` com underscores (`should_register_user_with_client_role`). Descricoes de teste permanecem em ingles para legibilidade universal.
+
+**SQL / Database:**
+- Table names: `snake_case`, plural, prefixado pelo schema do modulo (`users.usuarios`, `users.papeis_usuario`)
+- Column names: `snake_case` (`created_at`, `password_hash`, `is_active`)
+- Constraints: `{table}_{column}_key` para UNIQUE, `{table}_{column}_fkey` para FK
 
 ## Code Organization
 
@@ -31,21 +39,19 @@ Examples: `users.domain`, `users.application.command`, `users.infra.persistence`
 
 ## Type Safety
 
-**Value objects over primitives:** IDs (`UserId`), email (`Email`), CPF (`Cpf`), names (`UserName`), password hashes (`PasswordHash`)
+**Value objects over primitives:** IDs (`UsuarioId`), email (`Email`), CPF (`Cpf`), names (`NomeUsuario`), password hashes (`HashSenha`)
 
 **Shared kernel VOs** live in `br.com.serviceMaker.shared` — used across modules
 **Module-specific VOs** live in `{module}/domain/vo/`
 
-**Mixed VO styles:**
-- `UserId`: Java `record` (concise, auto equals/hashCode)
-- `Email`, `Cpf`: Traditional classes with private constructor, manual `equals`/`hashCode`, `of()` factory
+**VO style:** Prefer Java `record` for all simple VOs (auto equals/hashCode, concise). Use traditional class only when mutable state or complex validation logic requires it. See CONCERNS.md for the current inconsistency to resolve.
 
 ## Error Handling
 
 **Pattern:** Domain exceptions extend `RuntimeException` (unchecked)
-- Thrown from use cases for business rule violations
+- Thrown from domain entities/aggregates for business rule violations
 - Thrown from value objects for invalid input
-- Example: `EmailAlreadyExistsException`, `IllegalArgumentException` for blank values
+- Example: `EmailJaCadastradoException`, `IllegalArgumentException` for blank values
 
 ## Dependency Injection
 

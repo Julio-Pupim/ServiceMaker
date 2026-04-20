@@ -1,7 +1,7 @@
 # State
 
-**Last Updated:** 2026-04-14
-**Current Work:** M1 - Fundacao (Users module) - Phase 2 DONE (T4, T5). Next: Phase 3 parallel — T6 (use cases + events), T7 (API DTOs), T8 (exception handler), T11 (JWT auth)
+**Last Updated:** 2026-04-18
+**Current Work:** M1 - Fundacao (Users + Auth) - COMPLETE. All 11 tasks done (T1-T11). 60 tests passing. Next: M2 - Catalogo de Servicos
 
 ---
 **EXCLUSIVE CURRENT FOCUS:** We are working ONLY on the module listed as "IN PROGRESS" (Currently: `Users` - M1).
@@ -53,9 +53,9 @@ _None yet_
 
 ## Todos
 
-- [ ] Finalizar testes do modulo Users (M1)
+- [x] Finalizar testes do modulo Users (M1) — 60 tests, all passing
 - [ ] Definir gateway de pagamento de baixo custo para M5
-- [ ] Phase 3: T6, T7, T8, T11 (paralelos) → T9 → T10
+- [ ] Iniciar M2 - Catalogo de Servicos (Specify)
 
 ---
 

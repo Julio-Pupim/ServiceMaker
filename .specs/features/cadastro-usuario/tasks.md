@@ -1,7 +1,7 @@
 # M1 Fundacao (Users + Auth) — Tasks
 
 **Design**: `cadastro-usuario/design.md`, `perfil-prestador/design.md`, `desativacao-usuario/design.md`
-**Status**: Draft
+**Status**: Complete
 **Scope**: Cobre as 4 features do M1 (cadastro, perfil prestador, desativacao, autenticacao JWT) por compartilharem o mesmo agregado, persistencia e API.
 **Total tasks**: 11 (T1–T11)
 
@@ -231,19 +231,19 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] RegisterUserUseCase publica UserRegisteredEvent apos save
-- [ ] CreateProviderProfileUseCase publica ProviderProfileCreatedEvent apos save (guarda de `active` vive em `User.createProviderProfile()` — use case nao duplica)
-- [ ] DeactivateUserUseCase publica UserDeactivatedEvent apenas se usuario estava ativo antes (verifica `wasActive` antes de chamar `user.deactivate()`)
-- [ ] ChangePasswordUseCase publica PasswordChangedEvent apos save (guarda de `active` vive em `User.changePassword()` — use case nao duplica)
-- [ ] Use cases NAO tem `if (!user.isActive()) throw ...` — invariante vive no agregado
-- [ ] Test: `should_publish_UserRegisteredEvent_after_registration`
-- [ ] Test: `should_publish_ProviderProfileCreatedEvent_after_profile_creation`
-- [ ] Test: `should_publish_UserDeactivatedEvent_when_user_was_active`
-- [ ] Test: `should_not_publish_event_when_user_already_inactive`
-- [ ] Test: `should_publish_PasswordChangedEvent_after_password_change`
-- [ ] Test: `should_propagate_InactiveUserException_from_domain_when_changing_password_for_inactive_user` (verifica que use case NAO valida, dominio lanca)
-- [ ] Gate check passes: `./mvnw test`
-- [ ] Test count: testes existentes (5+4+3+4=16) + 6 novos = 22 tests de use case passam
+- [x] RegisterUserUseCase publica UserRegisteredEvent apos save
+- [x] CreateProviderProfileUseCase publica ProviderProfileCreatedEvent apos save (guarda de `active` vive em `User.createProviderProfile()` — use case nao duplica)
+- [x] DeactivateUserUseCase publica UserDeactivatedEvent apenas se usuario estava ativo antes (verifica `wasActive` antes de chamar `user.deactivate()`)
+- [x] ChangePasswordUseCase publica PasswordChangedEvent apos save (guarda de `active` vive em `User.changePassword()` — use case nao duplica)
+- [x] Use cases NAO tem `if (!user.isActive()) throw ...` — invariante vive no agregado
+- [x] Test: `should_publish_UserRegisteredEvent_after_registration`
+- [x] Test: `should_publish_ProviderProfileCreatedEvent_after_profile_creation`
+- [x] Test: `should_publish_UserDeactivatedEvent_when_user_was_active`
+- [x] Test: `should_not_publish_event_when_user_already_inactive`
+- [x] Test: `should_publish_PasswordChangedEvent_after_password_change`
+- [x] Test: `should_propagate_InactiveUserException_from_domain_when_changing_password_for_inactive_user` (verifica que use case NAO valida, dominio lanca)
+- [x] Gate check passes: `./mvnw test`
+- [x] Test count: testes existentes (5+4+3+4=16) + 5 novos = 21 tests de use case passam (51 total)
 
 **Tests**: unit (mocked — @ExtendWith(MockitoExtension.class))
 **Gate**: quick
@@ -270,12 +270,12 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] RegisterUserRequest com @NotBlank em email, cpf, password, name
-- [ ] UserIdResponse(UUID id) criado
-- [ ] CreateProviderProfileRequest com @NotBlank em description
-- [ ] ChangePasswordRequest com @NotBlank em currentPassword, newPassword
-- [ ] ErrorResponse(String message, int status) criado
-- [ ] Gate check passes: `./mvnw compile`
+- [x] RegisterUserRequest com @NotBlank em email, cpf, password, name
+- [x] UserIdResponse(UUID id) criado
+- [x] CreateProviderProfileRequest com @NotBlank em description
+- [x] ChangePasswordRequest com @NotBlank em currentPassword, newPassword
+- [x] ErrorResponse(String message, int status) criado
+- [x] Gate check passes: `./mvnw compile`
 
 **Tests**: none (records sem logica — validados via controller tests em T9)
 **Gate**: build
@@ -297,16 +297,16 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] `@RestControllerAdvice(basePackages = "br.com.serviceMaker.users.api")`
-- [ ] EmailAlreadyExistsException → 409 Conflict + ErrorResponse
-- [ ] CpfAlreadyExistsException → 409 Conflict + ErrorResponse
-- [ ] UserNotFoundException → 404 Not Found + ErrorResponse
-- [ ] InvalidPasswordException → **422 Unprocessable Entity** + ErrorResponse (JWT ja autenticou — senha errada eh entrada semanticamente invalida)
-- [ ] InactiveUserException → 403 Forbidden + ErrorResponse
-- [ ] IllegalStateException → 409 Conflict + ErrorResponse
-- [ ] IllegalArgumentException → 400 Bad Request + ErrorResponse
-- [ ] MethodArgumentNotValidException → 400 Bad Request + ErrorResponse (com detalhes dos campos)
-- [ ] Gate check passes: `./mvnw compile`
+- [x] `@RestControllerAdvice(basePackages = "br.com.serviceMaker.users.api")`
+- [x] EmailAlreadyExistsException → 409 Conflict + ErrorResponse
+- [x] CpfAlreadyExistsException → 409 Conflict + ErrorResponse
+- [x] UserNotFoundException → 404 Not Found + ErrorResponse
+- [x] InvalidPasswordException → **422 Unprocessable Entity** + ErrorResponse (JWT ja autenticou — senha errada eh entrada semanticamente invalida)
+- [x] InactiveUserException → 403 Forbidden + ErrorResponse
+- [x] IllegalStateException → 409 Conflict + ErrorResponse
+- [x] IllegalArgumentException → 400 Bad Request + ErrorResponse
+- [x] MethodArgumentNotValidException → 400 Bad Request + ErrorResponse (com detalhes dos campos)
+- [x] Gate check passes: `./mvnw compile`
 
 **Tests**: none (testado via controller integration tests em T9)
 **Gate**: build
@@ -330,23 +330,23 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] `POST /api/users` → 201 Created com UserIdResponse (publico — sem JWT)
-- [ ] `POST /api/users/me/provider-profile` → 201 Created — `@AuthenticationPrincipal UserId` (protegido)
-- [ ] `PATCH /api/users/me/password` → 204 No Content — `@AuthenticationPrincipal UserId` (protegido)
-- [ ] `PATCH /api/users/me/deactivate` → 204 No Content — `@AuthenticationPrincipal UserId` (protegido)
-- [ ] @Valid em todos os request bodies
-- [ ] Endpoints `/me/*` NAO tem `{userId}` no path — userId vem exclusivamente do JWT
-- [ ] Test: `should_register_user_and_return_201`
-- [ ] Test: `should_return_409_when_email_already_exists`
-- [ ] Test: `should_return_400_when_request_body_invalid`
-- [ ] Test: `should_return_401_when_no_jwt_on_protected_endpoint`
-- [ ] Test: `should_create_provider_profile_and_return_201` (com JWT)
-- [ ] Test: `should_return_403_when_user_is_inactive`
-- [ ] Test: `should_change_password_and_return_204` (com JWT)
-- [ ] Test: `should_return_422_when_current_password_wrong`
-- [ ] Test: `should_deactivate_user_and_return_204` (com JWT)
-- [ ] Gate check passes: `./mvnw test`
-- [ ] Test count: todos os testes existentes + 9 novos controller tests passam
+- [x] `POST /api/users` → 201 Created com UserIdResponse (publico — sem JWT)
+- [x] `POST /api/users/me/provider-profile` → 201 Created — `@AuthenticationPrincipal UserId` (protegido)
+- [x] `PATCH /api/users/me/password` → 204 No Content — `@AuthenticationPrincipal UserId` (protegido)
+- [x] `PATCH /api/users/me/deactivate` → 204 No Content — `@AuthenticationPrincipal UserId` (protegido)
+- [x] @Valid em todos os request bodies
+- [x] Endpoints `/me/*` NAO tem `{userId}` no path — userId vem exclusivamente do JWT
+- [x] Test: `should_register_user_and_return_201`
+- [x] Test: `should_return_409_when_email_already_exists`
+- [x] Test: `should_return_400_when_request_body_invalid`
+- [x] Test: `should_return_401_when_no_jwt_on_protected_endpoint`
+- [x] Test: `should_create_provider_profile_and_return_201` (com JWT)
+- [x] Test: `should_return_403_when_user_is_inactive`
+- [x] Test: `should_change_password_and_return_204` (com JWT)
+- [x] Test: `should_return_422_when_current_password_wrong`
+- [x] Test: `should_deactivate_user_and_return_204` (com JWT)
+- [x] Gate check passes: `./mvnw test` (60 tests, 0 failures)
+- [x] Test count: todos os testes existentes + 9 novos controller tests passam
 
 **Tests**: integration (Testcontainers — @SpringBootTest com TestRestTemplate + JWT gerado via `JwtService` nos testes)
 **Gate**: full
@@ -368,16 +368,16 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] SecurityFilterChain bean configurado
-- [ ] POST /api/users permitido sem autenticacao
-- [ ] POST /api/auth/login permitido sem autenticacao
-- [ ] /api/users/me/** exige JWT valido (401 Unauthorized se ausente/invalido)
-- [ ] Demais endpoints: default deny
-- [ ] `JwtAuthenticationFilter` adicionado via `.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)`
-- [ ] CSRF desabilitado para API REST (stateless)
-- [ ] SessionCreationPolicy.STATELESS
-- [ ] Gate check passes: `./mvnw test`
-- [ ] Todos os testes de T9 continuam passando
+- [x] SecurityFilterChain bean configurado (implemented with T11)
+- [x] POST /api/users permitido sem autenticacao
+- [x] POST /api/auth/login permitido sem autenticacao
+- [x] /api/users/me/** exige JWT valido (401 Unauthorized se ausente/invalido)
+- [x] Demais endpoints: default deny (anyRequest().authenticated())
+- [x] `JwtAuthenticationFilter` adicionado via `.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)`
+- [x] CSRF desabilitado para API REST (stateless)
+- [x] SessionCreationPolicy.STATELESS
+- [x] Gate check passes: `./mvnw test` (51 tests, 0 failures)
+- [x] Todos os testes de T9 continuam passando (60 tests, 0 failures)
 
 **Tests**: none (validado pelos testes de T9 rodando com security + JWT ativos)
 **Gate**: full
@@ -409,25 +409,26 @@ T5, T6, T7, T8, T11 ──→ T9 (controller com /me endpoints + tests) ──�
 - Skill: NONE
 
 **Done when**:
-- [ ] `POST /api/auth/login` com email + senha retorna 200 + `{ "accessToken": "...", "expiresInSeconds": 3600 }`
-- [ ] Login com email inexistente → 401 Unauthorized
-- [ ] Login com senha errada → 401 Unauthorized
-- [ ] Login com usuario desativado → 403 Forbidden
-- [ ] `JwtService.generateToken(UserId)` retorna JWT com `sub` = userId, `iat`, `exp`
-- [ ] `JwtService.extractUserId(String token)` retorna `UserId` ou lanca exception se token invalido/expirado
-- [ ] `JwtAuthenticationFilter` extrai token do header `Authorization: Bearer ...`, valida, e popula SecurityContext com `UserId` como principal
-- [ ] Request com token expirado → 401 Unauthorized
-- [ ] Request com token malformado → 401 Unauthorized
-- [ ] Segredo JWT vem de `application.properties` (nao hardcoded)
-- [ ] Test: `should_generate_valid_token_for_user_id`
-- [ ] Test: `should_extract_user_id_from_valid_token`
-- [ ] Test: `should_reject_expired_token`
-- [ ] Test: `should_reject_malformed_token`
-- [ ] Test: `should_login_and_return_access_token`
-- [ ] Test: `should_return_401_on_wrong_password`
-- [ ] Test: `should_return_403_on_inactive_user_login`
-- [ ] Gate check passes: `./mvnw test`
-- [ ] Test count: todos os testes existentes + 7 novos tests passam
+- [x] `POST /api/auth/login` com email + senha retorna 200 + `{ "accessToken": "...", "expiresInSeconds": 3600 }`
+- [x] Login com email inexistente → 401 Unauthorized
+- [x] Login com senha errada → 401 Unauthorized
+- [x] Login com usuario desativado → 403 Forbidden
+- [x] `JwtService.generateToken(UserId)` retorna JWT com `sub` = userId, `iat`, `exp`
+- [x] `JwtService.extractUserId(String token)` retorna `UserId` ou lanca exception se token invalido/expirado
+- [x] `JwtAuthenticationFilter` extrai token do header `Authorization: Bearer ...`, valida, e popula SecurityContext com `UserId` como principal
+- [x] Request com token expirado → 401 Unauthorized (handled by filter — continues without auth)
+- [x] Request com token malformado → 401 Unauthorized (handled by filter — continues without auth)
+- [x] Segredo JWT vem de `application.yaml` (nao hardcoded)
+- [x] Test: `should_generate_valid_token_for_user_id`
+- [x] Test: `should_extract_user_id_from_valid_token`
+- [x] Test: `should_reject_expired_token`
+- [x] Test: `should_reject_malformed_token`
+- [x] Test: `should_login_and_return_access_token`
+- [x] Test: `should_return_401_on_wrong_password`
+- [x] Test: `should_return_403_on_inactive_user_login`
+- [x] Test: `should_return_401_on_unknown_email` (bonus)
+- [x] Gate check passes: `./mvnw test` (51 tests, 0 failures)
+- [x] Test count: todos os testes existentes + 8 novos tests passam
 
 **Tests**: unit (JwtService puro) + integration (@SpringBootTest + Testcontainers + TestRestTemplate para AuthController)
 **Gate**: full

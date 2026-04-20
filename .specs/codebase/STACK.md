@@ -14,8 +14,8 @@
 
 - API Style: REST (Spring WebMVC)
 - Database: PostgreSQL via Spring Data JDBC (not JPA)
-- Migrations: Liquibase (XML changelogs)
-- Authentication: Spring Security + BCrypt (`BCryptPasswordEncoder`)
+- Migrations: Liquibase (XML changelogs, per-module subdirectories — see INTEGRATIONS.md)
+- Authentication: Spring Security + BCrypt (`BCryptPasswordEncoder`) + JWT
 - Validation: Spring Boot Starter Validation (Bean Validation)
 - API Docs: springdoc-openapi 3.0.2 (Swagger UI)
 - Monitoring: Spring Boot Actuator
@@ -25,6 +25,8 @@
 - Unit: JUnit 5 + Mockito (via `spring-boot-starter-*-test`)
 - Integration: Testcontainers 1.21.4 (PostgreSQL 1.19.8)
 - Modulith: `spring-modulith-starter-test` (module boundary verification)
+- Architecture: ArchUnit (domain independence, cross-module access rules)
+- Coverage: JaCoCo (measurement, no enforced thresholds)
 - E2E: None configured
 
 ## Development Tools
